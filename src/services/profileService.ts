@@ -10,7 +10,7 @@ interface PasswordParams {
 const profileService = {
   fetchCurrent: async () => {
     const res = await api
-      .get("/auth", {
+      .get("/current/user", {
         headers: {
           Authorization: TokenService.get(),
         },
@@ -23,7 +23,7 @@ const profileService = {
   },
   updateProfile: async (userId: number | string, params: ProfileSchema) => {
     try {
-      const res = await api.put(`/user/${userId}`, params, {
+      const res = await api.put(`/current/user/${userId}`, params, {
         headers: {
           Authorization: TokenService.get(),
         },
@@ -36,7 +36,7 @@ const profileService = {
   },
   passwordUpdate: async (params: PasswordParams) => {
     const res = await api
-      .put("/users/current/password", params, {
+      .put("/current/user/password", params, {
         headers: {
           Authorization: TokenService.get(),
         },

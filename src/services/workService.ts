@@ -18,7 +18,7 @@ export type WorkParams = {
 const workService = {
   create: async (params: WorkSchema) => {
     const res = await api
-      .post("/work", params, {
+      .post("/user/work", params, {
         headers: {
           Authorization: TokenService.get(),
         },
@@ -34,7 +34,7 @@ const workService = {
 
   fetchAll: async () => {
     try {
-      const response = await api.get("/works", {
+      const response = await api.get("/user/works", {
         headers: {
           Authorization: TokenService.get(),
         },

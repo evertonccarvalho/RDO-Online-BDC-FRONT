@@ -19,7 +19,7 @@ export interface UserParams {
 const usersServices = {
   fetchAll: async () => {
     try {
-      const res = await api.get("/users", {
+      const res = await api.get("/admin/users/", {
         headers: {
           Authorization: TokenService.get(),
         },
@@ -37,7 +37,7 @@ const usersServices = {
         throw new Error("O ID do usuário não foi fornecido.");
       }
 
-      const res = await api.get(`/user/${userId}`, {
+      const res = await api.get(`/admin/user/${userId}`, {
         headers: {
           Authorization: TokenService.get(),
         },
@@ -51,7 +51,7 @@ const usersServices = {
 
   update: async (userId: number | string, params: UserSchema) => {
     try {
-      const res = await api.put(`/user/${userId}`, params, {
+      const res = await api.put(`/admin/user/${userId}`, params, {
         headers: {
           Authorization: TokenService.get(),
         },
@@ -65,7 +65,7 @@ const usersServices = {
 
   delete: async (userId: number) => {
     try {
-      const res = await api.delete(`/user/${userId}`, {
+      const res = await api.delete(`/admin/user/${userId}`, {
         headers: {
           Authorization: TokenService.get(),
         },

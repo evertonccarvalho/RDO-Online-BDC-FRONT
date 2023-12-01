@@ -5,7 +5,7 @@ import { toast } from "@/components/ui/use-toast";
 import { profileSchema } from "@/lib/validations/user";
 import profileService from "@/services/profileService";
 import { TokenService } from "@/services/tokenService";
-import usersServices, { UserParams } from "@/services/usersServices";
+import { UserParams } from "@/services/usersServices";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,20 +19,19 @@ import VoltarButton from "../../components/VoltarButton";
 import ProfileHeader from "./profileHeader";
 
 export default function UpdateProfileForm() {
-  const [user, setUser] = useState<UserParams | null>(null);
   const pathname = usePathname();
   const id = pathname.split("/").pop();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [initialEmail, setInitialEmail] = useState<string | null>(null);
+  const [user, setUser] = useState<UserParams | null>(null);
 
   async function getUser(userId: string | undefined): Promise<void> {
     try {
       if (userId === undefined) {
         throw new Error("ID do usuário não fornecido.");
       }
-
-      const data = await usersServices.getById(+userId);
+      const data = await profileService.fetchCurrent();
       setUser(data);
     } catch (error) {
       console.log("Error fetching user:", error);
