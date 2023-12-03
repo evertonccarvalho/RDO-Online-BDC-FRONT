@@ -24,7 +24,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import RoleSelectField from "./components/RoleSelectField";
-import WorkSelectList from "./components/WorkSelectList";
 export default function UpdateUserForm() {
   const { toast } = useToast();
   const [user, setUser] = useState<UserParams | null>(null);
@@ -57,7 +56,6 @@ export default function UpdateUserForm() {
       email: user?.email || "",
       role: user?.role || "",
       active: user?.active,
-      workId: user?.workId || "",
     },
     mode: "onChange",
   });
@@ -68,14 +66,11 @@ export default function UpdateUserForm() {
       form.setValue("userName", user.userName || "");
       form.setValue("role", user.role || "");
       form.setValue("active", user.active || true);
-      form.setValue("workId", user.workId || 0);
     }
   }, [form, user]);
 
   async function onSubmit(data: z.infer<typeof userSchema>) {
-    const parsedData = { ...data, workId: Number(data.workId) };
-    userSchema.parse(parsedData);
-    const res = await usersServices.update(user?.id || "", parsedData);
+    const res = await usersServices.update(user?.id || "", data);
     console.log("User updated successfully:", res);
 
     if (res === 200) {
@@ -126,12 +121,6 @@ export default function UpdateUserForm() {
                       control={form.control}
                       name="role"
                       label="Role"
-                    />
-                    <WorkSelectList
-                      control={form.control}
-                      name="workId"
-                      label="Obra"
-                      placeholder="Obra e ID"
                     />
                     <FormField
                       control={form.control}

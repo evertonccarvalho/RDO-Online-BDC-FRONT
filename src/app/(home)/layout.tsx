@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import MainSideBar from "./components/Sidebar";
-import { ThemeProvider } from "@/providers/theme-provider";
 
 interface HomeLayoutProps {
   children: React.ReactNode;
@@ -53,14 +52,7 @@ export default function HomeLayout({ children }: HomeLayoutProps) {
             {/* <!-- ===== Main Content Start ===== --> */}
             <main>
               <div className="mx-auto max-w-screen-2xl p-4 md:p-4 2xl:p-4">
-                <ThemeProvider
-                  attribute="class"
-                  defaultTheme="system"
-                  enableSystem
-                  disableTransitionOnChange
-                >
-                  {children}
-                </ThemeProvider>
+                {children}
               </div>
             </main>
             {/* <!-- ===== Main Content End ===== --> */}

@@ -10,7 +10,6 @@ export interface UserParams {
   work?: WorkParams | null;
   active: boolean;
   role: string;
-  workId?: number;
   avatarUrl?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
