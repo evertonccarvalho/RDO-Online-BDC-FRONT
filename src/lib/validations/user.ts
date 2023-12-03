@@ -11,7 +11,6 @@ export const userSchema = z.object({
   email: z.string().email(), // Certifica-se de que o campo de e-mail seja um e-mail válido
   role: z.string(),
   active: z.boolean(),
-  // workId: z.union([z.string(), z.number()]), // Isso pode ser ajustado com o tipo de dados correto para workId
 });
 
 export const profileSchema = z.object({
@@ -29,7 +28,6 @@ export type UserSchema = {
   userName: string;
   email: string;
   role: string;
-  // workId: number;
   active: boolean;
 };
 

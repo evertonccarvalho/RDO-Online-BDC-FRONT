@@ -25,7 +25,6 @@ const UserPage = () => {
             email: "",
             active: true,
             role: "",
-            workId: 1,
             work: {
               id: 1,
               workDescription: "",

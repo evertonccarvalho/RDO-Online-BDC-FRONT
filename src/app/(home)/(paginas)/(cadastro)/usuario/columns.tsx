@@ -81,20 +81,6 @@ export const columns: ColumnDef<UserParams>[] = [
     },
   },
   {
-    accessorKey: "workId",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Id da Obra
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
     accessorKey: "workDescription",
     header: ({ column }) => {
       return (
