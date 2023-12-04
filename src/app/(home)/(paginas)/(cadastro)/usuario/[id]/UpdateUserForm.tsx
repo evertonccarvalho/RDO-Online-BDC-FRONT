@@ -85,7 +85,7 @@ export default function UpdateUserForm() {
 
   return (
     <>
-      <main className="max-h-[900px]">
+      <main className="max-h-[900px] bg-card">
         <div className="flex flex-col gap-9 rounded-sm bg-card p-5 sm:grid-cols-2">
           <ProfileHeader
             coverImageSrc={user?.avatarUrl || useCover}
