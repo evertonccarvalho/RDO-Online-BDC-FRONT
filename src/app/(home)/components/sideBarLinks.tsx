@@ -30,10 +30,7 @@ export default function SideBarLinks({ sidebarOpen }: props) {
             <div>{React.createElement(menu?.icon, { size: "20" })}</div>
 
             <h2
-              style={{
-                transitionDelay: `${i + 3}00ms`,
-              }}
-              className={`whitespace-pre duration-500 ${
+              className={`${
                 !sidebarOpen && "translate-x-28 overflow-hidden opacity-0"
               }`}
             >
@@ -42,7 +39,7 @@ export default function SideBarLinks({ sidebarOpen }: props) {
             <h2
               className={`${
                 sidebarOpen && "hidden"
-              } absolute left-48 w-0 overflow-hidden whitespace-pre rounded-md bg-card px-0 py-0 font-semibold text-primary drop-shadow-lg group-hover:left-14 group-hover:w-fit group-hover:px-2 group-hover:py-1 group-hover:duration-300  `}
+              } absolute left-48 w-0 overflow-hidden whitespace-pre rounded-md bg-card px-0 py-0 font-semibold text-primary drop-shadow-lg group-hover:left-14 group-hover:w-fit group-hover:px-2 group-hover:py-1   `}
             >
               {menu?.name}
             </h2>

@@ -39,7 +39,7 @@ export default function SideBarAdminLinks({ sidebarOpen }: props) {
   return (
     <>
       {isAdmin && (
-        <div>
+        <div className="relative mr-2 gap-10  ">
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
               <AccordionTrigger
@@ -47,10 +47,7 @@ export default function SideBarAdminLinks({ sidebarOpen }: props) {
               >
                 <UserPlus size={20} />{" "}
                 <h2
-                  style={{
-                    transitionDelay: `${+3}00ms`,
-                  }}
-                  className={`whitespace-pre duration-500 ${
+                  className={` ${
                     !sidebarOpen && "translate-x-28 overflow-hidden opacity-0"
                   }`}
                 >
@@ -59,7 +56,7 @@ export default function SideBarAdminLinks({ sidebarOpen }: props) {
                 <h2
                   className={`${
                     sidebarOpen && "hidden"
-                  } absolute left-48 w-0 overflow-hidden whitespace-pre rounded-md bg-card px-0 py-0 font-semibold text-primary drop-shadow-lg group-hover:left-14 group-hover:w-fit group-hover:px-2 group-hover:py-1 group-hover:duration-300  `}
+                  } absolute left-48 w-0 overflow-hidden whitespace-pre rounded-md bg-card px-0 py-0 font-semibold text-primary drop-shadow-lg group-hover:left-14 group-hover:w-fit group-hover:px-2 group-hover:py-1   `}
                 >
                   Cadastro
                 </h2>
@@ -69,7 +66,7 @@ export default function SideBarAdminLinks({ sidebarOpen }: props) {
                   <Link
                     href={subMenu?.link}
                     key={i}
-                    className={`group ml-3 flex items-center gap-3.5 rounded-md p-2 text-xs font-medium hover:text-primary`}
+                    className={`group flex items-center gap-3.5 rounded-md p-2 text-sm font-medium hover:text-primary`}
                   >
                     <div>
                       {React.createElement(subMenu?.icon, {
@@ -78,10 +75,7 @@ export default function SideBarAdminLinks({ sidebarOpen }: props) {
                     </div>
 
                     <h2
-                      style={{
-                        transitionDelay: `${i + 3}00ms`,
-                      }}
-                      className={`whitespace-pre duration-500 ${
+                      className={`${
                         !sidebarOpen &&
                         "translate-x-28 overflow-hidden opacity-0"
                       }`}
@@ -91,7 +85,7 @@ export default function SideBarAdminLinks({ sidebarOpen }: props) {
                     <h2
                       className={`${
                         sidebarOpen && "hidden"
-                      } absolute left-48 w-0 overflow-hidden whitespace-pre rounded-md bg-card px-0 py-0 font-semibold text-primary drop-shadow-lg group-hover:left-14 group-hover:w-fit group-hover:px-2 group-hover:py-1 group-hover:duration-300  `}
+                      } absolute left-48 w-0 overflow-hidden whitespace-pre rounded-md bg-card px-0 py-0 font-semibold text-primary drop-shadow-lg group-hover:left-14 group-hover:w-fit group-hover:px-2 group-hover:py-1   `}
                     >
                       {subMenu?.name}
                     </h2>

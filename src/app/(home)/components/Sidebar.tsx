@@ -1,5 +1,6 @@
 import { ConstructionIcon, HomeIcon, ListStartIcon } from "lucide-react";
 import { useEffect } from "react";
+import { HiMenuAlt3 } from "react-icons/hi";
 import AdminMenu from "./sideBarAdminLinks";
 import SideBarLinks from "./sideBarLinks";
 import SideBarBeta from "./userSidbarBeta";
@@ -36,17 +37,29 @@ const MainSideBar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   return (
     <>
-      <div
-        className={`z-50 min-h-screen bg-card py-28 ${
-          sidebarOpen ? "w-64" : "w-16"
-        } grid-cols-1 bg-background px-4 text-foreground duration-500`}
+      <aside
+        className={`z-50 min-h-screen gap-5  ${
+          sidebarOpen ? "w-64" : "hidden lg:block lg:w-16"
+        } grid-cols-1 bg-card px-4 text-foreground duration-500 `}
       >
-        <div className={`${!sidebarOpen && "hidden"} pb-14`}>
+        <div className="relative right-0 flex justify-end py-8">
+          <HiMenuAlt3
+            size={26}
+            className="cursor-pointer"
+            onClick={(e: { stopPropagation: () => void }) => {
+              e.stopPropagation();
+              setSidebarOpen(!sidebarOpen);
+            }}
+          />
+        </div>
+        <div className={`${!sidebarOpen && "hidden"} py pb-14`}>
           <SideBarBeta />
         </div>
-        <SideBarLinks sidebarOpen={sidebarOpen} />
-        <AdminMenu sidebarOpen={sidebarOpen} />
-      </div>
+        <div className="flex flex-col gap-4 py-10">
+          <SideBarLinks sidebarOpen={sidebarOpen} />
+          <AdminMenu sidebarOpen={sidebarOpen} />
+        </div>
+      </aside>
     </>
   );
 };
