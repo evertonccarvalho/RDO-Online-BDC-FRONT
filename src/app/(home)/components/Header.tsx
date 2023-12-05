@@ -14,14 +14,16 @@ const Header = (props: {
       <div className="shadow-2 flex flex-grow items-center justify-between px-4 py-4 md:px-6 2xl:px-11">
         <div className="flex items-center gap-2 sm:gap-4 ">
           <div className="flex justify-end py-3 ">
-            <HiMenuAlt3
-              size={26}
-              className="cursor-pointer lg:hidden"
-              onClick={(e: { stopPropagation: () => void }) => {
-                e.stopPropagation();
-                props.setSidebarOpen(!props.sidebarOpen);
-              }}
-            />
+            {!props.sidebarOpen && (
+              <HiMenuAlt3
+                size={26}
+                className="cursor-pointer md:hidden "
+                onClick={(e: { stopPropagation: () => void }) => {
+                  e.stopPropagation();
+                  props.setSidebarOpen(!props.sidebarOpen);
+                }}
+              />
+            )}
           </div>
           <div className="flex flex-row  sm:block">
             <Link

@@ -47,14 +47,12 @@ const UserPage = () => {
 
   return (
     <>
-      <div className=" space-y-6 p-5">
+      <div className=" space-y-6 p-2">
         <div>
           <Breadcrumb pageName="Usuários" />
           <p className="text-sm text-muted-foreground">Usuários</p>
         </div>
-        <div className="container">
-          <DataTable columns={columns} data={userData} />
-        </div>
+        <DataTable columns={columns} data={userData} />
       </div>
     </>
   );

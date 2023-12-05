@@ -39,7 +39,7 @@ const MainSideBar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     <>
       <aside
         className={`z-50 min-h-screen gap-5  ${
-          sidebarOpen ? "w-64" : "hidden lg:block lg:w-16"
+          sidebarOpen ? "w-48" : "hidden md:block md:w-16"
         } grid-cols-1 bg-card px-4 text-foreground duration-500 `}
       >
         <div className="relative right-0 flex justify-end py-8">
