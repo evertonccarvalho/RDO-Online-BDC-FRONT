@@ -30,7 +30,7 @@ const Header = (props: {
               className=" row flex flex-shrink-0 items-center "
               href="/home"
             >
-              <Image src={Logo} width={50} alt="logo" />
+              <Image src={Logo} priority width={50} alt="logo" />
               <p>RDO/</p>
               <p className="text-primary">B.D.C</p>
             </Link>
