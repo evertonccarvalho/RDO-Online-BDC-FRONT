@@ -2,10 +2,12 @@
 import Input from "@/components/common/form/Input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import wallpaper from "@/images/wallpaper.jpg";
 import { registerSchema } from "@/lib/validations/auth";
 import authService from "@/services/authService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LogInIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -61,7 +63,16 @@ export default function RegisterPage() {
 
   return (
     <div className="container grid h-screen w-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="hidden h-full bg-muted lg:block" />
+      <div className="hidden h-full bg-muted lg:block">
+        <div className="relative h-full w-full">
+          <Image
+            src={wallpaper}
+            alt="wallpaper"
+            layout="fill"
+            objectFit="cover"
+          />
+        </div>
+      </div>
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">
