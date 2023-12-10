@@ -1,6 +1,6 @@
-import { ApexOptions } from 'apexcharts';
-import React, { useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
+import { ApexOptions } from "apexcharts";
+import React, { useState } from "react";
+import ReactApexChart from "react-apexcharts";
 
 interface ChartThreeState {
   series: number[];
@@ -8,20 +8,20 @@ interface ChartThreeState {
 
 const options: ApexOptions = {
   chart: {
-    type: 'donut',
+    type: "donut",
   },
-  colors: ['#10B981', '#375E83', '#259AE6', '#FFA70B'],
-  labels: ['Remote', 'Hybrid', 'Onsite', 'Leave'],
+  colors: ["#10B981", "#375E83", "#259AE6", "#FFA70B"],
+  labels: ["Remote", "Hybrid", "Onsite", "Leave"],
   legend: {
     show: true,
-    position: 'bottom',
+    position: "bottom",
   },
 
   plotOptions: {
     pie: {
       donut: {
-        size: '65%',
-        background: 'transparent',
+        size: "65%",
+        background: "transparent",
       },
     },
   },
@@ -54,10 +54,10 @@ const ChartThree: React.FC = () => {
   });
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5">
+    <div className="col-span-12 rounded-sm border border-primary bg-card px-5 pb-5 pt-7 shadow-md sm:px-7 xl:col-span-5">
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
-          <h5 className="text-xl font-semibold text-black dark:text-white">
+          <h5 className="text-xl font-semibold text-foreground">
             Visitors Analytics
           </h5>
         </div>
@@ -71,7 +71,7 @@ const ChartThree: React.FC = () => {
               <option value="">Monthly</option>
               <option value="">Yearly</option>
             </select>
-            <span className="absolute top-1/2 right-3 z-10 -translate-y-1/2">
+            <span className="absolute right-3 top-1/2 z-10 -translate-y-1/2">
               <svg
                 width="10"
                 height="6"
@@ -108,7 +108,7 @@ const ChartThree: React.FC = () => {
       <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-primary"></span>
+            <span className="mr-2 block h-3 w-full max-w-[10px] rounded-full bg-primary"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Desktop </span>
               <span> 65% </span>
@@ -117,7 +117,7 @@ const ChartThree: React.FC = () => {
         </div>
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#6577F3]"></span>
+            <span className="mr-2 block h-3 w-full max-w-[10px] rounded-full bg-[#6577F3]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Tablet </span>
               <span> 34% </span>
@@ -126,7 +126,7 @@ const ChartThree: React.FC = () => {
         </div>
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#8FD0EF]"></span>
+            <span className="mr-2 block h-3 w-full max-w-[10px] rounded-full bg-[#8FD0EF]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Mobile </span>
               <span> 45% </span>
@@ -135,7 +135,7 @@ const ChartThree: React.FC = () => {
         </div>
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#0FADCF]"></span>
+            <span className="mr-2 block h-3 w-full max-w-[10px] rounded-full bg-[#0FADCF]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Unknown </span>
               <span> 12% </span>
