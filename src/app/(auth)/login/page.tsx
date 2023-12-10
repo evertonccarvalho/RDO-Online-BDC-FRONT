@@ -1,12 +1,12 @@
 "use client";
-import { useEffect, FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { LogInIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import authService from "@/services/authService";
 import { TokenService } from "@/services/tokenService";
+import { LogInIcon } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

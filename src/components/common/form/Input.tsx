@@ -4,10 +4,10 @@ import { FieldError } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
 const inputClasses = {
-  root: `group relative h-14 w-full rounded-md border border-[#a5a5a6] focus-within:border-primary focus-within:ring-1 focus-within:ring-primary`,
-  label: `absolute left-2 top-1/2 z-0 -translate-y-1/2 bg-background px-1 text-base pointer-events-none duration-200 group-focus-within:top-0 group-focus-within:text-xs group-focus-within:text-primary`,
+  root: `group relative h-10 w-full rounded-md border order-input focus-within:border-primary text-sm focus-within:ring-1 focus-within:ring-primary `,
+  input: `z-10 h-full w-full rounded-md bg-background px-3.5 text-sm py-4 outline-none`,
+  label: `absolute left-2 top-1/2 z-0 -translate-y-1/2 bg-background px-1 text-sm text-muted-foreground pointer-events-none duration-200 group-focus-within:top-0 group-focus-within:text-xs group-focus-within:text-primary`,
   labelError: `absolute left-2 top-1/2 z-0 -translate-y-1/2 bg-background px-1 text-red-500 pointer-events-none duration-200 group-focus-within:top-0 group-focus-within:text-xs group-focus-within:text-red-500`,
-  input: `z-10 h-full w-full rounded-md bg-background px-3.5 py-4 outline-none`,
 };
 
 function useCnMerge(...classNames: Argument[]) {

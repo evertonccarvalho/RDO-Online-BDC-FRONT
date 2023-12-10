@@ -98,13 +98,13 @@ export default function RegisterPage() {
                     type="email"
                     {...form.register("email")}
                     error={form.formState.errors.email} // Passando o erro correspondente ao campo
-                  />{" "}
+                  />
                   <Input
                     placeholder="Senha"
                     type="password"
                     {...form.register("password")} // Registrando o campo com react-hook-form
                     error={form.formState.errors.password}
-                  />{" "}
+                  />
                   <Input
                     placeholder="Confirm Senha"
                     type="password"
