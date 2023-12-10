@@ -1,50 +1,64 @@
 "use client";
-import Link from "next/link";
-
+import FormInputField from "@/components/common/form/FormInputField";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
+import { registerSchema } from "@/lib/validations/auth";
 import authService from "@/services/authService";
-import { TokenService } from "@/services/tokenService";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { LogInIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [userName, setUserName] = useState("");
-  const [registrationMessage, setRegistrationMessage] = useState(""); // Nova variável de estado para a mensagem
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (TokenService.get()) {
-      router.push("/home");
+  type FormValues = z.infer<typeof registerSchema>;
+  const form = useForm<FormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      userName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  async function onSubmit(data: z.infer<typeof registerSchema>) {
+    try {
+      setIsSubmitting(true);
+      registerSchema.parse(data); // Validar os valores antes de chamar a API
+
+      const { status } = await authService.register(data);
+      if (status === 201) {
+        toast({
+          variant: "success",
+          title: "Usuário registrado.",
+          description: `foi registrado com sucesso`,
+        });
+        router.push("/login");
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Erro ao atualizar usuário.",
+          description: "Houve um problema ao registar o usuário.",
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Erro ao atualizar usuário.",
+        description: "Houve um erro ao atualizar o usuário.",
+      });
+    } finally {
+      setIsSubmitting(false); // Definir isSubmitting como false após a finalização da requisição
     }
-  }, [router]);
-
-  const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const params = { userName, email, password };
-
-    if (password !== passwordConfirm) {
-      // Configurando a mensagem de erro diretamente
-      setRegistrationMessage("A senha e confirmação são diferentes!");
-      return;
-    }
-
-    const { data, status } = await authService.register(params);
-
-    if (status === 201) {
-      router.push("/login?registred=true");
-    } else {
-      // Configurando a mensagem de erro diretamente
-      setRegistrationMessage(
-        data?.message || "Ocorreu um erro durante o registro.",
-      );
-    }
-  };
+  }
 
   return (
     <div className="container grid h-screen w-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -61,58 +75,48 @@ export default function RegisterPage() {
             </p>
           </div>
           <div className="grid gap-6">
-            <form onSubmit={handleRegister}>
-              <div className="grid gap-2">
-                <div className="grid gap-1">
-                  <label className="sr-only" htmlFor="email">
-                    Nome
-                  </label>
-                  <Input
-                    id="userName"
-                    placeholder="Seu Nome"
-                    type="text"
-                    autoCapitalize="none"
-                    autoComplete="name"
-                    autoCorrect="off"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                  />{" "}
-                  <label className="sr-only" htmlFor="email">
-                    Email
-                  </label>
-                  <Input
-                    id="email"
-                    placeholder="name@example.com"
-                    type="email"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    autoCorrect="off"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <label className="sr-only" htmlFor="email">
-                    senha
-                  </label>
-                  <Input
-                    id="password"
-                    placeholder="*******"
-                    type="password"
-                    autoCorrect="off"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />{" "}
-                  <Input
-                    id="passwordConfirm"
-                    placeholder="*******"
-                    type="password"
-                    autoCorrect="off"
-                    value={passwordConfirm}
-                    onChange={(e) => setPasswordConfirm(e.target.value)}
-                  />
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="">
+                <div className="flex flex-col justify-around gap-4">
+                  <div className="grid grid-cols-1 gap-3">
+                    <FormInputField
+                      control={form.control}
+                      name="userName"
+                      label="Nome Completo"
+                      placeholder="Nome Completo"
+                      maxLength={25}
+                    />{" "}
+                    <FormInputField
+                      control={form.control}
+                      name="email"
+                      label="email"
+                      placeholder="email@example.com"
+                      type="email"
+                      maxLength={25}
+                    />{" "}
+                    <FormInputField
+                      control={form.control}
+                      name="password"
+                      label="password"
+                      placeholder="********"
+                      type="password"
+                      maxLength={25}
+                    />{" "}
+                    <FormInputField
+                      control={form.control}
+                      name="confirmPassword"
+                      label="Confirm Password"
+                      placeholder="********"
+                      type="password"
+                      maxLength={25}
+                    />
+                  </div>
+                  <Button disabled={isSubmitting} type="submit">
+                    Criar nova conta
+                  </Button>
                 </div>
-                <Button type="submit">Registro</Button>
-              </div>
-            </form>
+              </form>
+            </Form>
           </div>
           <p className="px-8 text-center text-sm text-muted-foreground">
             <Link

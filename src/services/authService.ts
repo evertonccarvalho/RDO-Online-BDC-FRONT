@@ -1,11 +1,6 @@
+import { RegisterSchema } from "@/lib/validations/auth";
 import api from "./api";
 import { TokenService } from "./tokenService";
-
-interface RegisterParams {
-  userName: string;
-  email: string;
-  password: string;
-}
 
 interface LoginParams {
   email: string;
@@ -13,7 +8,7 @@ interface LoginParams {
 }
 
 const authService = {
-  register: async (params: RegisterParams) => {
+  register: async (params: RegisterSchema) => {
     const res = await api.post("/auth/register", params).catch((error) => {
       if (error.response.status === 400) {
         return error.response;
@@ -37,6 +32,7 @@ const authService = {
 
     return res;
   },
+
   autoLogin: async (token: string) => {
     const res = await api
       .get("/auth", { headers: { Authorization: `Bearer ${token}` } })
