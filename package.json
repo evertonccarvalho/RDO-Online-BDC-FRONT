@@ -33,6 +33,7 @@
     "apexcharts": "^3.44.1",
     "axios": "^1.6.0",
     "class-variance-authority": "^0.7.0",
+    "classnames": "^2.3.2",
     "clsx": "^2.0.0",
     "jsvectormap": "^1.5.3",
     "jvectormap-next": "^3.1.1",

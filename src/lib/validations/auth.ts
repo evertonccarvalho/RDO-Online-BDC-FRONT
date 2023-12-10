@@ -15,8 +15,7 @@ export const registerSchema = z
       .refine(
         (value) => /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(value),
         {
-          message:
-            "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número",
+          message: "Senha deve ter 1 letra maiúscula, 1 minúscula e 1 número",
         },
       ),
     confirmPassword: z
@@ -25,8 +24,7 @@ export const registerSchema = z
       .refine(
         (value) => /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(value),
         {
-          message:
-            "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número",
+          message: "Senha deve ter 1 letra maiúscula, 1 minúscula e 1 número",
         },
       ),
   })
