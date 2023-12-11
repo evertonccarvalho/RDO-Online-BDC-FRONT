@@ -1,13 +1,17 @@
 "use client";
 import Breadcrumb from "@/app/(home)/components/Breadcrumb";
 import Loader from "@/components/common/Loader/page";
-import { WorkParams, workService } from "@/services/workService";
+import { workService } from "@/services/workService";
 import useSWR from "swr";
 import WorkCard from "./workCard";
 const ObrasPage = () => {
-  const { data, error } = useSWR("/obras", workService.fetchAll);
-  if (error) return error;
-  if (!data) {
+  const { data: obrasData, error: obrasError } = useSWR(
+    "/obras",
+    workService.fetchAll,
+  );
+  console.log("Obras Data:", obrasData);
+  if (obrasError) return obrasError;
+  if (!obrasData) {
     return <Loader />;
   }
 
@@ -18,18 +22,20 @@ const ObrasPage = () => {
           <Breadcrumb pageName="Obras" />
           <p className="text-sm text-muted-foreground">Obras</p>
         </div>
+
         <div className="flex flex-row flex-wrap gap-4 p-2">
-          {data.map((item: WorkParams) => (
+          {obrasData.map((obra: any) => (
             <WorkCard
-              id={item.id}
-              key={item.id} // Utilizando o campo 'id' como chave única
-              company={item.company}
-              workDescription={item.workDescription}
-              nameResponsible={item.nameResponsible}
-              address={item.address}
-              logoUrl={item.logoUrl}
-              phoneContact={item.phoneContact}
-              active={item.active}
+              id={obra.id}
+              key={obra.id}
+              company={obra.company}
+              workDescription={obra.workDescription}
+              nameResponsible={obra.nameResponsible}
+              address={obra.address}
+              logoUrl={obra.logoUrl}
+              phoneContact={obra.phoneContact}
+              active={obra.active}
+              count={obra.services.length} // Passando a contagem de serviços como propriedade
             />
           ))}
         </div>

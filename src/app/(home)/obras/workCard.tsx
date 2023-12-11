@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import UserOne from "@/images/user.png";
-import { ArrowDown, EyeIcon } from "lucide-react";
+import { ArrowDown, EyeIcon, WorkflowIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -16,6 +16,7 @@ interface WorkCardProps {
   active: Boolean;
   createdAt?: Date;
   id: number;
+  count: string;
 }
 
 export default function WorkCard({
@@ -28,6 +29,7 @@ export default function WorkCard({
   active,
   createdAt,
   id,
+  count,
 }: WorkCardProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -101,28 +103,12 @@ export default function WorkCard({
                 </div>
                 <div className="2xl:gap-7.5 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4">
                   <Card
-                    icon={EyeIcon}
-                    amount="$3.456K"
-                    description="Total views"
+                    icon={WorkflowIcon}
+                    amount={`Serviços ${count}`}
+                    description="Total de Serviços"
                     percentage="0.43%"
-                  />
-                  <Card
-                    icon={EyeIcon}
-                    amount="$3.456K"
-                    description="Total views"
-                    percentage="0.43%"
-                  />
-                  <Card
-                    icon={EyeIcon}
-                    amount="$3.456K"
-                    description="Total views"
-                    percentage="0.43%"
-                  />
-                  <Card
-                    icon={EyeIcon}
-                    amount="$3.456K"
-                    description="Total views"
-                    percentage="0.43%"
+                    link={`/obras/service/${id}`}
+                    iconlink={EyeIcon}
                   />
                 </div>
               </div>

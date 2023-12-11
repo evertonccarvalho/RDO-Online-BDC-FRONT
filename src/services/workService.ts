@@ -1,3 +1,4 @@
+import { ServiceSchema } from "@/lib/validations/service";
 import { WorkSchema } from "@/lib/validations/work";
 import api from "./api";
 import { TokenService } from "./tokenService";
@@ -11,6 +12,7 @@ export type WorkParams = {
   address: string; // Endereço completo da obra
   logoUrl: string; // Logotipo da obra
   active: Boolean; // Indica se a obra está ativa
+  services?: ServiceSchema[];
   createdAt?: Date;
   updatedAt?: Date;
 };
