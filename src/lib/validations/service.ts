@@ -15,11 +15,11 @@ export const serviceSchema = z.object({
 });
 
 export type ServiceSchema = {
-  id: number;
+  id?: number;
   serviceDescription: string;
   unit: string;
   status: string;
   workId: number;
-  subcategoryId: number;
-  work: WorkSchema;
+  subcategoryId?: number;
+  work?: WorkSchema;
 };

@@ -3,7 +3,7 @@ import api from "./api";
 import { TokenService } from "./tokenService";
 
 const serviceService = {
-  create: async (workId: number, params: ServiceSchema) => {
+  register: async (workId: number, params: ServiceSchema) => {
     const res = await api
       .post(`/works/${workId}/services`, params, {
         headers: {

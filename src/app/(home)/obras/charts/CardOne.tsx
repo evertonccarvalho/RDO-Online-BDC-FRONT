@@ -3,17 +3,20 @@ import React from "react";
 
 interface CardProps {
   icon: React.ElementType;
-  iconlink: React.ElementType;
+  viewIconLink: React.ElementType;
+  newIconLink: React.ElementType;
   amount: string;
   description: string;
-  percentage: string;
-  link: string;
+  viewLink: string;
+  newLink: string;
 }
 
 const Card: React.FC<CardProps> = ({
   icon: IconComponent,
-  iconlink: IconLink,
-  link,
+  viewIconLink: ViewIconLink,
+  newIconLink: NewIconLink,
+  viewLink,
+  newLink,
   amount,
 }: CardProps) => {
   return (
@@ -23,13 +26,15 @@ const Card: React.FC<CardProps> = ({
           {IconComponent && <IconComponent />}
         </div>
         <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-background">
-          <Link href={link}>{IconLink && <IconLink />}</Link>
+          <Link href={newLink}>{NewIconLink && <NewIconLink />}</Link>
         </div>
       </div>
       <div className="mt-4 flex items-end justify-between">
-        <div>
+        <div className="flex items-center gap-2">
           <h4 className="text-title-md font-bold text-foreground">{amount}</h4>
-          <span className="text-sm font-medium">{}</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-background">
+            <Link href={viewLink}>{ViewIconLink && <ViewIconLink />}</Link>
+          </div>
         </div>
 
         <span className="text-meta-3 flex items-center gap-1 text-sm font-medium">

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import UserOne from "@/images/user.png";
-import { ArrowDown, EyeIcon, WorkflowIcon } from "lucide-react";
+import { ArrowDown, EyeIcon, PlusIcon, WorkflowIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -106,9 +106,10 @@ export default function WorkCard({
                     icon={WorkflowIcon}
                     amount={`Serviços ${count}`}
                     description="Total de Serviços"
-                    percentage="0.43%"
-                    link={`/obras/service/${id}`}
-                    iconlink={EyeIcon}
+                    viewLink={`/obras/service/${id}`}
+                    viewIconLink={EyeIcon}
+                    newLink={`/obras/service/new`}
+                    newIconLink={PlusIcon}
                   />
                 </div>
               </div>
