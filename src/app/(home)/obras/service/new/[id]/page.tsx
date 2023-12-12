@@ -29,37 +29,44 @@ export default function CreateWork() {
   });
 
   async function onSubmit(data: z.infer<typeof serviceSchema>) {
+    setIsSubmitting(true);
+
     try {
-      setIsSubmitting(true);
       serviceSchema.parse(data); // Validar os valores antes de chamar a API
 
       if (!workId) {
-        console.log("falta workid");
         throw new Error("WorkId not provided");
       }
-      const { status } = await serviceService.register(+workId, data);
+
+      const { status } = await serviceService.create(+workId, data);
+
+      const successMessage = `${data.serviceDescription} foi registrado com sucesso`;
+
       if (status === 201) {
         toast({
           variant: "success",
           title: "Serviço registrado.",
-          description: `${data.serviceDescription} foi registrada com sucesso`,
+          description: successMessage,
         });
-        router.push("/obras/service");
+        router.push("/obras");
       } else {
-        toast({
-          variant: "destructive",
-          title: "Erro ao atualizar usuário.",
-          description: "Houve um problema ao registar o serviço.",
-        });
+        throw new Error("Houve um problema ao registrar o serviço.");
       }
+    } catch (error) {
+      console.error("Erro durante o envio do formulário:", error);
+      toast({
+        variant: "destructive",
+        title: "Erro ao enviar formulário.",
+        description: "Houve um problema ao enviar o formulário.",
+      });
     } finally {
-      setIsSubmitting(false); // Definir isSubmitting como false após a finalização da requisição
+      setIsSubmitting(false);
     }
   }
 
   return (
     <>
-      <VoltarButton href="/obra" />
+      <VoltarButton href="/obras" />
       <div className="flex flex-col gap-9 rounded-sm bg-card p-5 sm:grid-cols-2">
         <form onSubmit={form.handleSubmit(onSubmit)} className="">
           <div className="flex flex-col justify-around gap-4">

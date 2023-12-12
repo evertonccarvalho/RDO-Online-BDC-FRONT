@@ -108,7 +108,7 @@ export default function WorkCard({
                     description="Total de Serviços"
                     viewLink={`/obras/service/${id}`}
                     viewIconLink={EyeIcon}
-                    newLink={`/obras/service/new`}
+                    newLink={`/obras/service/new/${id}`}
                     newIconLink={PlusIcon}
                   />
                 </div>

@@ -19,9 +19,9 @@ const serviceService = {
     return res;
   },
 
-  register: async (workid: number, params: ServiceSchema) => {
+  register: async (workId: number, params: ServiceSchema) => {
     try {
-      const res = await api.post(`/works/${workid}/services`, params, {
+      const res = await api.post(`/works/${workId}/services`, params, {
         headers: {
           Authorization: TokenService.get(),
         },
