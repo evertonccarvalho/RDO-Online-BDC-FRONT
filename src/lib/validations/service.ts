@@ -14,7 +14,7 @@ export const serviceSchema = z.object({
 });
 
 export type ServiceSchema = {
-  id?: number;
+  id: number;
   serviceDescription: string;
   unit: string;
   status: string;

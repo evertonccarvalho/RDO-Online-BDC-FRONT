@@ -1,17 +1,22 @@
 "use client";
 import Breadcrumb from "@/app/(home)/components/Breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import ServicePage from "./servicePage";
 
-export default function Services() {
+import { TableListServices } from "@/components/common/form/TableListServices";
+
+const ServicesPage = () => {
   return (
-    <div className="space-y-4 p-3">
-      <div>
-        <Breadcrumb pageName="SERVIÇOS" />
-        <p className="text-sm text-muted-foreground">SERVIÇOS</p>
+    <>
+      <div className="p-5">
+        <div>
+          <Breadcrumb pageName="Obras" />
+          <p className="text-sm text-muted-foreground">Obras</p>
+        </div>
+        <div className="container">
+          <TableListServices />
+        </div>
       </div>
-      <Separator />
-      <ServicePage />
-    </div>
+    </>
   );
-}
+};
+
+export default ServicesPage;

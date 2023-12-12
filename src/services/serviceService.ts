@@ -1,9 +1,18 @@
 import { ServiceSchema } from "@/lib/validations/service";
+import { WorkSchema } from "@/lib/validations/work";
 import api from "./api";
 import { TokenService } from "./tokenService";
 
+export type ServiceParams = {
+  serviceDescription: string;
+  unit: string;
+  status: string;
+  subcategoryId?: string;
+  work?: WorkSchema;
+};
+
 const serviceService = {
-  create: async (workId: number, params: ServiceSchema) => {
+  create: async (workId: number, params: ServiceParams) => {
     const res = await api
       .post(`/works/${workId}/services`, params, {
         headers: {
@@ -17,22 +26,6 @@ const serviceService = {
         return error;
       });
     return res;
-  },
-
-  register: async (workId: number, params: ServiceSchema) => {
-    try {
-      const res = await api.post(`/works/${workId}/services`, params, {
-        headers: {
-          Authorization: TokenService.get(),
-        },
-      });
-
-      return res.data; // Return the response data or modify as needed
-    } catch (error) {
-      if (error instanceof Error)
-        console.error("Erro ao registrar serviço", error.message);
-      throw error;
-    }
   },
 
   fetchAll: async (workId: number) => {
