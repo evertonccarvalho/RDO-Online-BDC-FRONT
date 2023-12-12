@@ -17,28 +17,25 @@ const ObrasPage = () => {
 
   return (
     <>
-      <div className="p-2">
-        <div>
-          <Breadcrumb pageName="Obras" />
-          <p className="text-sm text-muted-foreground">Obras</p>
-        </div>
+      <div>
+        <Breadcrumb pageName="Obras" />
+      </div>
 
-        <div className="flex flex-row flex-wrap gap-4 p-2">
-          {obrasData.map((obra: any) => (
-            <WorkCard
-              id={obra.id}
-              key={obra.id}
-              company={obra.company}
-              workDescription={obra.workDescription}
-              nameResponsible={obra.nameResponsible}
-              address={obra.address}
-              logoUrl={obra.logoUrl}
-              phoneContact={obra.phoneContact}
-              active={obra.active}
-              count={obra.services.length}
-            />
-          ))}
-        </div>
+      <div className="flex flex-row flex-wrap gap-4">
+        {obrasData.map((obra: any) => (
+          <WorkCard
+            id={obra.id}
+            key={obra.id}
+            company={obra.company}
+            workDescription={obra.workDescription}
+            nameResponsible={obra.nameResponsible}
+            address={obra.address}
+            logoUrl={obra.logoUrl}
+            phoneContact={obra.phoneContact}
+            active={obra.active}
+            count={obra.services.length}
+          />
+        ))}
       </div>
     </>
   );

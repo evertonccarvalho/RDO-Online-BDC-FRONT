@@ -25,14 +25,17 @@ const Header = (props: {
               />
             )}
           </div>
-          <div className="flex flex-row  sm:block">
+          <div className="flex flex-row sm:block">
             <Link
               className=" row flex flex-shrink-0 items-center "
               href="/home"
             >
               <Image src={Logo} priority width={50} alt="logo" />
-              <p>RDO/</p>
-              <p className="text-primary">B.D.C</p>
+              <div className="hidden md:block">
+                <p>
+                  RDO/<span className="text-primary">B.D.C</span>
+                </p>
+              </div>
             </Link>
           </div>
         </div>

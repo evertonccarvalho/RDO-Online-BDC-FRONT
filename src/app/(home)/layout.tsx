@@ -30,19 +30,24 @@ export default function HomeLayout({ children }: HomeLayoutProps) {
 
   return (
     <AuthProvider>
-      <div className="dark:bg-boxdark-2 dark:text-bodydark">
+      <div className="bg-background">
         <div className="flex h-screen overflow-hidden">
           <MainSideBar
             sidebarOpen={sidebarOpen}
             setSidebarOpen={setSidebarOpen}
           />
           <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-            <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-            <main>
-              <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+            <header className="flex items-center justify-between">
+              <Header
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+              />
+            </header>
+            <div>
+              <main className="mx-auto min-w-min max-w-screen-2xl p-4 md:p-6 2xl:p-10">
                 {children}
-              </div>
-            </main>
+              </main>
+            </div>
           </div>
         </div>
       </div>

@@ -1,6 +1,11 @@
-import { Button } from "@/components/ui/button";
 import UserOne from "@/images/user.png";
-import { ArrowDown, EyeIcon, PlusIcon, WorkflowIcon } from "lucide-react";
+import {
+  ArrowDown,
+  EyeIcon,
+  PenBoxIcon,
+  PlusIcon,
+  WorkflowIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -42,7 +47,7 @@ export default function WorkCard({
       <div className="flex w-full">
         <div className="w-full rounded-lg bg-card shadow-sm">
           <div className="relative">
-            <div className="relative rounded-t-lg bg-cover p-10">
+            <div className="relative rounded-t-lg bg-cover p-6">
               <div className="flex justify-between">
                 <div className="flex flex-col items-start gap-2 font-bold text-foreground">
                   <p className="w-full rounded-full ">{workDescription}</p>{" "}
@@ -50,33 +55,35 @@ export default function WorkCard({
                     Status
                   </p>
                 </div>
-                <Button
-                  className={`card-header ${isOpen ? "active" : ""}`}
-                  onClick={toggleCard}
-                >
-                  <ArrowDown />
-                </Button>
+                <div>
+                  <button
+                    className={`card-header ${isOpen ? "active" : ""}`}
+                    onClick={toggleCard}
+                  >
+                    <ArrowDown />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
           {isOpen && (
-            <div className="relative px-6">
-              <div className=" flex flex-col justify-start gap-4 p-4">
+            <div className="relative p-6">
+              <div className=" flex flex-col justify-start gap-4 ">
                 <div className="text-2xl font-black leading-none text-primary">
                   {company}
                 </div>
                 <div className="flex justify-between ">
                   <div className="flex items-center gap-4 ">
-                    <div className="h-12 w-12 rounded-full border-2 border-primary">
+                    <div className=" w-12 rounded-full border-2 border-primary">
                       <Image
                         src={logoUrl || UserOne}
                         alt="User"
-                        width={300}
-                        height={300}
+                        width={100}
+                        height={100}
                         quality={80}
                       />
                     </div>
-                    <div className="text-sm text-foreground">
+                    <div className="text-xs text-foreground">
                       <p>
                         Resp: <span>{nameResponsible}</span>
                       </p>
@@ -87,24 +94,22 @@ export default function WorkCard({
                         Endereço: <span>{address}</span>
                       </p>
                     </div>
-                  </div>
-                  <div className="flex items-center justify-end">
-                    <Button className="h-12 w-full ">
+                    <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
                       {id && (
                         <Link
-                          className="h-12 w-full  py-4"
+                          className="flex h-full w-full items-center justify-center"
                           href={`/obras/${id}`}
                         >
-                          Detalhes
+                          <PenBoxIcon />
                         </Link>
                       )}
-                    </Button>
+                    </div>
                   </div>
                 </div>
                 <div className="2xl:gap-7.5 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4">
                   <Card
                     icon={WorkflowIcon}
-                    amount={`Serviços ${count}`}
+                    amount={`${count}`}
                     description="Total de Serviços"
                     viewLink={`/obras/service/${id}`}
                     viewIconLink={EyeIcon}
