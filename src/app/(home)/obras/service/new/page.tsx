@@ -13,10 +13,9 @@ import { z } from "zod";
 export default function CreateWork() {
   const pathname = usePathname();
   const workId = pathname.split("/").pop();
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   type FormValues = z.infer<typeof serviceSchema>;
   const form = useForm<FormValues>({
@@ -25,7 +24,7 @@ export default function CreateWork() {
       serviceDescription: "",
       status: "",
       unit: "",
-      subcategoryId: 2,
+      subcategoryId: "",
     },
   });
 
@@ -35,29 +34,24 @@ export default function CreateWork() {
       serviceSchema.parse(data); // Validar os valores antes de chamar a API
 
       if (!workId) {
+        console.log("falta workid");
         throw new Error("WorkId not provided");
       }
       const { status } = await serviceService.register(+workId, data);
       if (status === 201) {
         toast({
           variant: "success",
-          title: "Usuário registrado.",
-          description: `foi registrado com sucesso`,
+          title: "Serviço registrado.",
+          description: `${data.serviceDescription} foi registrada com sucesso`,
         });
-        router.push("/login");
+        router.push("/obras/service");
       } else {
         toast({
           variant: "destructive",
           title: "Erro ao atualizar usuário.",
-          description: "Houve um problema ao registar o usuário.",
+          description: "Houve um problema ao registar o serviço.",
         });
       }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Erro ao atualizar usuário.",
-        description: "Houve um erro ao atualizar o usuário.",
-      });
     } finally {
       setIsSubmitting(false); // Definir isSubmitting como false após a finalização da requisição
     }
@@ -102,7 +96,9 @@ export default function CreateWork() {
                 error={form.formState.errors.subcategoryId}
               />
             </div>
-            <Button type="submit">Criar Serviço</Button>
+            <Button disabled={isSubmitting} type="submit">
+              Criar Serviço
+            </Button>
           </div>
         </form>
       </div>

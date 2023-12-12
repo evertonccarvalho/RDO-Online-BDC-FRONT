@@ -3,7 +3,7 @@ import api from "./api";
 import { TokenService } from "./tokenService";
 
 const serviceService = {
-  register: async (workId: number, params: ServiceSchema) => {
+  create: async (workId: number, params: ServiceSchema) => {
     const res = await api
       .post(`/works/${workId}/services`, params, {
         headers: {
@@ -17,6 +17,22 @@ const serviceService = {
         return error;
       });
     return res;
+  },
+
+  register: async (workid: number, params: ServiceSchema) => {
+    try {
+      const res = await api.post(`/works/${workid}/services`, params, {
+        headers: {
+          Authorization: TokenService.get(),
+        },
+      });
+
+      return res.data; // Return the response data or modify as needed
+    } catch (error) {
+      if (error instanceof Error)
+        console.error("Erro ao registrar serviço", error.message);
+      throw error;
+    }
   },
 
   fetchAll: async (workId: number) => {

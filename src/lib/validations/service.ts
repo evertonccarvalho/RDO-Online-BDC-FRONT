@@ -11,7 +11,7 @@ export const serviceSchema = z.object({
   unit: z.string(),
   status: z.string().default("Ativo"),
   workId: z.number(),
-  subcategoryId: z.number(),
+  subcategoryId: z.string(),
 });
 
 export type ServiceSchema = {
@@ -20,6 +20,6 @@ export type ServiceSchema = {
   unit: string;
   status: string;
   workId: number;
-  subcategoryId?: number;
+  subcategoryId?: string;
   work?: WorkSchema;
 };
