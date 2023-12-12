@@ -3,7 +3,7 @@ import Breadcrumb from "@/app/(home)/components/Breadcrumb";
 import Loader from "@/components/common/Loader/page";
 import { workService } from "@/services/workService";
 import useSWR from "swr";
-import WorkCard from "./workCard";
+import WorkCard from "../../../components/common/workCard";
 const ObrasPage = () => {
   const { data: obrasData, error: obrasError } = useSWR(
     "/obras",
@@ -35,7 +35,7 @@ const ObrasPage = () => {
               logoUrl={obra.logoUrl}
               phoneContact={obra.phoneContact}
               active={obra.active}
-              count={obra.services.length} // Passando a contagem de serviços como propriedade
+              count={obra.services.length}
             />
           ))}
         </div>

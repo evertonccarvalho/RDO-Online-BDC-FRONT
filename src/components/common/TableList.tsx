@@ -2,7 +2,7 @@ import { deleteService } from "@/lib/userUtils";
 import { PenBoxIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import DeleteItem from "../delete/DeleteItem";
+import DeleteItem from "./delete/DeleteItem";
 
 interface orderSingleProps {
   id: number;

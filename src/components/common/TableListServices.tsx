@@ -22,7 +22,7 @@ export function TableListServices() {
 
   return (
     <div className="text-Foreground rounded bg-card px-6 py-4">
-      <h2 className="mb-4 text-lg">Recent Orders</h2>
+      <h2 className="mb-4 text-lg">Serviços</h2>
 
       <div className="overflow-x-auto pb-4">
         <div className="flex min-w-[760px] flex-col">

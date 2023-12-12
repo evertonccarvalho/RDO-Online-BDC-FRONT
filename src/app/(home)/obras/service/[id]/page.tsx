@@ -1,7 +1,7 @@
 "use client";
 import Breadcrumb from "@/app/(home)/components/Breadcrumb";
 
-import { TableListServices } from "@/components/common/form/TableListServices";
+import { TableListServices } from "@/components/common/TableListServices";
 
 const ServicesPage = () => {
   return (

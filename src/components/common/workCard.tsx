@@ -4,7 +4,7 @@ import { ArrowDown, EyeIcon, PlusIcon, WorkflowIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import Card from "./charts/CardOne";
+import Card from "./ServiceMiniCard";
 
 interface WorkCardProps {
   workDescription: string;
@@ -110,6 +110,7 @@ export default function WorkCard({
                     viewIconLink={EyeIcon}
                     newLink={`/obras/service/new/${id}`}
                     newIconLink={PlusIcon}
+                    workId={id}
                   />
                 </div>
               </div>

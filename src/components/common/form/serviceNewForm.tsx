@@ -1,18 +1,21 @@
 "use client";
-import VoltarButton from "@/app/(home)/components/VoltarButton";
 import Input from "@/components/common/form/Input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { serviceSchema } from "@/lib/validations/service";
 import { serviceService } from "@/services/serviceService";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-export default function CreateService() {
-  const pathname = usePathname();
-  const workId = pathname.split("/").pop();
+export default function CreateNewService({
+  workId,
+}: {
+  workId: number | undefined;
+}) {
+  // const pathname = usePathname();
+  // const workId = pathname.split("/").pop();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
@@ -66,8 +69,7 @@ export default function CreateService() {
 
   return (
     <>
-      <VoltarButton href="/obras" />
-      <div className="flex flex-col gap-9 rounded-sm bg-card p-5 sm:grid-cols-2">
+      <div className="flex flex-col gap-9 rounded-sm bg-card sm:grid-cols-2">
         <form onSubmit={form.handleSubmit(onSubmit)} className="">
           <div className="flex flex-col justify-around gap-4">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
