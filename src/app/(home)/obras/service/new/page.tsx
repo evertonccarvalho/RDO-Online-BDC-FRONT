@@ -73,12 +73,15 @@ export default function CreateWork() {
               <Input
                 placeholder="Descrição do Serviço"
                 type="text"
+                value={form.watch("serviceDescription")}
                 {...form.register("serviceDescription")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.serviceDescription}
               />
+
               <Input
                 placeholder="Status"
                 type="text"
+                value={form.watch("status")}
                 {...form.register("status")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.status}
               />
@@ -87,12 +90,14 @@ export default function CreateWork() {
               <Input
                 placeholder="UNIT????"
                 type="text"
+                value={form.watch("unit")}
                 {...form.register("unit")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.unit}
               />{" "}
               <Input
                 placeholder="SubCategoria????"
                 type="number"
+                value={form.watch("subcategoryId")}
                 {...form.register("subcategoryId")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.subcategoryId}
               />

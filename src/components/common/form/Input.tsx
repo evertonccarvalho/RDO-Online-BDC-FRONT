@@ -20,15 +20,17 @@ interface InputProps extends React.ComponentProps<"input"> {
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ placeholder, error, ...props }, ref) => {
+  ({ placeholder, value, error, ...props }, ref) => {
     const hasError = !!error;
 
     return (
-      <div className={cn(inputClasses.root, { "has-error": hasError })}>
+      <div className={useCnMerge(inputClasses.root, { "has-error": hasError })}>
         <label
-          className={cn(
+          className={useCnMerge(
             inputClasses.label,
-            { [inputClasses.labelError]: hasError }, // Adicionando classe condicional para alterar a cor do texto
+            { [inputClasses.labelError]: hasError },
+            value && "top-0 text-xs",
+            // Adicionando classe condicional para alterar a cor do texto
           )}
           htmlFor={props.id ?? props.name}
         >

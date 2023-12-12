@@ -91,23 +91,27 @@ export default function RegisterPage() {
                   <Input
                     placeholder="Nome Completo"
                     {...form.register("userName")}
+                    value={form.watch("userName")}
                     error={form.formState.errors.userName} // Passando o erro correspondente ao campo
                   />
                   <Input
                     placeholder="E-mail"
                     type="email"
+                    value={form.watch("email")}
                     {...form.register("email")}
                     error={form.formState.errors.email} // Passando o erro correspondente ao campo
                   />
                   <Input
                     placeholder="Senha"
                     type="password"
+                    value={form.watch("password")}
                     {...form.register("password")} // Registrando o campo com react-hook-form
                     error={form.formState.errors.password}
                   />
                   <Input
                     placeholder="Confirm Senha"
                     type="password"
+                    value={form.watch("confirmPassword")}
                     {...form.register("confirmPassword")} // Registrando o campo com react-hook-form
                     error={form.formState.errors.confirmPassword}
                   />
