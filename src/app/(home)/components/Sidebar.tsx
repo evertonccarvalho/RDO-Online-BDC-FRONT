@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import AdminMenu from "./sideBarAdminLinks";
 import SideBarLinks from "./sideBarLinks";
-import SideBarBeta from "./userSidbarBeta";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -53,7 +52,7 @@ const MainSideBar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           />
         </div>
         <div className={`${!sidebarOpen && "hidden"} py pb-14`}>
-          <SideBarBeta />
+          {/* <SideBarBeta /> */}
         </div>
         <div className="flex flex-col gap-4 py-10">
           <SideBarLinks sidebarOpen={sidebarOpen} />

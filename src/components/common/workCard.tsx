@@ -120,16 +120,6 @@ export default function WorkCard({
                       modalName="Atualizar Serviço"
                       modalContent={<UpdateWorker workId={id} />}
                     />
-                    {/* <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
-                      {id && (
-                        <Link
-                          className="flex h-full w-full items-center justify-center"
-                          href={`/obras/${id}`}
-                        >
-                          <PenBoxIcon />
-                        </Link>
-                      )}
-                    </div> */}
                     <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
                       <button
                         className="flex h-full w-full items-center justify-center"

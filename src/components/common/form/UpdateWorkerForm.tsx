@@ -3,15 +3,7 @@ import VoltarButton from "@/app/(home)/components/VoltarButton";
 import ProfileHeader from "@/app/(home)/currentuser/[id]/profileHeader";
 import { Button } from "@/components/ui/button";
 
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import useCover from "@/images/cover.png";
 import userAvatar from "@/images/user.png";
@@ -169,28 +161,15 @@ export default function UpdateWorker({
                     {...form.register("phoneContact")} // Registrando o campo com react-hook-form
                     error={form.formState.errors.phoneContact}
                   />
-                  <FormField
-                    control={form.control}
-                    name="active"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col gap-2 text-sm">
-                        <FormLabel className="flex gap-2 text-sm">
-                          Status <FormMessage />
-                        </FormLabel>
-                        <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md ">
-                          <div className="space-y-1 leading-none">
-                            <FormLabel>Obra Ativa?</FormLabel>
-                          </div>
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
+                  <div className="flex items-center gap-2 text-sm">
+                    <label className="flex gap-2 text-sm">Ativa?</label>
+                    <input
+                      className="h-6 w-6 cursor-pointer accent-primary"
+                      checked={form.watch("active" || false)}
+                      {...form.register("active")} // Registrando o campo com react-hook-form
+                      type="checkbox"
+                    />
+                  </div>
                 </div>
                 <Button disabled={isSubmitting} type="submit">
                   Atualizar Obra
