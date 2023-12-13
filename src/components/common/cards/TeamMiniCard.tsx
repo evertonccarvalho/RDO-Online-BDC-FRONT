@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import ModalComponent from "../Modal";
-import CreateNewService from "../form/serviceNewForm";
+import CreateNewTeam from "../form/teamNewForm";
 
 interface CardProps {
   icon: React.ElementType;
@@ -40,8 +40,8 @@ const TeamCard: React.FC<CardProps> = ({
         <ModalComponent
           isOpen={showModal}
           onClose={handleCloseModal}
-          modalName="Novo Serviço"
-          modalContent={<CreateNewService workId={workId} />}
+          modalName="Nova Equipe"
+          modalContent={<CreateNewTeam workId={workId} />}
         />
         <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
           <button

@@ -1,17 +1,17 @@
-import { deleteService } from "@/lib/userUtils";
+import { deleteTeam } from "@/lib/userUtils";
 import { PenBoxIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import ModalComponent from "../../Modal";
 import DeleteItem from "../../delete/DeleteItem";
 import UpdateService from "../../form/serviceUpdateForm";
+import UpdateTeam from "../../form/teamUpdateForm";
 
 interface orderSingleProps {
   id: number;
   description: string;
+  empresa: string;
   status: string;
-  unit: string;
-  subCategory?: string | undefined;
   work?: string | undefined;
 }
 
@@ -44,26 +44,25 @@ export function TableTeam({ ...props }: orderSingleProps) {
   }
 
   return (
-    <tr className="grid w-full grid-cols-6 items-center gap-4 border-b-[1px] border-background p-2 text-center text-xs text-foreground">
+    <tr className="grid w-full grid-cols-5 items-center gap-4 border-b-[1px] border-background p-2 text-center text-xs text-foreground">
       <td className="text-center text-primary ">{"#" + props.id}</td>
       <td className="text-center">{props.description}</td>
-      <td className="text-center">{props.unit}</td>
+      <td className="text-center">{props.empresa}</td>
       <td
         className={`flex items-center justify-center rounded px-2 py-1 ${statusColorClass}`}
       >
         {props.status}
       </td>
-      <td className="">{props.subCategory}</td>
       <td className="flex items-center justify-center gap-1">
         <DeleteItem
           itemName={props.description}
-          deleteFunction={() => deleteService(props.id, +workId)}
+          deleteFunction={() => deleteTeam(props.id, +workId)}
         />
         <ModalComponent
           isOpen={showModal}
           onClose={handleCloseModal}
           modalName="Atualizar Serviço"
-          modalContent={<UpdateService workId={+workId} serviceId={props.id} />}
+          modalContent={<UpdateTeam workId={+workId} teamId={props.id} />}
         />
         <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
           <button

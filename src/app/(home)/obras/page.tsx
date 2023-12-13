@@ -61,7 +61,8 @@ const ObrasPage = () => {
             logoUrl={obra.logoUrl}
             phoneContact={obra.phoneContact}
             active={obra.active}
-            count={obra.services.length}
+            countService={obra.services.length}
+            countTeam={obra.Team.length}
           />
         ))}
       </div>

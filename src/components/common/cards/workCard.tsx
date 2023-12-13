@@ -24,7 +24,8 @@ interface WorkCardProps {
   active: string;
   createdAt?: Date;
   id: number;
-  count: string;
+  countService: string;
+  countTeam: string;
 }
 
 export default function WorkCard({
@@ -37,7 +38,8 @@ export default function WorkCard({
   active,
   createdAt,
   id,
-  count,
+  countService,
+  countTeam,
 }: WorkCardProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -135,7 +137,7 @@ export default function WorkCard({
                 <div className="2xl:gap-7.5 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4">
                   <ServiceCard
                     icon={WorkflowIcon}
-                    amount={`${count}`}
+                    amount={`${countService}`}
                     description="Total de Serviços"
                     viewLink={`/obras/service/read/${id}`}
                     viewIconLink={EyeIcon}
@@ -144,7 +146,7 @@ export default function WorkCard({
                   />
                   <TeamCard
                     icon={Users2Icon}
-                    amount={`${count}`}
+                    amount={`${countTeam}`}
                     description="Equipes"
                     viewLink={`/obras/team/read/${id}`}
                     viewIconLink={EyeIcon}
