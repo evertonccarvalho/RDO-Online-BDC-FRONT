@@ -19,7 +19,7 @@ interface WorkCardProps {
   phoneContact: string;
   address: string;
   logoUrl: string;
-  active: Boolean;
+  active: string;
   createdAt?: Date;
   id: number;
   count: string;
@@ -51,6 +51,15 @@ export default function WorkCard({
     setIsOpen(!isOpen);
   };
 
+  let statusColorClass = "";
+
+  // Determinando a cor com base no texto do status
+  if (active) {
+    statusColorClass = "bg-green-900 px-2 py-1 text-green-500"; // Se ativo for verdadeiro, cor verde
+  } else {
+    statusColorClass = "bg-red-900 text-red-500"; // Se ativo for falso, cor vermelha
+  }
+
   return (
     <>
       <div className="flex w-full">
@@ -60,8 +69,10 @@ export default function WorkCard({
               <div className="flex justify-between">
                 <div className="flex flex-col items-start gap-2 font-bold text-foreground">
                   <p className="w-full rounded-full ">{workDescription}</p>{" "}
-                  <p className="w-36 rounded-full bg-primary text-center">
-                    Status
+                  <p
+                    className={`flex items-center justify-center rounded px-2 py-1 ${statusColorClass}`}
+                  >
+                    {active ? "Ativa" : "Inativa"}
                   </p>
                 </div>
                 <div>
