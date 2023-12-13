@@ -108,7 +108,7 @@ export default function UpdateService({
   return (
     <>
       <div className="flex flex-col gap-9 rounded-sm bg-card sm:grid-cols-2">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col justify-around gap-4">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Input

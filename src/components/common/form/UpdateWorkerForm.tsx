@@ -3,7 +3,6 @@ import VoltarButton from "@/app/(home)/components/VoltarButton";
 import ProfileHeader from "@/app/(home)/currentuser/[id]/profileHeader";
 import { Button } from "@/components/ui/button";
 
-import FormInputField from "@/components/common/form/FormInputField";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
@@ -23,6 +22,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Input from "./Input";
 
 export default function UpdateWorker({
   workId,
@@ -33,6 +33,7 @@ export default function UpdateWorker({
   const [work, setWork] = useState<WorkSchema | null>(null);
   const pathname = usePathname();
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function getUser(workId: number | undefined): Promise<void> {
     try {
@@ -78,18 +79,39 @@ export default function UpdateWorker({
   }, [form, work]);
 
   async function onSubmit(data: z.infer<typeof workSchema>) {
-    workSchema.parse(data);
-    const res = await workService.update(work?.id || "", data);
-    console.log("User updated successfully:", res);
+    setIsSubmitting(true);
 
-    if (res === 200) {
+    try {
+      workSchema.parse(data); // Validar os valores antes de chamar a API
+
+      if (!workId) {
+        throw new Error("WorkId not provided");
+      }
+
+      const res = await workService.update(work?.id || "", data);
+
+      const successMessage = `${work?.workDescription} foi atualizado com sucesso`;
+
+      if (res === 200) {
+        toast({
+          variant: "success",
+          title: "Obra registrado.",
+          description: successMessage,
+        });
+        router.push("/obras");
+      } else {
+        throw new Error("Houve um problema ao registrar o serviço.");
+      }
+    } catch (error) {
+      console.error("Erro durante o envio do formulário:", error);
       toast({
-        variant: "success",
-        title: "Usuário atualizado.",
-        description: `${work?.workDescription} foi atualizado com sucesso`,
+        variant: "destructive",
+        title: "Erro ao enviar formulário.",
+        description: "Houve um problema ao enviar o formulário.",
       });
+    } finally {
+      setIsSubmitting(false);
     }
-    router.push("/obras");
   }
 
   return (
@@ -105,46 +127,47 @@ export default function UpdateWorker({
         />
         <div className="flex flex-col gap-9 rounded-sm bg-card p-5 sm:grid-cols-2">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="">
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col justify-around gap-4">
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <FormInputField
-                    control={form.control}
-                    name="company"
-                    label="Empresa"
+                  <Input
                     placeholder="Empresa"
-                    maxLength={25}
-                  />
-                  <FormInputField
-                    control={form.control}
-                    name="workDescription"
-                    label="Descrição"
-                    maxLength={25}
+                    type="text"
+                    value={form.watch("company")}
+                    {...form.register("company")} // Registrando o campo com react-hook-form
+                    error={form.formState.errors.company}
+                  />{" "}
+                  <Input
                     placeholder="Descrição"
+                    type="text"
+                    value={form.watch("workDescription")}
+                    {...form.register("workDescription")} // Registrando o campo com react-hook-form
+                    error={form.formState.errors.workDescription}
                   />
                 </div>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-4">
-                  <FormInputField
-                    control={form.control}
-                    name="nameResponsible"
-                    label="Responsavel"
-                    maxLength={50}
+                  <Input
                     placeholder="Responsavel"
-                  />
-                  <FormInputField
-                    control={form.control}
-                    name="address"
-                    label="Endereço"
-                    maxLength={50}
+                    type="text"
+                    value={form.watch("nameResponsible")}
+                    {...form.register("nameResponsible")} // Registrando o campo com react-hook-form
+                    error={form.formState.errors.nameResponsible}
+                  />{" "}
+                  <Input
                     placeholder="Endereço"
-                  />
-                  <FormInputField
-                    control={form.control}
-                    name="phoneContact"
-                    label="Telefone"
+                    type="text"
+                    value={form.watch("address")}
+                    {...form.register("address")} // Registrando o campo com react-hook-form
+                    error={form.formState.errors.address}
+                  />{" "}
+                  <Input
+                    placeholder="Telefone"
                     maxLength={14}
                     data-mask="[-](00) 0 0000-0000"
-                    placeholder="(xx) 9xxxx-xxxx"
+                    type="text"
+                    value={form.watch("phoneContact")}
+                    {...form.register("phoneContact")} // Registrando o campo com react-hook-form
+                    error={form.formState.errors.phoneContact}
                   />
                   <FormField
                     control={form.control}
@@ -169,8 +192,8 @@ export default function UpdateWorker({
                     )}
                   />
                 </div>
-                <Button className="" type="submit">
-                  Submit
+                <Button disabled={isSubmitting} type="submit">
+                  Atualizar Obra
                 </Button>
               </div>
             </form>
