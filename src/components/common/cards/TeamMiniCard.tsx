@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
-import ModalComponent from "./Modal";
-import CreateNewService from "./form/serviceNewForm";
+import ModalComponent from "../Modal";
+import CreateNewService from "../form/serviceNewForm";
 
 interface CardProps {
   icon: React.ElementType;
@@ -10,16 +10,14 @@ interface CardProps {
   amount: string;
   description: string;
   viewLink: string;
-  newLink: string;
   workId: number;
 }
 
-const Card: React.FC<CardProps> = ({
+const TeamCard: React.FC<CardProps> = ({
   icon: IconComponent,
   viewIconLink: ViewIconLink,
   newIconLink: NewIconLink,
   viewLink,
-  newLink,
   workId,
   description,
   amount,
@@ -78,4 +76,4 @@ const Card: React.FC<CardProps> = ({
   );
 };
 
-export default Card;
+export default TeamCard;

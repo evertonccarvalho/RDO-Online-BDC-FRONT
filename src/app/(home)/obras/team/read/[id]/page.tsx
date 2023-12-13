@@ -1,17 +1,17 @@
 "use client";
 import Breadcrumb from "@/app/(home)/components/Breadcrumb";
 
-import { TableListServices } from "@/components/common/tables/service/TableListServices";
+import { TableListTeam } from "@/components/common/tables/team/TableListTeam";
 
 const ServicesPage = () => {
   return (
     <>
       <div className="">
         <div>
-          <Breadcrumb pageName="Obras" />
+          <Breadcrumb pageName="Equipe" />
         </div>
         <div className="">
-          <TableListServices />
+          <TableListTeam />
         </div>
       </div>
     </>

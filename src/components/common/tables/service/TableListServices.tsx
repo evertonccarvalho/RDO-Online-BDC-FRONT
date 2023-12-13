@@ -3,7 +3,7 @@ import { serviceService } from "@/services/serviceService";
 import { Loader } from "lucide-react";
 import { usePathname } from "next/navigation";
 import useSWR from "swr";
-import { Table } from "./TableList";
+import { TableService } from "./TableService";
 
 export function TableListServices() {
   const pathname = usePathname();
@@ -35,7 +35,7 @@ export function TableListServices() {
         </thead>
         <tbody>
           {data.map((service: ServiceSchema, index: number) => (
-            <Table
+            <TableService
               key={index}
               id={service.id}
               description={service.serviceDescription}

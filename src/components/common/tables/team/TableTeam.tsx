@@ -2,9 +2,9 @@ import { deleteService } from "@/lib/userUtils";
 import { PenBoxIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import ModalComponent from "./Modal";
-import DeleteItem from "./delete/DeleteItem";
-import UpdateService from "./form/serviceUpdateForm";
+import ModalComponent from "../../Modal";
+import DeleteItem from "../../delete/DeleteItem";
+import UpdateService from "../../form/serviceUpdateForm";
 
 interface orderSingleProps {
   id: number;
@@ -15,7 +15,7 @@ interface orderSingleProps {
   work?: string | undefined;
 }
 
-export function Table({ ...props }: orderSingleProps) {
+export function TableTeam({ ...props }: orderSingleProps) {
   const pathname = usePathname();
   const workId = pathname.split("/").pop();
 

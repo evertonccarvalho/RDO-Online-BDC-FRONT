@@ -7,7 +7,7 @@ import { workService } from "@/services/workService";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import useSWR from "swr";
-import WorkCard from "../../../components/common/workCard";
+import WorkCard from "../../../components/common/cards/WorksCard";
 const ObrasPage = () => {
   const [showModal, setShowModal] = useState(false);
   const { data: obrasData, error: obrasError } = useSWR(

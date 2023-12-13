@@ -4,13 +4,15 @@ import {
   EyeIcon,
   PenBoxIcon,
   PlusIcon,
+  Users2Icon,
   WorkflowIcon,
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import ModalComponent from "./Modal";
-import Card from "./ServiceMiniCard";
-import UpdateWorker from "./form/UpdateWorkerForm";
+import ModalComponent from "../Modal";
+import UpdateWorker from "../form/UpdateWorkerForm";
+import ServiceCard from "./ServiceMiniCard";
+import TeamCard from "./TeamMiniCard";
 
 interface WorkCardProps {
   workDescription: string;
@@ -131,13 +133,21 @@ export default function WorkCard({
                   </div>
                 </div>
                 <div className="2xl:gap-7.5 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4">
-                  <Card
+                  <ServiceCard
                     icon={WorkflowIcon}
                     amount={`${count}`}
                     description="Total de Serviços"
                     viewLink={`/obras/service/read/${id}`}
                     viewIconLink={EyeIcon}
-                    newLink={`/obras/service/new/${id}`}
+                    newIconLink={PlusIcon}
+                    workId={id}
+                  />
+                  <TeamCard
+                    icon={Users2Icon}
+                    amount={`${count}`}
+                    description="Equipes"
+                    viewLink={`/obras/team/read/${id}`}
+                    viewIconLink={EyeIcon}
                     newIconLink={PlusIcon}
                     workId={id}
                   />
