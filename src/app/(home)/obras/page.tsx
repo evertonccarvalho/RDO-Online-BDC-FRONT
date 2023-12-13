@@ -2,12 +2,12 @@
 import Breadcrumb from "@/app/(home)/components/Breadcrumb";
 import Loader from "@/components/common/Loader/page";
 import ModalComponent from "@/components/common/Modal";
+import WorkCard from "@/components/common/cards/workCard";
 import CreateNewWork from "@/components/common/form/workNewForm";
 import { workService } from "@/services/workService";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import useSWR from "swr";
-import WorkCard from "../../../components/common/cards/WorksCard";
 const ObrasPage = () => {
   const [showModal, setShowModal] = useState(false);
   const { data: obrasData, error: obrasError } = useSWR(
