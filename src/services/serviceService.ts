@@ -7,7 +7,6 @@ export type ServiceParams = {
   unit: string;
   status: string;
   subcategoryId?: string;
-  work?: WorkSchema;
 };
 
 const serviceService = {
