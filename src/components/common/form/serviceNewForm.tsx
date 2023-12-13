@@ -81,13 +81,15 @@ export default function CreateNewService({
                 {...form.register("serviceDescription")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.serviceDescription}
               />
-
-              <Input
+              <SelectInput
                 placeholder="Status"
-                type="text"
                 value={form.watch("status")}
-                {...form.register("status")} // Registrando o campo com react-hook-form
+                {...form.register("status")}
                 error={form.formState.errors.status}
+                options={[
+                  { value: "Ativo", label: "Ativo" },
+                  { value: "Inativo", label: "Inativo" },
+                ]}
               />
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-4">

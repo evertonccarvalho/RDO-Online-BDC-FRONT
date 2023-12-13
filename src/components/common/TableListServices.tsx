@@ -27,8 +27,8 @@ export function TableListServices() {
           <tr className="grid grid-cols-6 gap-4 rounded bg-gray-900 p-3 text-center text-xs">
             <th className="text-center">Id</th>
             <th className="text-center">Descrição</th>
-            <th className="text-center">Status</th>
             <th className="text-center">Unit</th>
+            <th className="text-center">Status</th>
             <th className="text-center">Sub Categoria</th>
             <th className="text-center">Ações</th>
           </tr>

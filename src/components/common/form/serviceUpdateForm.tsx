@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import SelectInput from "./selectInput";
 export default function UpdateService({
   workId,
   serviceId,
@@ -110,7 +111,7 @@ export default function UpdateService({
       <div className="flex flex-col gap-9 rounded-sm bg-card sm:grid-cols-2">
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col justify-around gap-4">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-1">
               <Input
                 placeholder="Descrição do Serviço"
                 type="text"
@@ -118,29 +119,34 @@ export default function UpdateService({
                 {...form.register("serviceDescription")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.serviceDescription}
               />
-
-              <Input
-                placeholder="Status"
-                type="text"
-                value={form.watch("status")}
-                {...form.register("status")} // Registrando o campo com react-hook-form
-                error={form.formState.errors.status}
-              />
             </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-3">
               <Input
                 placeholder="UNIT????"
                 type="text"
                 value={form.watch("unit")}
                 {...form.register("unit")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.unit}
-              />{" "}
-              <Input
-                placeholder="SubCategoria????"
-                type="number"
+              />
+              <SelectInput
+                placeholder="Status"
+                value={form.watch("status")}
+                {...form.register("status")}
+                error={form.formState.errors.status}
+                options={[
+                  { value: "Ativo", label: "Ativo" },
+                  { value: "Inativo", label: "Inativo" },
+                ]}
+              />
+              <SelectInput
+                placeholder="SubCategoria"
                 value={form.watch("subcategoryId")}
-                {...form.register("subcategoryId")} // Registrando o campo com react-hook-form
+                {...form.register("subcategoryId")}
                 error={form.formState.errors.subcategoryId}
+                options={[
+                  { value: "1", label: "Aterro" },
+                  { value: "2", label: "Terraplanagem" },
+                ]}
               />
             </div>
             <Button disabled={isSubmitting} type="submit">
