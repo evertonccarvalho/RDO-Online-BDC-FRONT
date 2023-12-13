@@ -1,41 +1,16 @@
-"use client";
-import authService from "@/services/authService";
-import { TokenService } from "@/services/tokenService";
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
-export default function HomeNoAuth() {
-  const router = useRouter();
+import Hero from "./components/hero";
+import Header from "./components/ui/header";
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = TokenService.get();
+export const metadata = {
+  title: "Home - Simple",
+  description: "Page description",
+};
 
-        if (!token) {
-          console.log("nao tem token");
-          return;
-        }
-
-        const response = await authService.autoLogin(token);
-
-        if (response.status === 200) {
-          router.push("/home");
-        } else {
-          alert("Dados incorretos!");
-          // Ou, se estiver usando uma biblioteca de notificação, algo como:
-          // toast.error('Dados incorretos!');
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchData(); // Chame a função assíncrona
-  }, [router]);
-
+export default function Home() {
   return (
     <>
-      <h1></h1>
+      <Header />
+      <Hero />
     </>
   );
 }
