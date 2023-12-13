@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="border-t py-4 md:flex md:items-center md:justify-between md:py-8">
           {/* Copyrights note */}
           <div className="mr-4 text-sm text-gray-600">
-            &copy; Cruip.com. All rights reserved.
+            ©poweredby Éverton Carvalho, 2023
           </div>
           <div className="mb-2">
             <Logo />
