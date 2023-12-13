@@ -23,14 +23,18 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-export default function UpdateWorker() {
+
+export default function UpdateWorker({
+  workId,
+}: {
+  workId: number | undefined;
+}) {
   const { toast } = useToast();
   const [work, setWork] = useState<WorkSchema | null>(null);
   const pathname = usePathname();
   const router = useRouter();
-  const id = pathname.split("/").pop();
 
-  async function getUser(workId: string | undefined): Promise<void> {
+  async function getUser(workId: number | undefined): Promise<void> {
     try {
       if (workId === undefined) {
         throw new Error("ID do usuário não fornecido.");
@@ -44,8 +48,8 @@ export default function UpdateWorker() {
   }
 
   useEffect(() => {
-    getUser(id);
-  }, [id]);
+    getUser(workId);
+  }, [workId]);
 
   // 1. Define a schema zod.
 

@@ -7,9 +7,10 @@ import {
   WorkflowIcon,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
+import ModalComponent from "./Modal";
 import Card from "./ServiceMiniCard";
+import UpdateWorker from "./form/UpdateWorkerForm";
 
 interface WorkCardProps {
   workDescription: string;
@@ -37,6 +38,14 @@ export default function WorkCard({
   count,
 }: WorkCardProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   const toggleCard = () => {
     setIsOpen(!isOpen);
@@ -94,7 +103,13 @@ export default function WorkCard({
                         Endereço: <span>{address}</span>
                       </p>
                     </div>
-                    <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
+                    <ModalComponent
+                      isOpen={showModal}
+                      onClose={handleCloseModal}
+                      modalName="Atualizar Serviço"
+                      modalContent={<UpdateWorker workId={id} />}
+                    />
+                    {/* <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
                       {id && (
                         <Link
                           className="flex h-full w-full items-center justify-center"
@@ -103,6 +118,14 @@ export default function WorkCard({
                           <PenBoxIcon />
                         </Link>
                       )}
+                    </div> */}
+                    <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
+                      <button
+                        className="flex h-full w-full items-center justify-center"
+                        onClick={toggleModal}
+                      >
+                        <PenBoxIcon />
+                      </button>
                     </div>
                   </div>
                 </div>
