@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import SelectInput from "./selectInput";
 export default function CreateNewService({
   workId,
 }: {
@@ -97,12 +98,15 @@ export default function CreateNewService({
                 {...form.register("unit")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.unit}
               />{" "}
-              <Input
-                placeholder="SubCategoria????"
-                type="number"
+              <SelectInput
+                placeholder="SubCategoria"
                 value={form.watch("subcategoryId")}
-                {...form.register("subcategoryId")} // Registrando o campo com react-hook-form
+                {...form.register("subcategoryId")}
                 error={form.formState.errors.subcategoryId}
+                options={[
+                  { value: "1", label: "Aterro" },
+                  { value: "2", label: "Terraplanagem" },
+                ]}
               />
             </div>
             <Button disabled={isSubmitting} type="submit">
