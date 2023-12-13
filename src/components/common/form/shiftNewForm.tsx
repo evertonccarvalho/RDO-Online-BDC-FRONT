@@ -2,15 +2,15 @@
 import Input from "@/components/common/form/Input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { serviceSchema } from "@/lib/validations/service";
-import { serviceService } from "@/services/serviceService";
+import { shiftSchema } from "@/lib/validations/shift";
+import { shiftService } from "@/services/shiftService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectInput from "./selectInput";
-export default function CreateNewService({
+export default function CreateNewShift({
   workId,
 }: {
   workId: number | undefined;
@@ -21,30 +21,31 @@ export default function CreateNewService({
   const router = useRouter();
   const { toast } = useToast();
 
-  type FormValues = z.infer<typeof serviceSchema>;
+  type FormValues = z.infer<typeof shiftSchema>;
   const form = useForm<FormValues>({
-    resolver: zodResolver(serviceSchema),
+    resolver: zodResolver(shiftSchema),
     defaultValues: {
-      serviceDescription: "",
+      description: "",
+      feasibility: "",
+      weatherCondition: "",
       status: "",
-      unit: "",
-      subcategoryId: "",
+      teamId: 0,
     },
   });
 
-  async function onSubmit(data: z.infer<typeof serviceSchema>) {
+  async function onSubmit(data: z.infer<typeof shiftSchema>) {
     setIsSubmitting(true);
 
     try {
-      serviceSchema.parse(data); // Validar os valores antes de chamar a API
+      shiftSchema.parse(data); // Validar os valores antes de chamar a API
 
       if (!workId) {
         throw new Error("WorkId not provided");
       }
 
-      const { status } = await serviceService.create(+workId, data);
+      const { status } = await shiftService.create(+workId, data);
 
-      const successMessage = `${data.serviceDescription} foi registrado com sucesso`;
+      const successMessage = `${data.description} foi registrado com sucesso`;
 
       if (status === 201) {
         toast({
@@ -73,44 +74,38 @@ export default function CreateNewService({
       <div className="flex flex-col gap-9 rounded-sm bg-card sm:grid-cols-2">
         <form onSubmit={form.handleSubmit(onSubmit)} className="">
           <div className="flex flex-col justify-around gap-4">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <SelectInput
-                placeholder="Categoria"
-                value={form.watch("subcategoryId")}
-                {...form.register("subcategoryId")}
-                error={form.formState.errors.subcategoryId}
-                options={[
-                  { value: "1", label: "Terraplanagem" },
-                  { value: "2", label: "Pintura" },
-                ]}
-              />
-              <SelectInput
-                placeholder="Sub Categoria"
-                value={form.watch("subcategoryId")}
-                {...form.register("subcategoryId")}
-                error={form.formState.errors.subcategoryId}
-                options={[
-                  { value: "1", label: "Aterro" },
-                  { value: "2", label: "Lixar" },
-                ]}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-1">
+              <Input
+                placeholder="Descrição do turno"
+                type="text"
+                value={form.watch("description")}
+                {...form.register("description")} // Registrando o campo com react-hook-form
+                error={form.formState.errors.description}
               />
             </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-1">
-              <Input
-                placeholder="Descrição do Serviço"
-                type="text"
-                value={form.watch("serviceDescription")}
-                {...form.register("serviceDescription")} // Registrando o campo com react-hook-form
-                error={form.formState.errors.serviceDescription}
-              />
-              <Input
-                placeholder="Unidade de Medida"
-                type="text"
-                value={form.watch("unit")}
-                {...form.register("unit")} // Registrando o campo com react-hook-form
-                error={form.formState.errors.unit}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-3">
+              <SelectInput
+                placeholder="Praticabilidade"
+                value={form.watch("feasibility")}
+                {...form.register("feasibility")}
+                error={form.formState.errors.feasibility}
+                options={[
+                  { value: "Ensolarado", label: "Ensolarado" },
+                  { value: "Nublado", label: "Nublado" },
+                  { value: "Chuvoso", label: "Chuvoso" },
+                ]}
               />{" "}
-              <Input placeholder="Quantidade Total" type="text" />
+              <SelectInput
+                placeholder="Clima"
+                value={form.watch("weatherCondition")}
+                {...form.register("weatherCondition")}
+                error={form.formState.errors.weatherCondition}
+                options={[
+                  { value: "Ensolarado", label: "Ensolarado" },
+                  { value: "Nublado", label: "Nublado" },
+                  { value: "Chuvoso", label: "Chuvoso" },
+                ]}
+              />
               <SelectInput
                 placeholder="Status"
                 value={form.watch("status")}
@@ -120,10 +115,10 @@ export default function CreateNewService({
                   { value: "Ativo", label: "Ativo" },
                   { value: "Inativo", label: "Inativo" },
                 ]}
-              />
+              />{" "}
             </div>
             <Button disabled={isSubmitting} type="submit">
-              Criar Serviço
+              Criar Turno
             </Button>
           </div>
         </form>

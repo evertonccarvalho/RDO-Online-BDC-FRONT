@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210, 40%, 96%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -25,11 +25,10 @@
     --ring: 71.1 56.6% 59.3%;
     --radius: 0rem;
   }
-
   .dark {
-    --background: 20 14.3% 4.1%;
+    --background: 213 26% 14%;
     --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
+    --card: 213 27% 19%;
     --card-foreground: 0 0% 95%;
     --popover: 0 0% 9%;
     --popover-foreground: 0 0% 95%;
@@ -48,15 +47,16 @@
     --ring: 71.1 56.6% 59.3%;
   }
 }
-
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply h-full bg-background text-foreground;
+    @apply h-full  bg-background text-foreground;
   }
   html {
     @apply h-full;
   }
 }
+
+/* font-satoshi font-normal text-base text-body bg-whiten relative z-1 */

@@ -63,6 +63,7 @@ const ObrasPage = () => {
             active={obra.active}
             countService={obra.services.length}
             countTeam={obra.Team.length}
+            countShift={obra.Shift.length}
           />
         ))}
       </div>

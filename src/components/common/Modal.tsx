@@ -20,7 +20,7 @@ const ModalComponent: React.FC<ModalProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-70 outline-none focus:outline-none">
           <div className=" relative mx-auto my-6 w-auto max-w-3xl bg-card">
             <div className="relative flex flex-col  p-6">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between pb-4 ">
                 <p>{modalName}</p>
                 <div className="flex h-11 w-11 rounded-full text-primary hover:bg-primary hover:text-background">
                   <button
@@ -31,7 +31,7 @@ const ModalComponent: React.FC<ModalProps> = ({
                   </button>
                 </div>
               </div>
-              {modalContent}
+              <div className="  p-5">{modalContent}</div>
             </div>
           </div>
         </div>

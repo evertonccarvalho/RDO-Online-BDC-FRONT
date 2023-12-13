@@ -12,6 +12,7 @@ import { useState } from "react";
 import ModalComponent from "../Modal";
 import UpdateWorker from "../form/UpdateWorkerForm";
 import ServiceCard from "./ServiceMiniCard";
+import ShiftCard from "./ShiftMiniCard";
 import TeamCard from "./TeamMiniCard";
 
 interface WorkCardProps {
@@ -26,6 +27,7 @@ interface WorkCardProps {
   id: number;
   countService: string;
   countTeam: string;
+  countShift: string;
 }
 
 export default function WorkCard({
@@ -40,6 +42,7 @@ export default function WorkCard({
   id,
   countService,
   countTeam,
+  countShift,
 }: WorkCardProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -149,6 +152,15 @@ export default function WorkCard({
                     amount={`${countTeam}`}
                     description="Equipes"
                     viewLink={`/obras/team/read/${id}`}
+                    viewIconLink={EyeIcon}
+                    newIconLink={PlusIcon}
+                    workId={id}
+                  />{" "}
+                  <ShiftCard
+                    icon={Users2Icon}
+                    amount={`${countShift}`}
+                    description="Turnos"
+                    viewLink={`/obras/shift/read/${id}`}
                     viewIconLink={EyeIcon}
                     newIconLink={PlusIcon}
                     workId={id}
