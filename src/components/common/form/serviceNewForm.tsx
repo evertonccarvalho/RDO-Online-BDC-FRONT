@@ -73,13 +73,22 @@ export default function CreateNewService({
       <div className="flex flex-col gap-9 rounded-sm bg-card sm:grid-cols-2">
         <form onSubmit={form.handleSubmit(onSubmit)} className="">
           <div className="flex flex-col justify-around gap-4">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-1">
               <Input
                 placeholder="Descrição do Serviço"
                 type="text"
                 value={form.watch("serviceDescription")}
                 {...form.register("serviceDescription")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.serviceDescription}
+              />
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-3">
+              <Input
+                placeholder="UNIT????"
+                type="text"
+                value={form.watch("unit")}
+                {...form.register("unit")} // Registrando o campo com react-hook-form
+                error={form.formState.errors.unit}
               />
               <SelectInput
                 placeholder="Status"
@@ -91,15 +100,6 @@ export default function CreateNewService({
                   { value: "Inativo", label: "Inativo" },
                 ]}
               />
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-4">
-              <Input
-                placeholder="UNIT????"
-                type="text"
-                value={form.watch("unit")}
-                {...form.register("unit")} // Registrando o campo com react-hook-form
-                error={form.formState.errors.unit}
-              />{" "}
               <SelectInput
                 placeholder="SubCategoria"
                 value={form.watch("subcategoryId")}
