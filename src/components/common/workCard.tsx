@@ -111,7 +111,7 @@ export default function WorkCard({
                     icon={WorkflowIcon}
                     amount={`${count}`}
                     description="Total de Serviços"
-                    viewLink={`/obras/service/${id}`}
+                    viewLink={`/obras/service/read/${id}`}
                     viewIconLink={EyeIcon}
                     newLink={`/obras/service/new/${id}`}
                     newIconLink={PlusIcon}

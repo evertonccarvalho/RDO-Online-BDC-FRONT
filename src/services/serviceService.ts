@@ -1,4 +1,3 @@
-import { ServiceSchema } from "@/lib/validations/service";
 import { WorkSchema } from "@/lib/validations/work";
 import api from "./api";
 import { TokenService } from "./tokenService";
@@ -42,7 +41,7 @@ const serviceService = {
     }
   },
 
-  getById: async (serviceId: number, workId: number | undefined) => {
+  getById: async (workId: number, serviceId: number | undefined) => {
     try {
       if (serviceId === undefined) {
         throw new Error("O ID do serviço não foi fornecido.");
@@ -63,7 +62,7 @@ const serviceService = {
   update: async (
     serviceId: number,
     workId: number | string,
-    params: ServiceSchema,
+    params: ServiceParams,
   ) => {
     try {
       const res = await api.put(

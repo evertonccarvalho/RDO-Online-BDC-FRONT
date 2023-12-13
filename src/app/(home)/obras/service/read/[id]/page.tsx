@@ -6,12 +6,11 @@ import { TableListServices } from "@/components/common/TableListServices";
 const ServicesPage = () => {
   return (
     <>
-      <div className="p-5">
+      <div className="">
         <div>
           <Breadcrumb pageName="Obras" />
-          <p className="text-sm text-muted-foreground">Obras</p>
         </div>
-        <div className="container">
+        <div className="">
           <TableListServices />
         </div>
       </div>

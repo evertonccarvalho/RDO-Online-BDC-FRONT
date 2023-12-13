@@ -21,32 +21,31 @@ export function TableListServices() {
   }
 
   return (
-    <div className="text-Foreground rounded bg-card px-6 py-4">
-      <h2 className="mb-4 text-lg">Serviços</h2>
-
-      <div className="overflow-x-auto pb-4">
-        <div className="flex min-w-[760px] flex-col">
-          <div className="text-md grid grid-cols-[95px_minmax(20%,_1fr)_minmax(110px,_1fr)_1fr_1fr_160px] rounded bg-gray-900 p-3 text-center">
-            <span className="text-left">Id</span>
-            <span className="text-left">Descrição</span>
-            <span className="text-left">Unit</span>
-            <span className="">Status</span>
-            <span className="">Sub Categoria</span>
-            <span className="text-center">Ações</span>
-          </div>
-
-          {data.map((order: ServiceSchema, index: number) => (
+    <div className="flex w-full min-w-[400px] ">
+      <table className="text-Foreground w-full rounded bg-card px-6 py-4">
+        <thead>
+          <tr className="grid grid-cols-6 gap-4 rounded bg-gray-900 p-3 text-center text-xs">
+            <th className="text-center">Id</th>
+            <th className="text-center">Descrição</th>
+            <th className="text-center">Status</th>
+            <th className="text-center">Unit</th>
+            <th className="text-center">Sub Categoria</th>
+            <th className="text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((service: ServiceSchema, index: number) => (
             <Table
               key={index}
-              id={order.id}
-              description={order.serviceDescription}
-              status={order.status}
-              unit={order.unit}
-              subCategory={order.subcategoryId}
+              id={service.id}
+              description={service.serviceDescription}
+              status={service.status}
+              unit={service.unit}
+              subCategory={service.subcategoryId}
             />
           ))}
-        </div>
-      </div>
+        </tbody>
+      </table>
     </div>
   );
 }

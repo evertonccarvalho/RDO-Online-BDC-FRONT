@@ -30,7 +30,7 @@ export default function UpdateWorker() {
   const router = useRouter();
   const id = pathname.split("/").pop();
 
-  async function getUser(workId: string | undefined): Promise<void> {
+  async function getWork(workId: string | undefined): Promise<void> {
     try {
       if (workId === undefined) {
         throw new Error("ID do usuário não fornecido.");
@@ -44,7 +44,7 @@ export default function UpdateWorker() {
   }
 
   useEffect(() => {
-    getUser(id);
+    getWork(id);
   }, [id]);
 
   // 1. Define a schema zod.

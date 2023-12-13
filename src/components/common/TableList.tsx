@@ -1,8 +1,10 @@
 import { deleteService } from "@/lib/userUtils";
 import { PenBoxIcon } from "lucide-react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import ModalComponent from "./Modal";
 import DeleteItem from "./delete/DeleteItem";
+import UpdateService from "./form/serviceUpdateForm";
 
 interface orderSingleProps {
   id: number;
@@ -16,6 +18,15 @@ interface orderSingleProps {
 export function Table({ ...props }: orderSingleProps) {
   const pathname = usePathname();
   const workId = pathname.split("/").pop();
+
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   if (!workId) {
     throw new Error("WorkId not provided");
@@ -33,37 +44,36 @@ export function Table({ ...props }: orderSingleProps) {
   }
 
   return (
-    <div className="group grid w-full grid-cols-[95px_minmax(20%,_1fr)_minmax(110px,_1fr)_1fr_1fr_160px] border-b-[1px] border-gray-900 p-3 text-center text-sm text-foreground">
-      <span className="text-left text-primary transition-colors group-hover:text-primary">
-        {"#" + props.id}
-      </span>
-      <span className="text-left">{props.description}</span>
-      <span className="text-left">{props.unit}</span>
-      <div className="">
-        {/* <span className="rounded bg-green-900 px-2 py-1 text-green-500"> */}
-        <span className={`rounded px-2 py-1 ${statusColorClass}`}>
-          {props.status}
-        </span>
-      </div>
-      <span className="">{props.subCategory}</span>
-      <div className="flex items-center justify-center gap-2">
-        <div>
-          <DeleteItem
-            itemName={props.description}
-            deleteFunction={() => deleteService(props.id, +workId)}
-          />
+    <tr className="grid w-full grid-cols-6 items-center gap-4 border-b-[1px] border-background p-2 text-center text-xs text-foreground">
+      <td className="text-center text-primary ">{"#" + props.id}</td>
+      <td className="text-center">{props.description}</td>
+      <td className="text-center">{props.unit}</td>
+      <td
+        className={`flex items-center justify-center rounded px-2 py-1 ${statusColorClass}`}
+      >
+        {props.status}
+      </td>
+      <td className="">{props.subCategory}</td>
+      <td className="flex items-center justify-center gap-1">
+        <DeleteItem
+          itemName={props.description}
+          deleteFunction={() => deleteService(props.id, +workId)}
+        />
+        <ModalComponent
+          isOpen={showModal}
+          onClose={handleCloseModal}
+          modalName="Atualizar Serviço"
+          modalContent={<UpdateService workId={+workId} serviceId={props.id} />}
+        />
+        <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
+          <button
+            className="flex h-full w-full items-center justify-center"
+            onClick={toggleModal}
+          >
+            <PenBoxIcon />
+          </button>
         </div>
-        <div className="flex h-10 w-10 text-primary  hover:bg-primary hover:text-background">
-          {props.id && (
-            <Link
-              className="flex h-full w-full cursor-pointer items-center justify-center"
-              href={`/obras/service/${workId}/edit/${props.id}`}
-            >
-              <PenBoxIcon className="h-4 w-4 " />
-            </Link>
-          )}
-        </div>
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 }
