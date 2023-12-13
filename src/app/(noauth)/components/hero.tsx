@@ -1,10 +1,11 @@
+import { Button } from "@/components/ui/button";
 import LogoBDCBanner from "./ui/LogoBDCBanner";
 
 export default function Hero() {
   return (
     <section className="relative">
       {/* Illustration behind hero content */}
-      <div
+      {/* <div
         className="-z-1 pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 transform"
         aria-hidden="true"
       >
@@ -32,33 +33,42 @@ export default function Hero() {
             <circle cx="155" cy="443" r="64" />
           </g>
         </svg>
-      </div>
+      </div> */}
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {/* Hero content */}
-        <div className="pb-12 pt-32 md:pb-20 md:pt-40">
+        <div className="pt-32 md:pb-20 md:pt-40">
           {/* Section header */}
-          <div className="pb-12 text-center md:pb-16">
+          <div className=" text-center">
             <h1
-              className="leading-tighter mb-4 text-5xl font-extrabold tracking-tighter md:text-6xl"
+              className="text-4xl font-extrabold tracking-tighter md:text-6xl md:leading-tight"
               data-aos="zoom-y-out"
             >
-              Bem Vindo ao R.D.O Online <br />{" "}
+              Você sabe{" "}
               <span className="bg-gradient-to-r from-[#dfff75] to-[#bcd43b] bg-clip-text text-transparent">
-                Borges de Carvalho
+                quanto
+              </span>{" "}
+              e por que seus custos estão{" "}
+              <span className="bg-gradient-to-r from-[#dfff75] to-[#bcd43b] bg-clip-text text-transparent">
+                acima do orçado
               </span>
+              ?
             </h1>
-            <div className="mx-auto max-w-3xl">
+            <div className="mx-auto max-w-5xl p-4">
               <p
-                className="mb-8 text-xl text-gray-600"
+                className="md:text-3x1 mb-8 text-2xl text-foreground"
                 data-aos="zoom-y-out"
                 data-aos-delay="150"
               >
-                Estamos em desenvolvimento
+                Através dos indicadores adequados e de ferramentas dinâmicas
+                pode-se obter análises assertivas e em tempo hábil.
               </p>
             </div>
+            <div className="flex justify-center gap-2">
+              <Button>Saiba Mais</Button>
+              <Button>Demonstração</Button>
+            </div>
           </div>
-
           {/* Hero image */}
           <LogoBDCBanner />
         </div>

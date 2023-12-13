@@ -2,7 +2,7 @@ import Logo from "./logo";
 
 export default function Footer() {
   return (
-    <footer>
+    <footer className="absolute bottom-0 w-full">
       <div className="bg mx-auto  max-w-6xl px-4 sm:px-6">
         {/* Top area: Blocks */}
 
