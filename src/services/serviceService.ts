@@ -1,4 +1,3 @@
-import { WorkSchema } from "@/lib/validations/work";
 import api from "./api";
 import { TokenService } from "./tokenService";
 
@@ -6,6 +5,7 @@ export type ServiceParams = {
   serviceDescription: string;
   unit: string;
   status: string;
+  totalAmount: string;
   subcategoryId?: string;
 };
 

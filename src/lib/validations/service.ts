@@ -9,6 +9,7 @@ export const serviceSchema = z.object({
       message: "Não pode ter apenas espaços!",
     }),
   unit: z.string(),
+  totalAmount: z.string(),
   status: z.string().default("Ativo"),
   subcategoryId: z.string(),
 });
@@ -18,6 +19,7 @@ export type ServiceSchema = {
   serviceDescription: string;
   unit: string;
   status: string;
+  totalAmount: string;
   subcategoryId?: string;
   work?: WorkSchema;
 };

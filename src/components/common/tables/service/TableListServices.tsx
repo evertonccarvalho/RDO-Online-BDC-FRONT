@@ -1,10 +1,10 @@
 import { ServiceSchema } from "@/lib/validations/service";
 import { serviceService } from "@/services/serviceService";
+import { subCategoryService } from "@/services/subCategoryService";
 import { Loader } from "lucide-react";
 import { usePathname } from "next/navigation";
 import useSWR from "swr";
 import { TableService } from "./TableService";
-import { subCategoryService } from "@/services/subCategoryService";
 
 export function TableListServices() {
   const pathname = usePathname();
@@ -39,10 +39,11 @@ export function TableListServices() {
     <div className="flex w-full min-w-[400px]">
       <table className="text-Foreground w-full rounded bg-card px-6 py-4">
         <thead>
-          <tr className="grid grid-cols-6 gap-4 rounded bg-gray-900 p-3 text-center text-xs">
+          <tr className="grid grid-cols-7 gap-4 rounded bg-gray-900 p-3 text-center text-xs">
             <th className="text-center">Id</th>
             <th className="text-center">Descrição</th>
             <th className="text-center">Unit</th>
+            <th className="text-center">Quantidade Total</th>
             <th className="text-center">Status</th>
             <th className="text-center">Sub Categoria</th>
             <th className="text-center">Ações</th>
@@ -56,6 +57,7 @@ export function TableListServices() {
               description={service.serviceDescription}
               status={service.status}
               unit={service.unit}
+              total={service.totalAmount}
               subCategory={getSubCategoryName(service.subcategoryId)}
             />
           ))}

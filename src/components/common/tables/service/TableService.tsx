@@ -11,6 +11,7 @@ interface orderSingleProps {
   description: string;
   status: string;
   unit: string;
+  total: string;
   subCategory?: string | undefined;
   work?: string | undefined;
 }
@@ -44,10 +45,11 @@ export function TableService({ ...props }: orderSingleProps) {
   }
 
   return (
-    <tr className="grid w-full grid-cols-6 items-center gap-4 border-b-[1px] border-background p-2 text-center text-xs text-foreground">
+    <tr className="grid w-full grid-cols-7 items-center gap-4 border-b-[1px] border-background p-2 text-center text-xs text-foreground">
       <td className="text-center text-primary ">{"#" + props.id}</td>
       <td className="text-center">{props.description}</td>
       <td className="text-center">{props.unit}</td>
+      <td className="text-center">{props.total}</td>
       <td
         className={`flex items-center justify-center rounded px-2 py-1 ${statusColorClass}`}
       >

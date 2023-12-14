@@ -5,10 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { serviceSchema } from "@/lib/validations/service";
 import { categoryService } from "@/services/categoryService";
 import { serviceService } from "@/services/serviceService";
-import {
-  SubCategorySchema,
-  subCategoryService,
-} from "@/services/subCategoryService";
+import { subCategoryService } from "@/services/subCategoryService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -24,15 +21,14 @@ export default function CreateNewService({
   const router = useRouter();
   const { toast } = useToast();
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [subCategories, setSubCategories] = useState<SubCategorySchema[]>([]);
 
   useEffect(() => {
-    // Carregar todas as categorias ao montar o componente
     async function loadCategories() {
       try {
-        const categories = await categoryService.fetchAll();
-        setCategories(categories);
+        const fetchedCategories = await categoryService.fetchAll();
+        setCategories(fetchedCategories);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -40,23 +36,27 @@ export default function CreateNewService({
     loadCategories();
   }, []);
 
-  const handleCategoryChange = async (categoryId: string) => {
-    setSelectedCategory(categoryId);
-    try {
-      const response = await subCategoryService.getById(+categoryId);
-      let subCategoriesArray: SubCategorySchema[] = [];
-
-      if (Array.isArray(response)) {
-        subCategoriesArray = response;
-      } else if (response) {
-        subCategoriesArray = [response];
+  useEffect(() => {
+    async function loadSubCategories() {
+      try {
+        const fetchedSubCategories = await subCategoryService.fetchAll();
+        setSubCategories(fetchedSubCategories);
+      } catch (error) {
+        console.error("Error fetching subcategories:", error);
       }
-
-      setSubCategories(subCategoriesArray);
-    } catch (error) {
-      console.error("Error fetching subcategories:", error);
     }
+    loadSubCategories();
+  }, []);
+
+  const handleCategoryChange = (selectedCategoryId: string) => {
+    setSelectedCategory(selectedCategoryId);
   };
+
+  const filteredSubCategories = selectedCategory
+    ? subCategories.filter((subCategory) => subCategory === selectedCategory)
+    : subCategories;
+
+  // };
 
   type FormValues = z.infer<typeof serviceSchema>;
   const form = useForm<FormValues>({
@@ -66,6 +66,7 @@ export default function CreateNewService({
       status: "",
       unit: "",
       subcategoryId: "",
+      totalAmount: "",
     },
   });
 
@@ -113,7 +114,7 @@ export default function CreateNewService({
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <SelectInput
                 placeholder="Category"
-                value={selectedCategory}
+                value={categories}
                 onChange={(e) => handleCategoryChange(e.target.value)}
                 options={categories.map(({ id, name }) => ({
                   value: id,
@@ -122,11 +123,10 @@ export default function CreateNewService({
               />
               <SelectInput
                 placeholder="Subcategory"
-                value={selectedCategory}
+                value={form.watch("subcategoryId")}
                 {...form.register("subcategoryId")}
                 error={form.formState.errors.subcategoryId}
-                onChange={(e) => handleCategoryChange(e.target.value)}
-                options={subCategories.map(({ id, name }) => ({
+                options={filteredSubCategories.map(({ id, name }) => ({
                   value: id,
                   label: name,
                 }))}
@@ -147,7 +147,13 @@ export default function CreateNewService({
                 {...form.register("unit")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.unit}
               />{" "}
-              <Input placeholder="Quantidade Total" type="text" />
+              <Input
+                placeholder="Quantitade Total"
+                type="number"
+                value={form.watch("totalAmount")}
+                {...form.register("totalAmount")} // Registrando o campo com react-hook-form
+                error={form.formState.errors.totalAmount}
+              />
               <SelectInput
                 placeholder="Status"
                 value={form.watch("status")}
