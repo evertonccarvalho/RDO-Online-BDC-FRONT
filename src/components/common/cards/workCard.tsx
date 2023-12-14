@@ -146,7 +146,7 @@ export default function WorkCard({
                     viewIconLink={EyeIcon}
                     newIconLink={PlusIcon}
                     workId={id}
-                  />
+                  />{" "}
                   <TeamCard
                     icon={Users2Icon}
                     amount={`${countTeam}`}

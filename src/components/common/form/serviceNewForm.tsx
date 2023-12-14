@@ -3,10 +3,15 @@ import Input from "@/components/common/form/Input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { serviceSchema } from "@/lib/validations/service";
+import { categoryService } from "@/services/categoryService";
 import { serviceService } from "@/services/serviceService";
+import {
+  SubCategorySchema,
+  subCategoryService,
+} from "@/services/subCategoryService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectInput from "./selectInput";
@@ -15,11 +20,43 @@ export default function CreateNewService({
 }: {
   workId: number | undefined;
 }) {
-  // const pathname = usePathname();
-  // const workId = pathname.split("/").pop();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [subCategories, setSubCategories] = useState<SubCategorySchema[]>([]);
+
+  useEffect(() => {
+    // Carregar todas as categorias ao montar o componente
+    async function loadCategories() {
+      try {
+        const categories = await categoryService.fetchAll();
+        setCategories(categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    }
+    loadCategories();
+  }, []);
+
+  const handleCategoryChange = async (categoryId: string) => {
+    setSelectedCategory(categoryId);
+    try {
+      const response = await subCategoryService.getById(+categoryId);
+      let subCategoriesArray: SubCategorySchema[] = [];
+
+      if (Array.isArray(response)) {
+        subCategoriesArray = response;
+      } else if (response) {
+        subCategoriesArray = [response];
+      }
+
+      setSubCategories(subCategoriesArray);
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+    }
+  };
 
   type FormValues = z.infer<typeof serviceSchema>;
   const form = useForm<FormValues>({
@@ -75,24 +112,24 @@ export default function CreateNewService({
           <div className="flex flex-col justify-around gap-4">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <SelectInput
-                placeholder="Categoria"
-                value={form.watch("subcategoryId")}
-                {...form.register("subcategoryId")}
-                error={form.formState.errors.subcategoryId}
-                options={[
-                  { value: "1", label: "Terraplanagem" },
-                  { value: "2", label: "Pintura" },
-                ]}
+                placeholder="Category"
+                value={selectedCategory}
+                onChange={(e) => handleCategoryChange(e.target.value)}
+                options={categories.map(({ id, name }) => ({
+                  value: id,
+                  label: name,
+                }))}
               />
               <SelectInput
-                placeholder="Sub Categoria"
-                value={form.watch("subcategoryId")}
+                placeholder="Subcategory"
+                value={selectedCategory}
                 {...form.register("subcategoryId")}
                 error={form.formState.errors.subcategoryId}
-                options={[
-                  { value: "1", label: "Aterro" },
-                  { value: "2", label: "Lixar" },
-                ]}
+                onChange={(e) => handleCategoryChange(e.target.value)}
+                options={subCategories.map(({ id, name }) => ({
+                  value: id,
+                  label: name,
+                }))}
               />
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-1">
