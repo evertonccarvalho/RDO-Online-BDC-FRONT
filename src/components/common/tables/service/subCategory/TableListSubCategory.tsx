@@ -6,6 +6,7 @@ import { Loader } from "lucide-react";
 import { usePathname } from "next/navigation";
 import useSWR from "swr";
 import { TableSubCategory } from "./TableSubCategory";
+import { categoryService } from "@/services/categoryService";
 
 export function TableListSubCategory() {
   const pathname = usePathname();
@@ -15,15 +16,27 @@ export function TableListSubCategory() {
     throw new Error("WorkId not provided");
   }
 
-  const { data, error } = useSWR("/subcategory", () =>
-    subCategoryService.fetchAll(),
+  const { data: subCategories, error: subCategoryError } = useSWR(
+    "/subcategory",
+    () => subCategoryService.fetchAll(),
   );
-  console.log(data);
 
-  if (error) return error;
-  if (!data) {
+  const { data: categories, error: categoryError } = useSWR("/categories", () =>
+    categoryService.fetchAll(),
+  );
+
+  if (subCategoryError || categoryError) return <div>Error fetching data</div>;
+  if (!subCategories || !categories) {
     return <Loader />;
   }
+
+  // Função para buscar o nome da categoria correspondente ao ID da categoria
+  const getCategoryName = (categoryId: string | undefined) => {
+    const category = categories.find(
+      (cat: { id: any }) => cat.id === categoryId,
+    );
+    return category ? category.name : "Categoria não encontrada";
+  };
 
   return (
     <div className="flex w-full min-w-[400px] ">
@@ -38,13 +51,13 @@ export function TableListSubCategory() {
           </tr>
         </thead>
         <tbody>
-          {data.map((item: SubCategorySchema, index: number) => (
+          {subCategories.map((item: SubCategorySchema, index: number) => (
             <TableSubCategory
               key={index}
               id={item.id}
               description={item.name}
               status={item.status}
-              subCategory={item.serviceCategoryId}
+              subCategory={getCategoryName(item.serviceCategoryId)}
             />
           ))}
         </tbody>
