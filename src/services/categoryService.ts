@@ -1,8 +1,12 @@
-import { WorkSchema } from "@/lib/validations/work";
 import api from "./api";
 import { TokenService } from "./tokenService";
 
 export type CategoryParams = {
+  name: string;
+  status: string;
+};
+export type CategorySchema = {
+  id: number;
   name: string;
   status: string;
 };

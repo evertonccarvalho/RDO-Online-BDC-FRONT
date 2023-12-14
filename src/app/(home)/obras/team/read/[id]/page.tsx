@@ -3,7 +3,7 @@ import Breadcrumb from "@/app/(home)/components/Breadcrumb";
 
 import { TableListTeam } from "@/components/common/tables/team/TableListTeam";
 
-const ServicesPage = () => {
+const TeamPage = () => {
   return (
     <>
       <div className="">
@@ -18,4 +18,4 @@ const ServicesPage = () => {
   );
 };
 
-export default ServicesPage;
+export default TeamPage;

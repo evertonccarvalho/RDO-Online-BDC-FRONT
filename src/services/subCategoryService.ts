@@ -4,13 +4,19 @@ import { TokenService } from "./tokenService";
 export type SubCategoryParams = {
   name: string;
   status: string;
-  categoryId?: string;
+  serviceCategoryId?: string;
+};
+export type SubCategorySchema = {
+  id: number;
+  name: string;
+  status: string;
+  serviceCategoryId?: string;
 };
 
 const subCategoryService = {
   create: async (params: SubCategoryParams) => {
     const res = await api
-      .post(`/subCategory`, params, {
+      .post(`/subcategory`, params, {
         headers: {
           Authorization: TokenService.get(),
         },
@@ -26,7 +32,7 @@ const subCategoryService = {
 
   fetchAll: async () => {
     try {
-      const response = await api.get(`/subCategory`, {
+      const response = await api.get(`/subcategory`, {
         headers: {
           Authorization: TokenService.get(),
         },
@@ -44,7 +50,7 @@ const subCategoryService = {
         throw new Error("O ID da equipe não foi fornecido.");
       }
 
-      const res = await api.get(`/subCategory/${subCategoryId}`, {
+      const res = await api.get(`/subcategory/${subCategoryId}`, {
         headers: {
           Authorization: TokenService.get(),
         },
@@ -58,7 +64,7 @@ const subCategoryService = {
 
   update: async (subCategoryId: number, params: SubCategoryParams) => {
     try {
-      const res = await api.put(`/subCategory/${subCategoryId}`, params, {
+      const res = await api.put(`/subcategory/${subCategoryId}`, params, {
         headers: {
           Authorization: TokenService.get(),
         },
@@ -72,14 +78,14 @@ const subCategoryService = {
 
   delete: async (subCategoryId: number) => {
     try {
-      const res = await api.delete(`/subCategory/${subCategoryId}`, {
+      const res = await api.delete(`/subcategory/${subCategoryId}`, {
         headers: {
           Authorization: TokenService.get(),
         },
       });
       return res.status;
     } catch (error) {
-      console.error("Error deleting subCategory:", error);
+      console.error("Error deleting subcategory:", error);
       throw error;
     }
   },

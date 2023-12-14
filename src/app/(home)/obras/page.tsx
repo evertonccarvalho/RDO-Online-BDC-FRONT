@@ -8,6 +8,8 @@ import { workService } from "@/services/workService";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import useSWR from "swr";
+import CategoryPage from "./Category/Category";
+import SubCategoryPage from "./subCategory/SubCategory";
 const ObrasPage = () => {
   const [showModal, setShowModal] = useState(false);
   const { data: obrasData, error: obrasError } = useSWR(
@@ -66,6 +68,10 @@ const ObrasPage = () => {
             countShift={obra.Shift.length}
           />
         ))}
+        <div className="grid  grid-cols-2 gap-4">
+          <CategoryPage />
+          <SubCategoryPage />
+        </div>
       </div>
     </>
   );
