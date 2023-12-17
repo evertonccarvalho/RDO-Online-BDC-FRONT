@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { WorkSchema } from "./work";
 
 export const serviceSchema = z.object({
   serviceDescription: z
@@ -9,17 +8,7 @@ export const serviceSchema = z.object({
       message: "Não pode ter apenas espaços!",
     }),
   unit: z.string(),
-  totalAmount: z.string(),
+  totalAmount: z.string().or(z.number().min(1)),
   status: z.string().default("Ativo"),
-  subcategoryId: z.string(),
+  subcategoryId: z.string().or(z.number().min(1)),
 });
-
-export type ServiceSchema = {
-  id: number;
-  serviceDescription: string;
-  unit: string;
-  status: string;
-  totalAmount: string;
-  subcategoryId?: string;
-  work?: WorkSchema;
-};

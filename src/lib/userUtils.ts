@@ -38,6 +38,7 @@ export async function deleteService(
     throw error;
   }
 }
+
 export async function deleteTeam(
   workId: number,
   teamId: number,

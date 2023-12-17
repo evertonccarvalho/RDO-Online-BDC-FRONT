@@ -31,17 +31,3 @@ export const workSchema = z.object({
     }),
   active: z.boolean(),
 });
-
-export type WorkSchema = {
-  id?: number;
-  workDescription: string; // Descrição da obra
-  company: string; // Nome da empresa da obra
-  nameResponsible: string; // Nome do responsável pela obra
-  phoneContact: string; // Número de telefone de contato
-  address: string; // Endereço completo da obra
-  active: boolean; // Indica se a obra está ativa
-};
-
-type InferredWork = z.infer<typeof workSchema>;
-function assertType<T>(_value: T) {}
-assertType<WorkSchema>({} as InferredWork);

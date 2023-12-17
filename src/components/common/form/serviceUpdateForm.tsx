@@ -2,8 +2,9 @@
 import Input from "@/components/common/form/Input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { ServiceSchema, serviceSchema } from "@/lib/validations/service";
-import { serviceService } from "@/services/serviceService";
+import { serviceSchema } from "@/lib/validations/service";
+import { IService, serviceService } from "@/services/serviceService";
+import { subCategoryService } from "@/services/subCategoryService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,16 +12,29 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectInput from "./selectInput";
 export default function UpdateService({
-  workId,
   serviceId,
+  workId,
 }: {
   workId: number | undefined;
   serviceId: number | undefined;
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [service, setService] = useState<IService | null>(null);
+  const [subCategories, setSubCategories] = useState([]);
   const router = useRouter();
   const { toast } = useToast();
-  const [service, setService] = useState<ServiceSchema | null>(null);
+
+  useEffect(() => {
+    async function loadSubCategories() {
+      try {
+        const fetchedSubCategories = await subCategoryService.fetchAll();
+        setSubCategories(fetchedSubCategories);
+      } catch (error) {
+        console.error("Error fetching subcategories:", error);
+      }
+    }
+    loadSubCategories();
+  }, []);
 
   async function getService(
     workId: number | undefined,
@@ -46,14 +60,17 @@ export default function UpdateService({
     getService(serviceId, workId);
   }, [serviceId, workId]);
 
+  // 1. Define a schema zod.
+
   type FormValues = z.infer<typeof serviceSchema>;
   const form = useForm<FormValues>({
     resolver: zodResolver(serviceSchema),
     defaultValues: {
-      serviceDescription: "",
-      status: "",
-      unit: "",
-      subcategoryId: "",
+      serviceDescription: service?.serviceDescription,
+      status: service?.status,
+      unit: service?.unit,
+      subcategoryId: service?.subcategoryId,
+      totalAmount: service?.totalAmount,
     },
   });
 
@@ -62,6 +79,7 @@ export default function UpdateService({
       form.setValue("serviceDescription", service.serviceDescription);
       form.setValue("status", service.status);
       form.setValue("unit", service.unit);
+      form.setValue("totalAmount", service.totalAmount);
       form.setValue("subcategoryId", service.subcategoryId || "");
     }
   }, [form, service]);
@@ -80,17 +98,16 @@ export default function UpdateService({
         throw new Error("WorkId not provided");
       }
 
-      const res = await serviceService.update(+serviceId, +workId, data);
+      const res = await serviceService.update(workId, service?.id, data);
 
-      const successMessage = `${data.serviceDescription} foi registrado com sucesso`;
+      const successMessage = `${service?.serviceDescription} foi registrado com sucesso`;
 
-      if (res === 201) {
+      if (res === 200) {
         toast({
           variant: "success",
-          title: "Serviço registrado.",
+          title: "Serviço Atualizado.",
           description: successMessage,
         });
-        router.push("/obras");
       } else {
         throw new Error("Houve um problema ao registrar o serviço.");
       }
@@ -122,11 +139,18 @@ export default function UpdateService({
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-3">
               <Input
-                placeholder="UNIT????"
+                placeholder="Unidade de Medida"
                 type="text"
                 value={form.watch("unit")}
                 {...form.register("unit")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.unit}
+              />{" "}
+              <Input
+                placeholder="Quantitade Total"
+                type="text"
+                value={form.watch("totalAmount")}
+                {...form.register("totalAmount")} // Registrando o campo com react-hook-form
+                error={form.formState.errors.totalAmount}
               />
               <SelectInput
                 placeholder="Status"
@@ -139,14 +163,14 @@ export default function UpdateService({
                 ]}
               />
               <SelectInput
-                placeholder="SubCategoria"
+                placeholder="Subcategory"
                 value={form.watch("subcategoryId")}
                 {...form.register("subcategoryId")}
                 error={form.formState.errors.subcategoryId}
-                options={[
-                  { value: "1", label: "Aterro" },
-                  { value: "2", label: "Terraplanagem" },
-                ]}
+                options={subCategories.map(({ id, name }) => ({
+                  value: id,
+                  label: name,
+                }))}
               />
             </div>
             <Button disabled={isSubmitting} type="submit">

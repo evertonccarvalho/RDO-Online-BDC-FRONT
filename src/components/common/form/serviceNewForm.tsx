@@ -80,17 +80,16 @@ export default function CreateNewService({
         throw new Error("WorkId not provided");
       }
 
-      const { status } = await serviceService.create(+workId, data);
+      const response = await serviceService.create(+workId, data);
 
       const successMessage = `${data.serviceDescription} foi registrado com sucesso`;
 
-      if (status === 201) {
+      if (response.status === 201) {
         toast({
           variant: "success",
           title: "Serviço registrado.",
           description: successMessage,
         });
-        router.push("/obras");
       } else {
         throw new Error("Houve um problema ao registrar o serviço.");
       }

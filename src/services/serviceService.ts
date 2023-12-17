@@ -1,29 +1,36 @@
+import { serviceSchema } from "@/lib/validations/service";
+import { z } from "zod";
 import api from "./api";
 import { TokenService } from "./tokenService";
+import { IWork } from "./workService";
 
-export type ServiceParams = {
+export type IService = {
+  id: number;
   serviceDescription: string;
   unit: string;
   status: string;
   totalAmount: string;
   subcategoryId?: string;
+  work?: IWork;
 };
 
 const serviceService = {
-  create: async (workId: number, params: ServiceParams) => {
-    const res = await api
-      .post(`/works/${workId}/services`, params, {
+  create: async (workId: number, params: z.infer<typeof serviceSchema>) => {
+    try {
+      const res = await api.post(`/works/${workId}/services`, params, {
         headers: {
           Authorization: TokenService.get(),
         },
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          return error.response;
-        }
-        return error;
       });
-    return res;
+
+      return res;
+    } catch (error: any) {
+      if (error.response.status === 400) {
+        return error.response;
+      } else {
+        return error;
+      }
+    }
   },
 
   fetchAll: async (workId: number) => {
@@ -59,11 +66,15 @@ const serviceService = {
   },
 
   update: async (
-    serviceId: number,
-    workId: number | string,
-    params: ServiceParams,
+    workId: number,
+    serviceId: number | undefined,
+    params: z.infer<typeof serviceSchema>,
   ) => {
     try {
+      if (serviceId === undefined) {
+        throw new Error("O ID do serviço não foi fornecido.");
+      }
+
       const res = await api.put(
         `/works/${workId}/services/${serviceId}`,
         params,
@@ -73,6 +84,7 @@ const serviceService = {
           },
         },
       );
+      console.log("a resioista di service", res);
       return res.status;
     } catch (error) {
       console.error("Error updating work:", error);

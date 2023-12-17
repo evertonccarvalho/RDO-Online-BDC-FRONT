@@ -1,6 +1,5 @@
-import { ServiceSchema } from "@/lib/validations/service";
-import { WorkSchema } from "@/lib/validations/work";
 import api from "./api";
+import { IService } from "./serviceService";
 import { TokenService } from "./tokenService";
 
 export type WorkParams = {
@@ -12,13 +11,23 @@ export type WorkParams = {
   address: string; // Endereço completo da obra
   logoUrl: string; // Logotipo da obra
   active: Boolean; // Indica se a obra está ativa
-  services?: ServiceSchema[];
+  services?: IService[];
   createdAt?: Date;
   updatedAt?: Date;
 };
 
+export type IWork = {
+  id?: number;
+  workDescription: string; // Descrição da obra
+  company: string; // Nome da empresa da obra
+  nameResponsible: string; // Nome do responsável pela obra
+  phoneContact: string; // Número de telefone de contato
+  address: string; // Endereço completo da obra
+  active: boolean; // Indica se a obra está ativa
+};
+
 const workService = {
-  create: async (params: WorkSchema) => {
+  create: async (params: IWork) => {
     const res = await api
       .post("/user/work", params, {
         headers: {
@@ -66,7 +75,7 @@ const workService = {
     }
   },
 
-  update: async (workId: number | string, params: WorkSchema) => {
+  update: async (workId: number | string, params: IWork) => {
     try {
       const res = await api.put(`/work/${workId}`, params, {
         headers: {

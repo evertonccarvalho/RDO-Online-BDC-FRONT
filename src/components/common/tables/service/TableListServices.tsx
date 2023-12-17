@@ -36,19 +36,20 @@ export function TableListServices() {
   };
 
   return (
-    <div className="flex w-full min-w-[400px]">
+    <div className="relative w-full overflow-auto">
       <table className="text-Foreground w-full rounded bg-card px-6 py-4">
-        <thead>
+        <thead className="min-w-max">
           <tr className="grid grid-cols-7 gap-4 rounded bg-gray-900 p-3 text-center text-xs">
             <th className="text-center">Id</th>
             <th className="text-center">Descrição</th>
             <th className="text-center">Unit</th>
             <th className="text-center">Quantidade Total</th>
             <th className="text-center">Status</th>
-            <th className="text-center">Sub Categoria</th>
+            <th className="mtext-center">Sub Categoria</th>
             <th className="text-center">Ações</th>
           </tr>
         </thead>
+        <tbody></tbody>
         <tbody>
           {services.map((service: ServiceSchema, index: number) => (
             <TableService

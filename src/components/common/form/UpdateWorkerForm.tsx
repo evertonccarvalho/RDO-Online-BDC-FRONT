@@ -2,13 +2,11 @@
 import VoltarButton from "@/app/(home)/components/VoltarButton";
 import ProfileHeader from "@/app/(home)/currentuser/[id]/profileHeader";
 import { Button } from "@/components/ui/button";
-
-import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import useCover from "@/images/cover.png";
 import userAvatar from "@/images/user.png";
-import { WorkSchema, workSchema } from "@/lib/validations/work";
-import { workService } from "@/services/workService";
+import { workSchema } from "@/lib/validations/work";
+import { IWork, workService } from "@/services/workService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -22,18 +20,18 @@ export default function UpdateWorker({
   workId: number | undefined;
 }) {
   const { toast } = useToast();
-  const [work, setWork] = useState<WorkSchema | null>(null);
+  const [work, setWork] = useState<IWork | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function getUser(workId: number | undefined): Promise<void> {
+  async function getWork(workId: number | undefined): Promise<void> {
     try {
       if (workId === undefined) {
         throw new Error("ID do usuário não fornecido.");
       }
 
-      const data = await workService.getById(+workId);
+      const data = await workService.getById(workId);
       setWork(data);
     } catch (error) {
       console.log("Error fetching user:", error);
@@ -41,7 +39,7 @@ export default function UpdateWorker({
   }
 
   useEffect(() => {
-    getUser(workId);
+    getWork(workId);
   }, [workId]);
 
   // 1. Define a schema zod.
@@ -118,65 +116,63 @@ export default function UpdateWorker({
           email={work?.nameResponsible}
         />
         <div className="flex flex-col gap-9 rounded-sm bg-card p-5 sm:grid-cols-2">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="flex flex-col justify-around gap-4">
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <Input
-                    placeholder="Empresa"
-                    type="text"
-                    value={form.watch("company")}
-                    {...form.register("company")} // Registrando o campo com react-hook-form
-                    error={form.formState.errors.company}
-                  />{" "}
-                  <Input
-                    placeholder="Descrição"
-                    type="text"
-                    value={form.watch("workDescription")}
-                    {...form.register("workDescription")} // Registrando o campo com react-hook-form
-                    error={form.formState.errors.workDescription}
-                  />
-                </div>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-4">
-                  <Input
-                    placeholder="Responsavel"
-                    type="text"
-                    value={form.watch("nameResponsible")}
-                    {...form.register("nameResponsible")} // Registrando o campo com react-hook-form
-                    error={form.formState.errors.nameResponsible}
-                  />{" "}
-                  <Input
-                    placeholder="Endereço"
-                    type="text"
-                    value={form.watch("address")}
-                    {...form.register("address")} // Registrando o campo com react-hook-form
-                    error={form.formState.errors.address}
-                  />{" "}
-                  <Input
-                    placeholder="Telefone"
-                    maxLength={14}
-                    data-mask="[-](00) 0 0000-0000"
-                    type="text"
-                    value={form.watch("phoneContact")}
-                    {...form.register("phoneContact")} // Registrando o campo com react-hook-form
-                    error={form.formState.errors.phoneContact}
-                  />
-                  <div className="flex items-center gap-2 text-sm">
-                    <label className="flex gap-2 text-sm">Ativa?</label>
-                    <input
-                      className="h-6 w-6 cursor-pointer accent-primary"
-                      checked={form.watch("active" || false)}
-                      {...form.register("active")} // Registrando o campo com react-hook-form
-                      type="checkbox"
-                    />
-                  </div>
-                </div>
-                <Button disabled={isSubmitting} type="submit">
-                  Atualizar Obra
-                </Button>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="flex flex-col justify-around gap-4">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <Input
+                  placeholder="Empresa"
+                  type="text"
+                  value={form.watch("company")}
+                  {...form.register("company")} // Registrando o campo com react-hook-form
+                  error={form.formState.errors.company}
+                />{" "}
+                <Input
+                  placeholder="Descrição"
+                  type="text"
+                  value={form.watch("workDescription")}
+                  {...form.register("workDescription")} // Registrando o campo com react-hook-form
+                  error={form.formState.errors.workDescription}
+                />
               </div>
-            </form>
-          </Form>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-4">
+                <Input
+                  placeholder="Responsavel"
+                  type="text"
+                  value={form.watch("nameResponsible")}
+                  {...form.register("nameResponsible")} // Registrando o campo com react-hook-form
+                  error={form.formState.errors.nameResponsible}
+                />{" "}
+                <Input
+                  placeholder="Endereço"
+                  type="text"
+                  value={form.watch("address")}
+                  {...form.register("address")} // Registrando o campo com react-hook-form
+                  error={form.formState.errors.address}
+                />{" "}
+                <Input
+                  placeholder="Telefone"
+                  maxLength={14}
+                  data-mask="[-](00) 0 0000-0000"
+                  type="text"
+                  value={form.watch("phoneContact")}
+                  {...form.register("phoneContact")} // Registrando o campo com react-hook-form
+                  error={form.formState.errors.phoneContact}
+                />
+                <div className="flex items-center gap-2 text-sm">
+                  <label className="flex gap-2 text-sm">Ativa?</label>
+                  <input
+                    className="h-6 w-6 cursor-pointer accent-primary"
+                    checked={form.watch("active" || false)}
+                    {...form.register("active")} // Registrando o campo com react-hook-form
+                    type="checkbox"
+                  />
+                </div>
+              </div>
+              <Button disabled={isSubmitting} type="submit">
+                Atualizar Obra
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     </>

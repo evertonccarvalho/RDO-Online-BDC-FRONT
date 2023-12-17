@@ -46,7 +46,9 @@ export function TableService({ ...props }: orderSingleProps) {
 
   return (
     <tr className="grid w-full grid-cols-7 items-center gap-4 border-b-[1px] border-background p-2 text-center text-xs text-foreground">
-      <td className="text-center text-primary ">{"#" + props.id}</td>
+      <td className="py-2 pl-4 text-center align-middle  text-primary ">
+        {"#" + props.id}
+      </td>
       <td className="text-center">{props.description}</td>
       <td className="text-center">{props.unit}</td>
       <td className="text-center">{props.total}</td>

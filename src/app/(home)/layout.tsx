@@ -44,7 +44,8 @@ export default function HomeLayout({ children }: HomeLayoutProps) {
               />
             </header>
             <div>
-              <main className="mx-auto min-w-min max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+              <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10"></div>
+              <main className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
                 {children}
               </main>
             </div>
