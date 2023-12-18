@@ -1,5 +1,4 @@
-import { ServiceSchema } from "@/lib/validations/service";
-import { serviceService } from "@/services/serviceService";
+import { IService, serviceService } from "@/services/serviceService";
 import { subCategoryService } from "@/services/subCategoryService";
 import { Loader } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -51,7 +50,7 @@ export function TableListServices() {
         </thead>
         <tbody></tbody>
         <tbody>
-          {services.map((service: ServiceSchema, index: number) => (
+          {services.map((service: IService, index: number) => (
             <TableService
               key={index}
               id={service.id}
