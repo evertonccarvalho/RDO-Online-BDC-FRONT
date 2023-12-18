@@ -1,5 +1,5 @@
+import { IWork } from "@/services/workService";
 import * as z from "zod";
-import { WorkSchema } from "./work";
 
 export const shiftSchema = z.object({
   description: z
@@ -22,5 +22,5 @@ export type ShiftSchema = {
   feasibility: string;
   weatherCondition: string;
   status: string;
-  work?: WorkSchema;
+  work?: IWork;
 };

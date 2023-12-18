@@ -1,5 +1,5 @@
+import { IWork } from "@/services/workService";
 import * as z from "zod";
-import { WorkSchema } from "./work";
 
 export const teamSchema = z.object({
   descricaoEquipe: z
@@ -17,5 +17,5 @@ export type TeamSchema = {
   descricaoEquipe: string;
   empresaContratada: string;
   status: string;
-  work?: WorkSchema;
+  work?: IWork;
 };

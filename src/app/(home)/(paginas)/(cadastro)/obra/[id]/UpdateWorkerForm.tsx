@@ -16,8 +16,8 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import useCover from "@/images/cover.png";
 import userAvatar from "@/images/user.png";
-import { WorkSchema, workSchema } from "@/lib/validations/work";
-import { workService } from "@/services/workService";
+import { workSchema } from "@/lib/validations/work";
+import { IWork, workService } from "@/services/workService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -25,7 +25,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 export default function UpdateWorker() {
   const { toast } = useToast();
-  const [work, setWork] = useState<WorkSchema | null>(null);
+  const [work, setWork] = useState<IWork | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const id = pathname.split("/").pop();

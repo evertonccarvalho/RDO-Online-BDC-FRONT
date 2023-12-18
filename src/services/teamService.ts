@@ -1,12 +1,12 @@
-import { WorkSchema } from "@/lib/validations/work";
 import api from "./api";
 import { TokenService } from "./tokenService";
+import { IWork } from "./workService";
 
 export type TeamParams = {
   descricaoEquipe: string;
   empresaContratada: string;
   status: string;
-  work?: WorkSchema;
+  work?: IWork;
 };
 
 const teamService = {
