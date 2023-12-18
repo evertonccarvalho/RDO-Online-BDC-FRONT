@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { deleteService } from "@/lib/userUtils";
 import { PenBoxIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -45,39 +46,30 @@ export function TableService({ ...props }: orderSingleProps) {
   }
 
   return (
-    <tr className="grid w-full grid-cols-7 items-center gap-4 border-b-[1px] border-background p-2 text-center text-xs text-foreground">
-      <td className="py-2 pl-4 text-center align-middle  text-primary ">
-        {"#" + props.id}
-      </td>
-      <td className="text-center">{props.description}</td>
-      <td className="text-center">{props.unit}</td>
-      <td className="text-center">{props.total}</td>
-      <td
-        className={`flex items-center justify-center rounded px-2 py-1 ${statusColorClass}`}
-      >
-        {props.status}
-      </td>
-      <td className="">{props.subCategory}</td>
-      <td className="flex items-center justify-center gap-1">
-        <DeleteItem
-          itemName={props.description}
-          deleteFunction={() => deleteService(props.id, +workId)}
-        />
-        <ModalComponent
-          isOpen={showModal}
-          onClose={handleCloseModal}
-          modalName="Atualizar Serviço"
-          modalContent={<UpdateService workId={+workId} serviceId={props.id} />}
-        />
-        <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
-          <button
-            className="flex h-full w-full items-center justify-center"
-            onClick={toggleModal}
-          >
-            <PenBoxIcon />
-          </button>
-        </div>
-      </td>
-    </tr>
+    <>
+      <ModalComponent
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        modalName="Atualizar Serviço"
+        modalContent={<UpdateService workId={+workId} serviceId={props.id} />}
+      />
+      <tr className="grid min-w-max grid-cols-7 items-center gap-2 border-b-[1px] border-background p-2 text-center text-xs text-foreground">
+        <td className="text-primary">{"#" + props.id}</td>
+        <td>{props.description}</td>
+        <td>{props.unit}</td>
+        <td>{props.total}</td>
+        <td className={`rounded px-2 ${statusColorClass}`}>{props.status}</td>
+        <td className="">{props.subCategory}</td>
+        <td>
+          <Button variant="ghost" size="icon" onClick={toggleModal}>
+            <PenBoxIcon className="h-4 w-4 text-primary" />
+          </Button>
+          <DeleteItem
+            itemName={props.description}
+            deleteFunction={() => deleteService(props.id, +workId)}
+          />
+        </td>
+      </tr>
+    </>
   );
 }

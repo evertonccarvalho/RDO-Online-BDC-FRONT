@@ -52,7 +52,9 @@ const UserPage = () => {
           <Breadcrumb pageName="Usuários" />
           <p className="text-sm text-muted-foreground">Usuários</p>
         </div>
-        <DataTable columns={columns} data={userData} />
+        <div className="text-Foreground w-full rounded bg-card px-6 py-4">
+          <DataTable columns={columns} data={userData} />
+        </div>
       </div>
     </>
   );

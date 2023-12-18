@@ -35,7 +35,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function ServiceData<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -76,10 +76,16 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filtrar Por Description"
+          value={
+            (table
+              .getColumn("serviceDescription")
+              ?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table
+              .getColumn("serviceDescription")
+              ?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -110,9 +116,9 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded border">
         <Table>
-          <TableHeader>
+          <TableHeader className="  bg-gray-900">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

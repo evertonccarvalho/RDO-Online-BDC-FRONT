@@ -1,14 +1,20 @@
 import { IService, serviceService } from "@/services/serviceService";
 import { subCategoryService } from "@/services/subCategoryService";
-import { Loader } from "lucide-react";
+import { Loader, PlusIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import useSWR from "swr";
+import ModalComponent from "../../Modal";
+import Input from "../../form/Input";
+import CreateNewService from "../../form/serviceNewForm";
 import { TableService } from "./TableService";
 
 export function TableListServices() {
+  const [filterValue, setFilterValue] = useState<string>("");
+  const [showModalService, setShowModalService] = useState(false);
+
   const pathname = usePathname();
   const workId = pathname.split("/").pop();
-
   if (!workId) {
     throw new Error("WorkId not provided");
   }
@@ -34,35 +40,88 @@ export function TableListServices() {
     return subCategory ? subCategory.name : "Subcategoria não encontrada";
   };
 
+  const filteredServices = services.filter((service: IService) => {
+    const searchString = filterValue.toLowerCase();
+    return (
+      service.serviceDescription.toLowerCase().includes(searchString) ||
+      service.status.toLowerCase().includes(searchString) ||
+      service.unit.toLowerCase().includes(searchString) ||
+      service.totalAmount.toString().includes(searchString) ||
+      getSubCategoryName(service.subcategoryId)
+        .toLowerCase()
+        .includes(searchString)
+    );
+  });
+
+  const handleCloseModalService = () => {
+    setShowModalService(false);
+  };
+  const toggleModalService = () => {
+    setShowModalService(!showModalService);
+  };
+
   return (
-    <div className="relative w-full overflow-auto">
-      <table className="text-Foreground w-full rounded bg-card px-6 py-4">
-        <thead className="min-w-max">
-          <tr className="grid grid-cols-7 gap-4 rounded bg-gray-900 p-3 text-center text-xs">
-            <th className="text-center">Id</th>
-            <th className="text-center">Descrição</th>
-            <th className="text-center">Unit</th>
-            <th className="text-center">Quantidade Total</th>
-            <th className="text-center">Status</th>
-            <th className="mtext-center">Sub Categoria</th>
-            <th className="text-center">Ações</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-        <tbody>
-          {services.map((service: IService, index: number) => (
-            <TableService
-              key={index}
-              id={service.id}
-              description={service.serviceDescription}
-              status={service.status}
-              unit={service.unit}
-              total={service.totalAmount}
-              subCategory={getSubCategoryName(service.subcategoryId)}
-            />
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <ModalComponent
+        isOpen={showModalService}
+        onClose={handleCloseModalService}
+        modalName="Novo Serviço"
+        modalContent={<CreateNewService workId={+workId} />}
+      />
+      <div className="flex items-center justify-between gap-4 bg-gray-900 p-2 px-4">
+        <div>
+          <Input
+            className=""
+            placeholder="Filtrar"
+            value={filterValue}
+            onChange={(event) => setFilterValue(event.target.value)}
+          />
+        </div>
+        <button
+          className="flex h-full max-w-fit items-center text-sm text-primary"
+          onClick={toggleModalService}
+        >
+          <PlusIcon className="h-4 w-4" />
+          <span className="hidden md:block">Novo Serviço </span>
+        </button>
+      </div>
+      <div className="relative w-full overflow-auto">
+        <table className="w-full bg-card text-white ">
+          {/* Restante do seu código da tabela */}
+          <thead className="min-w-max whitespace-nowrap">
+            <tr className="grid grid-cols-7 gap-4 bg-gray-900 p-3 text-xs">
+              <th>Id</th>
+              <th>Descrição</th>
+              <th>Unit</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Sub Categoria</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody className="">
+            {filteredServices.length > 0 ? (
+              filteredServices.map((service: IService, index: number) => (
+                <TableService
+                  key={index}
+                  id={service.id}
+                  description={service.serviceDescription}
+                  status={service.status}
+                  unit={service.unit}
+                  total={service.totalAmount}
+                  subCategory={getSubCategoryName(service.subcategoryId)}
+                />
+              ))
+            ) : (
+              <tr className="ext-Foreground h-24 w-full rounded bg-card">
+                <td colSpan={7} className="text-center">
+                  Nenhum resultado encontrado.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }
