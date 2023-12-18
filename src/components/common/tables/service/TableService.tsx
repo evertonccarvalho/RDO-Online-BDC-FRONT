@@ -38,11 +38,11 @@ export function TableService({ ...props }: orderSingleProps) {
 
   // Determinando a cor com base no texto do status
   if (props.status === "Ativo") {
-    statusColorClass = "bg-green-900 px-2 py-1 text-green-500"; // Status "Ativo" - cor verde
+    statusColorClass = "bg-green-900 px-2 py-1 text-green-500";
   } else if (props.status === "Inativo") {
-    statusColorClass = "bg-red-900 text-red-500"; // Status "Desativado" - cor vermelha
+    statusColorClass = "bg-red-900 text-red-500";
   } else {
-    statusColorClass = "text-gray-500"; // Outros status - cor padrão (cinza)
+    statusColorClass = "text-gray-500";
   }
 
   return (
@@ -53,7 +53,7 @@ export function TableService({ ...props }: orderSingleProps) {
         modalName="Atualizar Serviço"
         modalContent={<UpdateService workId={+workId} serviceId={props.id} />}
       />
-      <tr className="grid min-w-max grid-cols-7 items-center gap-2 border-b-[1px] border-background p-2 text-center text-xs text-foreground">
+      <tr className="grid min-w-max grid-cols-7 items-center gap-2 border-b-[1px] border-background p-2 text-center text-xs text-foreground hover:bg-gray-900">
         <td className="text-primary">{"#" + props.id}</td>
         <td>{props.description}</td>
         <td>{props.unit}</td>

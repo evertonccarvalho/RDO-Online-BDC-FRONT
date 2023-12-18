@@ -7,14 +7,17 @@ import useSWR from "swr";
 import ModalComponent from "../../Modal";
 import Input from "../../form/Input";
 import CreateNewService from "../../form/serviceNewForm";
+import Pagination from "../pagination";
 import { TableService } from "./TableService";
 
 export function TableListServices() {
   const [filterValue, setFilterValue] = useState<string>("");
   const [showModalService, setShowModalService] = useState(false);
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   const pathname = usePathname();
   const workId = pathname.split("/").pop();
+
   if (!workId) {
     throw new Error("WorkId not provided");
   }
@@ -53,11 +56,35 @@ export function TableListServices() {
     );
   });
 
+  const itemsPerPage = 10; // Defina o número de itens por página aqui
+
+  const indexOfLastItem = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredServices.slice(
+    indexOfFirstItem,
+    indexOfLastItem,
+  );
+
+  const renderedItems = currentItems.map((service: IService, index: number) => (
+    <TableService
+      key={index}
+      id={service.id}
+      description={service.serviceDescription}
+      status={service.status}
+      unit={service.unit}
+      total={service.totalAmount}
+      subCategory={getSubCategoryName(service.subcategoryId)}
+    />
+  ));
+
   const handleCloseModalService = () => {
     setShowModalService(false);
   };
   const toggleModalService = () => {
     setShowModalService(!showModalService);
+  };
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -68,23 +95,30 @@ export function TableListServices() {
         modalName="Novo Serviço"
         modalContent={<CreateNewService workId={+workId} />}
       />
-      <div className="flex items-center justify-between gap-4 bg-gray-900 p-2 px-4">
-        <div>
-          <Input
-            className=""
-            placeholder="Filtrar"
-            value={filterValue}
-            onChange={(event) => setFilterValue(event.target.value)}
-          />
+      <div className="bg-gray-900 p-2 px-4 py-4">
+        <div className="flex items-center justify-between gap-4 p-2">
+          <div>
+            <Input
+              className=""
+              placeholder="Filtrar"
+              value={filterValue}
+              onChange={(event) => setFilterValue(event.target.value)}
+            />
+          </div>
+          <button
+            className="flex h-full max-w-fit items-center text-sm text-primary"
+            onClick={toggleModalService}
+          >
+            <PlusIcon className="h-4 w-4" />
+            <span className="hidden md:block">Novo Serviço </span>
+          </button>
         </div>
-        <button
-          className="flex h-full max-w-fit items-center text-sm text-primary"
-          onClick={toggleModalService}
-        >
-          <PlusIcon className="h-4 w-4" />
-          <span className="hidden md:block">Novo Serviço </span>
-        </button>
+        <p className="px-2">
+          Serviços:
+          <span className="text-primary"> {filteredServices.length}</span>
+        </p>
       </div>
+
       <div className="relative w-full overflow-auto">
         <table className="w-full bg-card text-white ">
           {/* Restante do seu código da tabela */}
@@ -101,19 +135,9 @@ export function TableListServices() {
           </thead>
           <tbody className="">
             {filteredServices.length > 0 ? (
-              filteredServices.map((service: IService, index: number) => (
-                <TableService
-                  key={index}
-                  id={service.id}
-                  description={service.serviceDescription}
-                  status={service.status}
-                  unit={service.unit}
-                  total={service.totalAmount}
-                  subCategory={getSubCategoryName(service.subcategoryId)}
-                />
-              ))
+              renderedItems // Renderiza os items
             ) : (
-              <tr className="ext-Foreground h-24 w-full rounded bg-card">
+              <tr className="text-Foreground h-24 w-full rounded bg-card">
                 <td colSpan={7} className="text-center">
                   Nenhum resultado encontrado.
                 </td>
@@ -121,6 +145,12 @@ export function TableListServices() {
             )}
           </tbody>
         </table>
+        <Pagination
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          totalItems={filteredServices.length}
+          onPageChange={handlePageChange}
+        />
       </div>
     </>
   );
