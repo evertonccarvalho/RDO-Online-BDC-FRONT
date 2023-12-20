@@ -1,7 +1,6 @@
 "use client";
 import Breadcrumb from "@/app/(home)/components/Breadcrumb";
 
-import Servico from "@/app/(home)/(paginas)/(cadastro)/servico/page";
 import { TableListServices } from "@/components/common/tables/service/TableListServices";
 import CategoryPage from "../../../Category/Category";
 import SubCategoryPage from "../../../subCategory/SubCategory";
@@ -11,11 +10,10 @@ const ServicesPage = () => {
     <>
       <div className="">
         <div>
-          <Breadcrumb pageName="Obras" />
+          <Breadcrumb pageName="Serviços" />
         </div>
         <div className="">
           <TableListServices />
-          <Servico />
           <div className="grid grid-cols-2 gap-4 py-2">
             <SubCategoryPage />
             <CategoryPage />

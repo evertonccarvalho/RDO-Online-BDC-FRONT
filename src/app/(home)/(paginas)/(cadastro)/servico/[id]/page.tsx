@@ -8,7 +8,7 @@ const ServicesPage = () => {
     <>
       <div className="">
         <div>
-          <Breadcrumb pageName="Serviços" />
+          <Breadcrumb pageName="Obras" />
         </div>
         <div className="">
           <TableListServices />
