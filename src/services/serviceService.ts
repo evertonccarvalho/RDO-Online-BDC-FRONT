@@ -10,7 +10,7 @@ export type IService = {
   unit: string;
   status: string;
   totalAmount: string;
-  subcategoryId?: string;
+  subcategoryId?: number;
   work?: IWork;
 };
 

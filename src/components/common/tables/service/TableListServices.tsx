@@ -1,8 +1,11 @@
 import { IService, serviceService } from "@/services/serviceService";
-import { subCategoryService } from "@/services/subCategoryService";
-import { Loader, PlusIcon } from "lucide-react";
-import { useState } from "react";
-import useSWR from "swr";
+import {
+  ISubCategory,
+  subCategoryService,
+} from "@/services/subCategoryService";
+import { PlusIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import Loader from "../../Loader/page";
 import ModalComponent from "../../Modal";
 import Input from "../../form/Input";
 import CreateNewService from "../../form/serviceNewForm";
@@ -16,47 +19,58 @@ export function TableListServices({ workId }: Props) {
   const [filterValue, setFilterValue] = useState<string>("");
   const [showModalService, setShowModalService] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [services, setServices] = useState<IService[] | null>(null);
+  const [subCategories, setSubCategories] = useState<ISubCategory[] | null>(
+    null,
+  );
+  const [serviceError, setServiceError] = useState<boolean>(false);
+  const [subCategoryError, setSubCategoryError] = useState<boolean>(false);
 
-  if (!workId) {
-    throw new Error("WorkId not provided");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const servicesData = await serviceService.fetchAll(+workId);
+        const subCategoriesData = await subCategoryService.fetchAll();
+        setServices(servicesData);
+        setSubCategories(subCategoriesData);
+      } catch (error) {
+        setServiceError(true);
+        setSubCategoryError(true);
+      }
+    };
+
+    fetchData();
+  }, [workId]);
+
+  let errorMessage: string | JSX.Element = "";
+  if (serviceError || subCategoryError) {
+    errorMessage = "Error fetching data"; // Mensagem de erro
+  } else if (!services || !subCategories) {
+    errorMessage = services === null ? <Loader /> : "No services available"; // Mensagem quando não há serviços
   }
 
-  const { data: services, error: serviceError } = useSWR("/", () =>
-    serviceService.fetchAll(+workId),
-  );
-  const { data: subCategories, error: subCategoryError } = useSWR(
-    "/subcategories",
-    () => subCategoryService.fetchAll(), // Supondo que exista um serviço para buscar as subcategorias
-  );
-
-  if (serviceError || subCategoryError) return <div>Error fetching data</div>;
-  if (!services || !subCategories) {
-    return <Loader />;
-  }
-
-  // Função para buscar o nome da subcategoria correspondente ao ID da subcategoria
-  const getSubCategoryName = (subcategoryId: string | undefined) => {
-    const subCategory = subCategories.find(
-      (subCat: { id: string | undefined }) => subCat.id === subcategoryId,
+  const getSubCategoryName = (subcategoryId: number | undefined) => {
+    const subCategory = subCategories?.find(
+      (subCat) => subCat.id === subcategoryId,
     );
     return subCategory ? subCategory.name : "Subcategoria não encontrada";
   };
 
-  const filteredServices = services.filter((service: IService) => {
-    const searchString = filterValue.toLowerCase();
-    return (
-      service.serviceDescription.toLowerCase().includes(searchString) ||
-      service.status.toLowerCase().includes(searchString) ||
-      service.unit.toLowerCase().includes(searchString) ||
-      service.totalAmount.toString().includes(searchString) ||
-      getSubCategoryName(service.subcategoryId)
-        .toLowerCase()
-        .includes(searchString)
-    );
-  });
+  const filteredServices =
+    services?.filter((service) => {
+      const searchString = filterValue.toLowerCase();
+      return (
+        service.serviceDescription.toLowerCase().includes(searchString) ||
+        service.status.toLowerCase().includes(searchString) ||
+        service.unit.toLowerCase().includes(searchString) ||
+        service.totalAmount.toString().includes(searchString) ||
+        getSubCategoryName(service.subcategoryId)
+          .toLowerCase()
+          .includes(searchString)
+      );
+    }) || [];
 
   const itemsPerPage = 10; // Defina o número de itens por página aqui
-
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredServices.slice(
@@ -72,18 +86,28 @@ export function TableListServices({ workId }: Props) {
       status={service.status}
       unit={service.unit}
       total={service.totalAmount}
+      workId={workId}
       subCategory={getSubCategoryName(service.subcategoryId)}
     />
   ));
 
-  const handleCloseModalService = () => {
-    setShowModalService(false);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
+
   const toggleModalService = () => {
     setShowModalService(!showModalService);
   };
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+
+  const handleCloseModalService = async () => {
+    setShowModalService(false);
+    try {
+      const servicesData = await serviceService.fetchAll(+workId);
+      setServices(servicesData);
+    } catch (error) {
+      console.error("Erro ao atualizar lista de serviços:", error);
+      // Lidar com o erro, se necessário
+    }
   };
 
   return (
@@ -92,7 +116,12 @@ export function TableListServices({ workId }: Props) {
         isOpen={showModalService}
         onClose={handleCloseModalService}
         modalName="Novo Serviço"
-        modalContent={<CreateNewService workId={+workId} />}
+        modalContent={
+          <CreateNewService
+            workId={+workId}
+            onCloseModal={handleCloseModalService} // Passa a função de fechamento do modal
+          />
+        }
       />
       <div className="bg-gray-900 p-2 px-4 py-4">
         <div className="flex items-center justify-between gap-4 p-2">
@@ -132,15 +161,22 @@ export function TableListServices({ workId }: Props) {
               <th>Ações</th>
             </tr>
           </thead>
-          <tbody className="">
-            {filteredServices.length > 0 ? (
-              renderedItems // Renderiza os items
-            ) : (
+          <tbody>
+            {/* Exibição de mensagens de erro ou quando não há serviços */}
+            {serviceError || subCategoryError ? (
               <tr className="text-Foreground h-24 w-full rounded bg-card">
                 <td colSpan={7} className="text-center">
-                  Nenhum resultado encontrado.
+                  Error fetching data
                 </td>
               </tr>
+            ) : !services || !subCategories || filteredServices.length === 0 ? (
+              <tr className="text-Foreground h-24 w-full rounded bg-card">
+                <td colSpan={7} className="text-center">
+                  {services === null ? <Loader /> : "No services available"}
+                </td>
+              </tr>
+            ) : (
+              renderedItems // Renderiza os itens
             )}
           </tbody>
         </table>

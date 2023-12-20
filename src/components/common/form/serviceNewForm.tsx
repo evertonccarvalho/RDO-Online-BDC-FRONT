@@ -12,11 +12,16 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectInput from "./selectInput";
+
+interface CreateNewServiceProps {
+  workId: number;
+  onCloseModal: () => Promise<void>; // Definindo a propriedade onCloseModal
+}
+
 export default function CreateNewService({
   workId,
-}: {
-  workId: number | undefined;
-}) {
+  onCloseModal,
+}: CreateNewServiceProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
@@ -90,6 +95,7 @@ export default function CreateNewService({
           title: "Serviço registrado.",
           description: successMessage,
         });
+        onCloseModal(); // Chama a função onCloseModal para atualizar os serviços após fechar o modal
       } else {
         throw new Error("Houve um problema ao registrar o serviço.");
       }

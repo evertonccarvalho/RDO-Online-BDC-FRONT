@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { deleteService } from "@/lib/userUtils";
 import { PenBoxIcon } from "lucide-react";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import ModalComponent from "../../Modal";
 import DeleteItem from "../../delete/DeleteItem";
@@ -15,11 +14,12 @@ interface orderSingleProps {
   total: string;
   subCategory?: string | undefined;
   work?: string | undefined;
+  workId: number;
 }
 
-export function TableService({ ...props }: orderSingleProps) {
-  const pathname = usePathname();
-  const workId = pathname.split("/").pop();
+export function TableService({ workId, ...props }: orderSingleProps) {
+  // const pathname = usePathname();
+  // const workId = pathname.split("/").pop();
 
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => {

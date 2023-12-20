@@ -34,7 +34,7 @@ export default function ServiceTable({ workId }: Props) {
             status: "",
             unit: "",
             totalAmount: "",
-            subcategoryId: "",
+            subcategoryId: 0,
             work: {
               id: 1,
               workDescription: "",
@@ -50,7 +50,7 @@ export default function ServiceTable({ workId }: Props) {
     }
 
     fetchData();
-  }, []);
+  }, [workId]);
 
   return (
     <>

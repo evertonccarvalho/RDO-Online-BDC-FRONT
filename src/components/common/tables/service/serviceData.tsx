@@ -28,6 +28,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { PlusSquare } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 interface DataTableProps<TData, TValue> {
@@ -70,11 +72,38 @@ export function ServiceData<TData, TValue>({
 
   return (
     <div>
-      <div className="flex-1 text-sm text-muted-foreground">
-        {table.getFilteredSelectedRowModel().rows.length} de{" "}
-        {table.getFilteredRowModel().rows.length} linha(s) slecionadas.
-      </div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center gap-2 ">
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+          <Button variant="ghost" size="sm">
+            <Link
+              href="/obra/new"
+              className="flex flex-1 flex-row items-center gap-1  text-center "
+            >
+              <PlusSquare className="text-primary " />
+              <p className="text-sm text-primary ">Nova Obra</p>
+            </Link>
+          </Button>
+        </div>
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} de{" "}
+          {table.getFilteredRowModel().rows.length} linha(s) slecionadas.
+        </div>
         <Input
           placeholder="Filtrar Por Description"
           value={
@@ -165,24 +194,6 @@ export function ServiceData<TData, TValue>({
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
       </div>
     </div>
   );
