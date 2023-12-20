@@ -25,7 +25,7 @@ export function TableListServices({ workId }: Props) {
   );
   const [serviceError, setServiceError] = useState<boolean>(false);
   const [subCategoryError, setSubCategoryError] = useState<boolean>(false);
-
+  const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -84,6 +84,7 @@ export function TableListServices({ workId }: Props) {
       id={service.id}
       description={service.serviceDescription}
       status={service.status}
+      active={service.status}
       unit={service.unit}
       total={service.totalAmount}
       workId={workId}
@@ -123,6 +124,7 @@ export function TableListServices({ workId }: Props) {
           />
         }
       />
+
       <div className="bg-gray-900 p-2 px-4 py-4">
         <div className="flex items-center justify-between gap-4 p-2">
           <div>

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { getStringStatusColorClass } from "@/helpers/statusColorClassHelper";
 import { deleteService } from "@/lib/userUtils";
 import { PenBoxIcon } from "lucide-react";
 import { useState } from "react";
@@ -15,13 +16,12 @@ interface orderSingleProps {
   subCategory?: string | undefined;
   work?: string | undefined;
   workId: number;
+  active: string;
 }
 
-export function TableService({ workId, ...props }: orderSingleProps) {
-  // const pathname = usePathname();
-  // const workId = pathname.split("/").pop();
-
+export function TableService({ workId, active, ...props }: orderSingleProps) {
   const [showModal, setShowModal] = useState(false);
+
   const toggleModal = () => {
     setShowModal(!showModal);
   };
@@ -30,20 +30,7 @@ export function TableService({ workId, ...props }: orderSingleProps) {
     setShowModal(false);
   };
 
-  if (!workId) {
-    throw new Error("WorkId not provided");
-  }
-
-  let statusColorClass = "";
-
-  // Determinando a cor com base no texto do status
-  if (props.status === "Ativo") {
-    statusColorClass = "bg-green-900 px-2 py-1 text-green-500";
-  } else if (props.status === "Inativo") {
-    statusColorClass = "bg-red-900 text-red-500";
-  } else {
-    statusColorClass = "text-gray-500";
-  }
+  const statusColorClass = getStringStatusColorClass(active);
 
   return (
     <>

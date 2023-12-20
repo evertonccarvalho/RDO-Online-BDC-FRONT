@@ -58,15 +58,6 @@ export default function WorkCard({
     setIsOpen(!isOpen);
   };
 
-  // let statusColorClass = "";
-
-  // // Determinando a cor com base no texto do status
-  // if (active) {
-  //   statusColorClass = "bg-green-900 px-2 py-1 text-green-500"; // Se ativo for verdadeiro, cor verde
-  // } else {
-  //   statusColorClass = "bg-red-900 text-red-500"; // Se ativo for falso, cor vermelha
-  // }
-
   const statusColorClass = getStatusColorClass(active);
 
   return (
