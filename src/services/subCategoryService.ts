@@ -6,7 +6,7 @@ export type SubCategoryParams = {
   status: string;
   serviceCategoryId?: string;
 };
-export type SubCategorySchema = {
+export type ISubCategory = {
   id: number;
   name: string;
   status: string;

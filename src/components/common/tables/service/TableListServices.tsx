@@ -1,7 +1,6 @@
 import { IService, serviceService } from "@/services/serviceService";
 import { subCategoryService } from "@/services/subCategoryService";
 import { Loader, PlusIcon } from "lucide-react";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
 import ModalComponent from "../../Modal";
@@ -10,13 +9,13 @@ import CreateNewService from "../../form/serviceNewForm";
 import Pagination from "../pagination";
 import { TableService } from "./TableService";
 
-export function TableListServices() {
+interface Props {
+  workId: number;
+}
+export function TableListServices({ workId }: Props) {
   const [filterValue, setFilterValue] = useState<string>("");
   const [showModalService, setShowModalService] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
-
-  const pathname = usePathname();
-  const workId = pathname.split("/").pop();
 
   if (!workId) {
     throw new Error("WorkId not provided");
@@ -30,12 +29,9 @@ export function TableListServices() {
     () => subCategoryService.fetchAll(), // Supondo que exista um serviço para buscar as subcategorias
   );
 
-  const isLoading = !services || !subCategories;
-  const hasError = serviceError || subCategoryError;
-  const isEmpty = !services?.length || !subCategories?.length;
-
-  if (hasError) {
-    return <div>Error fetching data</div>;
+  if (serviceError || subCategoryError) return <div>Error fetching data</div>;
+  if (!services || !subCategories) {
+    return <Loader />;
   }
 
   // Função para buscar o nome da subcategoria correspondente ao ID da subcategoria
@@ -46,7 +42,7 @@ export function TableListServices() {
     return subCategory ? subCategory.name : "Subcategoria não encontrada";
   };
 
-  const filteredServices = services?.filter((service: IService) => {
+  const filteredServices = services.filter((service: IService) => {
     const searchString = filterValue.toLowerCase();
     return (
       service.serviceDescription.toLowerCase().includes(searchString) ||
@@ -63,24 +59,22 @@ export function TableListServices() {
 
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredServices?.slice(
+  const currentItems = filteredServices.slice(
     indexOfFirstItem,
     indexOfLastItem,
   );
 
-  const renderedItems = currentItems?.map(
-    (service: IService, index: number) => (
-      <TableService
-        key={index}
-        id={service.id}
-        description={service.serviceDescription}
-        status={service.status}
-        unit={service.unit}
-        total={service.totalAmount}
-        subCategory={getSubCategoryName(service.subcategoryId)}
-      />
-    ),
-  );
+  const renderedItems = currentItems.map((service: IService, index: number) => (
+    <TableService
+      key={index}
+      id={service.id}
+      description={service.serviceDescription}
+      status={service.status}
+      unit={service.unit}
+      total={service.totalAmount}
+      subCategory={getSubCategoryName(service.subcategoryId)}
+    />
+  ));
 
   const handleCloseModalService = () => {
     setShowModalService(false);
@@ -120,7 +114,7 @@ export function TableListServices() {
         </div>
         <p className="px-2">
           Serviços:
-          <span className="text-primary"> {filteredServices?.length}</span>
+          <span className="text-primary"> {filteredServices.length}</span>
         </p>
       </div>
 
@@ -138,28 +132,22 @@ export function TableListServices() {
               <th>Ações</th>
             </tr>
           </thead>
-          {isLoading ? (
-            <Loader />
-          ) : isEmpty ? (
-            <div>No services available</div>
-          ) : (
-            <tbody className="">
-              {filteredServices.length > 0 ? (
-                renderedItems // Renderiza os items
-              ) : (
-                <tr className="text-Foreground h-24 w-full rounded bg-card">
-                  <td colSpan={7} className="text-center">
-                    Nenhum resultado encontrado.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          )}
+          <tbody className="">
+            {filteredServices.length > 0 ? (
+              renderedItems // Renderiza os items
+            ) : (
+              <tr className="text-Foreground h-24 w-full rounded bg-card">
+                <td colSpan={7} className="text-center">
+                  Nenhum resultado encontrado.
+                </td>
+              </tr>
+            )}
+          </tbody>
         </table>
         <Pagination
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
-          totalItems={filteredServices?.length}
+          totalItems={filteredServices.length}
           onPageChange={handlePageChange}
         />
       </div>

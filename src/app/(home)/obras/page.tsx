@@ -1,15 +1,12 @@
 "use client";
-import Breadcrumb from "@/app/(home)/components/Breadcrumb";
 import Loader from "@/components/common/Loader/page";
-import ModalComponent from "@/components/common/Modal";
-import WorkCard from "@/components/common/cards/workCard";
-import CreateNewWork from "@/components/common/form/workNewForm";
+import WorkAndTablesCard from "@/components/common/cards/workAndTablesCard";
 import { workService } from "@/services/workService";
-import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import useSWR from "swr";
 const ObrasPage = () => {
   const [showModal, setShowModal] = useState(false);
+
   const { data: obrasData, error: obrasError } = useSWR(
     "/obras",
     workService.fetchAll,
@@ -29,12 +26,8 @@ const ObrasPage = () => {
 
   return (
     <>
-      <div>
-        <Breadcrumb pageName="Obras" />
-      </div>
-
       <div className="flex flex-row flex-wrap gap-4">
-        <div>
+        {/* <div>
           <ModalComponent
             isOpen={showModal}
             onClose={handleCloseModal}
@@ -49,9 +42,9 @@ const ObrasPage = () => {
               Nova Obra <PlusIcon />
             </button>
           </div>
-        </div>
+        </div> */}
         {obrasData.map((obra: any) => (
-          <WorkCard
+          <WorkAndTablesCard
             id={obra.id}
             key={obra.id}
             company={obra.company}
@@ -61,9 +54,6 @@ const ObrasPage = () => {
             logoUrl={obra.logoUrl}
             phoneContact={obra.phoneContact}
             active={obra.active}
-            countService={obra.services.length}
-            countTeam={obra.Team.length}
-            countShift={obra.Shift.length}
           />
         ))}
       </div>

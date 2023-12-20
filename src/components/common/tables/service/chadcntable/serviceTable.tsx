@@ -1,14 +1,17 @@
 "use client";
-import Breadcrumb from "@/app/(home)/components/Breadcrumb";
 import { columnService } from "@/components/common/tables/service/columnsService";
 import { ServiceData } from "@/components/common/tables/service/serviceData";
 import { IService, serviceService } from "@/services/serviceService";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Servico() {
+interface Props {
+  workId: number;
+}
+
+export default function ServiceTable({ workId }: Props) {
   const pathname = usePathname();
-  const workId = pathname.split("/").pop();
+  // const workId = pathname.split("/").pop();
   const [serviceData, setServiceData] = useState<IService[]>([]);
 
   useEffect(() => {
@@ -51,14 +54,8 @@ export default function Servico() {
 
   return (
     <>
-      <div className=" space-y-6 p-2">
-        <div>
-          <Breadcrumb pageName="Usuários" />
-          <p className="text-sm text-muted-foreground">Serviços</p>
-        </div>
-        <div className="text-Foreground w-full rounded bg-card px-6 py-4">
-          <ServiceData columns={columnService} data={serviceData} />
-        </div>
+      <div className="text-Foreground w-full rounded bg-card py-2">
+        <ServiceData columns={columnService} data={serviceData} />
       </div>
     </>
   );

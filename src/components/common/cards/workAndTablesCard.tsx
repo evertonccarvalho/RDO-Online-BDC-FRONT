@@ -1,21 +1,15 @@
 import { getStatusColorClass } from "@/helpers/statusColorClassHelper";
 import UserOne from "@/images/user.png";
-import {
-  ArrowDown,
-  EyeIcon,
-  PenBoxIcon,
-  PlusIcon,
-  Users2Icon,
-  WorkflowIcon,
-} from "lucide-react";
+import { ArrowDown, ArrowUp, PenBoxIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import ButtonContentSwitcher from "../ButtonContentSwitcher ";
 import ModalComponent from "../Modal";
 import UpdateWorker from "../form/UpdateWorkerForm";
+import { TableListCategory } from "../tables/service/Category/TableListCategory";
 import { TableListServices } from "../tables/service/TableListServices";
-import ServiceCard from "./ServiceMiniCard";
-import ShiftCard from "./ShiftMiniCard";
-import TeamCard from "./TeamMiniCard";
+import ServiceTable from "../tables/service/chadcntable/serviceTable";
+import { TableListSubCategory } from "../tables/service/subCategory/TableListSubCategory";
 
 interface WorkCardProps {
   workDescription: string;
@@ -26,12 +20,9 @@ interface WorkCardProps {
   logoUrl: string;
   active: string;
   id: number;
-  countService: string;
-  countTeam: string;
-  countShift: string;
 }
 
-export default function WorkCard({
+export default function WorkAndTablesCard({
   workDescription,
   company,
   nameResponsible,
@@ -40,15 +31,19 @@ export default function WorkCard({
   logoUrl,
   active,
   id,
-  countService,
-  countTeam,
-  countShift,
 }: WorkCardProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => {
     setShowModal(!showModal);
   };
+
+  const buttons = [
+    { label: "Serviços", content: <ServiceTable workId={id} /> },
+    { label: "Serviços2", content: <TableListServices workId={id} /> },
+    { label: "Categorias", content: <TableListCategory /> },
+    { label: "Subcategorias", content: <TableListSubCategory /> },
+  ];
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -57,15 +52,6 @@ export default function WorkCard({
   const toggleCard = () => {
     setIsOpen(!isOpen);
   };
-
-  // let statusColorClass = "";
-
-  // // Determinando a cor com base no texto do status
-  // if (active) {
-  //   statusColorClass = "bg-green-900 px-2 py-1 text-green-500"; // Se ativo for verdadeiro, cor verde
-  // } else {
-  //   statusColorClass = "bg-red-900 text-red-500"; // Se ativo for falso, cor vermelha
-  // }
 
   const statusColorClass = getStatusColorClass(active);
 
@@ -89,7 +75,7 @@ export default function WorkCard({
                     className={`card-header ${isOpen ? "active" : ""}`}
                     onClick={toggleCard}
                   >
-                    <ArrowDown />
+                    {isOpen ? <ArrowUp /> : <ArrowDown />}
                   </button>
                 </div>
               </div>
@@ -139,36 +125,7 @@ export default function WorkCard({
                     </div>
                   </div>
                 </div>
-                <div className="2xl:gap-7.5 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4">
-                  <TableListServices workId={id} />
-                  <ServiceCard
-                    icon={WorkflowIcon}
-                    amount={`${countService}`}
-                    description="Total de Serviços"
-                    viewLink={`/obras/service/read/${id}`}
-                    viewIconLink={EyeIcon}
-                    newIconLink={PlusIcon}
-                    workId={id}
-                  />{" "}
-                  <TeamCard
-                    icon={Users2Icon}
-                    amount={`${countTeam}`}
-                    description="Equipes"
-                    viewLink={`/obras/team/read/${id}`}
-                    viewIconLink={EyeIcon}
-                    newIconLink={PlusIcon}
-                    workId={id}
-                  />
-                  <ShiftCard
-                    icon={Users2Icon}
-                    amount={`${countShift}`}
-                    description="Turnos"
-                    viewLink={`/obras/shift/read/${id}`}
-                    viewIconLink={EyeIcon}
-                    newIconLink={PlusIcon}
-                    workId={id}
-                  />
-                </div>
+                <ButtonContentSwitcher buttons={buttons} />
               </div>
             </div>
           )}

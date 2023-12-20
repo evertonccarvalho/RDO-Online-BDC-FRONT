@@ -1,7 +1,7 @@
 import Loader from "@/components/common/Loader/page";
 import { categoryService } from "@/services/categoryService";
 import {
-  SubCategorySchema,
+  ISubCategory,
   subCategoryService,
 } from "@/services/subCategoryService";
 import { usePathname } from "next/navigation";
@@ -56,7 +56,7 @@ export function TableListSubCategory() {
             </tr>
           </thead>
           <tbody>
-            {subCategories.map((item: SubCategorySchema, index: number) => (
+            {subCategories.map((item: ISubCategory, index: number) => (
               <TableSubCategory
                 key={index}
                 id={item.id}
