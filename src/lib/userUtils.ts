@@ -26,8 +26,8 @@ export async function deleteWork(workId: number): Promise<boolean> {
 }
 
 export async function deleteService(
-  workId: number,
   serviceId: number,
+  workId: number,
 ): Promise<boolean> {
   try {
     await serviceService.delete(workId, serviceId);

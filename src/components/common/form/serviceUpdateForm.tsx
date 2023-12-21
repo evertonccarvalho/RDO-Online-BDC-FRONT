@@ -11,13 +11,17 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectInput from "./selectInput";
+interface UpdateServiceProps {
+  serviceId: number;
+  workId: number;
+  onCloseModal: () => Promise<void>; // Definindo a propriedade onCloseModal
+}
+
 export default function UpdateService({
   serviceId,
   workId,
-}: {
-  workId: number | undefined;
-  serviceId: number | undefined;
-}) {
+  onCloseModal,
+}: UpdateServiceProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [service, setService] = useState<IService | null>(null);
   const [subCategories, setSubCategories] = useState([]);
@@ -108,6 +112,7 @@ export default function UpdateService({
           title: "Serviço Atualizado.",
           description: successMessage,
         });
+        onCloseModal(); // Chama a função onCloseModal para atualizar os serviços após fechar o modal
       } else {
         throw new Error("Houve um problema ao registrar o serviço.");
       }

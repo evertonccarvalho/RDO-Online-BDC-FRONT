@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface DeleteItemProps {
@@ -25,6 +26,7 @@ const DeleteItem: React.FC<DeleteItemProps> = ({
 }) => {
   const { toast } = useToast();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const router = useRouter();
 
   const handleDelete = async () => {
     try {
@@ -37,6 +39,7 @@ const DeleteItem: React.FC<DeleteItemProps> = ({
           description: `${itemName} foi excluído com sucesso.`,
         });
       }
+      router.push("/obras");
     } catch (error) {
       toast({
         variant: "destructive",

@@ -8,7 +8,6 @@ import ModalComponent from "../Modal";
 import UpdateWorker from "../form/UpdateWorkerForm";
 import { TableListCategory } from "../tables/service/Category/TableListCategory";
 import { TableListServices } from "../tables/service/TableListServices";
-import ServiceTable from "../tables/service/chadcntable/serviceTable";
 import { TableListSubCategory } from "../tables/service/subCategory/TableListSubCategory";
 
 interface WorkCardProps {
@@ -39,7 +38,6 @@ export default function WorkAndTablesCard({
   };
 
   const buttons = [
-    { label: "Serviços", content: <ServiceTable workId={id} /> },
     { label: "Serviços2", content: <TableListServices workId={id} /> },
     { label: "Categorias", content: <TableListCategory /> },
     { label: "Subcategorias", content: <TableListSubCategory /> },

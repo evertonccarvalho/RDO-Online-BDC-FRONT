@@ -9,6 +9,7 @@ import Loader from "../../Loader/page";
 import ModalComponent from "../../Modal";
 import Input from "../../form/Input";
 import CreateNewService from "../../form/serviceNewForm";
+import UpdateService from "../../form/serviceUpdateForm";
 import Pagination from "../pagination";
 import { TableService } from "./TableService";
 
@@ -17,7 +18,6 @@ interface Props {
 }
 export function TableListServices({ workId }: Props) {
   const [filterValue, setFilterValue] = useState<string>("");
-  const [showModalService, setShowModalService] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [services, setServices] = useState<IService[] | null>(null);
   const [subCategories, setSubCategories] = useState<ISubCategory[] | null>(
@@ -25,11 +25,17 @@ export function TableListServices({ workId }: Props) {
   );
   const [serviceError, setServiceError] = useState<boolean>(false);
   const [subCategoryError, setSubCategoryError] = useState<boolean>(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(
+    null,
+  );
   const [showModal, setShowModal] = useState(false);
+  const [showModalService, setShowModalService] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const servicesData = await serviceService.fetchAll(+workId);
+
         const subCategoriesData = await subCategoryService.fetchAll();
         setServices(servicesData);
         setSubCategories(subCategoriesData);
@@ -41,13 +47,6 @@ export function TableListServices({ workId }: Props) {
 
     fetchData();
   }, [workId]);
-
-  let errorMessage: string | JSX.Element = "";
-  if (serviceError || subCategoryError) {
-    errorMessage = "Error fetching data"; // Mensagem de erro
-  } else if (!services || !subCategories) {
-    errorMessage = services === null ? <Loader /> : "No services available"; // Mensagem quando não há serviços
-  }
 
   const getSubCategoryName = (subcategoryId: number | undefined) => {
     const subCategory = subCategories?.find(
@@ -78,22 +77,24 @@ export function TableListServices({ workId }: Props) {
     indexOfLastItem,
   );
 
-  const renderedItems = currentItems.map((service: IService, index: number) => (
-    <TableService
-      key={index}
-      id={service.id}
-      description={service.serviceDescription}
-      status={service.status}
-      active={service.status}
-      unit={service.unit}
-      total={service.totalAmount}
-      workId={workId}
-      subCategory={getSubCategoryName(service.subcategoryId)}
-    />
-  ));
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleOpenModal = (serviceId: number) => {
+    setSelectedServiceId(serviceId);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = async () => {
+    setShowModal(false);
+    try {
+      const servicesData = await serviceService.fetchAll(+workId);
+      setServices(servicesData);
+    } catch (error) {
+      console.error("Erro ao atualizar lista de serviços:", error);
+      // Lidar com o erro, se necessário
+    }
   };
 
   const toggleModalService = () => {
@@ -113,18 +114,33 @@ export function TableListServices({ workId }: Props) {
 
   return (
     <>
-      <ModalComponent
-        isOpen={showModalService}
-        onClose={handleCloseModalService}
-        modalName="Novo Serviço"
-        modalContent={
-          <CreateNewService
-            workId={+workId}
-            onCloseModal={handleCloseModalService} // Passa a função de fechamento do modal
+      <div>
+        <ModalComponent
+          isOpen={showModalService}
+          onClose={handleCloseModalService}
+          modalName="Novo Serviço"
+          modalContent={
+            <CreateNewService
+              workId={+workId}
+              onCloseModal={handleCloseModalService}
+            />
+          }
+        />
+        {showModal && selectedServiceId !== null && (
+          <ModalComponent
+            isOpen={showModal}
+            onClose={handleCloseModal}
+            modalName="Atualizar Serviço"
+            modalContent={
+              <UpdateService
+                workId={workId}
+                serviceId={selectedServiceId}
+                onCloseModal={handleCloseModal} // Alterado para a função de fechamento do modal atual
+              />
+            }
           />
-        }
-      />
-
+        )}
+      </div>
       <div className="bg-gray-900 p-2 px-4 py-4">
         <div className="flex items-center justify-between gap-4 p-2">
           <div>
@@ -178,7 +194,20 @@ export function TableListServices({ workId }: Props) {
                 </td>
               </tr>
             ) : (
-              renderedItems // Renderiza os itens
+              currentItems.map((service: IService, index: number) => (
+                <TableService
+                  key={index}
+                  id={service.id}
+                  description={service.serviceDescription}
+                  status={service.status}
+                  active={service.status}
+                  unit={service.unit}
+                  total={service.totalAmount}
+                  workId={workId}
+                  onOpenModal={handleOpenModal}
+                  subCategory={getSubCategoryName(service.subcategoryId)}
+                />
+              ))
             )}
           </tbody>
         </table>

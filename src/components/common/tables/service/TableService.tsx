@@ -2,10 +2,7 @@ import { Button } from "@/components/ui/button";
 import { getStringStatusColorClass } from "@/helpers/statusColorClassHelper";
 import { deleteService } from "@/lib/userUtils";
 import { PenBoxIcon } from "lucide-react";
-import { useState } from "react";
-import ModalComponent from "../../Modal";
 import DeleteItem from "../../delete/DeleteItem";
-import UpdateService from "../../form/serviceUpdateForm";
 
 interface orderSingleProps {
   id: number;
@@ -17,29 +14,18 @@ interface orderSingleProps {
   work?: string | undefined;
   workId: number;
   active: string;
+  onOpenModal: (serviceId: number, workId: number) => void;
 }
 
-export function TableService({ workId, active, ...props }: orderSingleProps) {
-  const [showModal, setShowModal] = useState(false);
-
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
+export function TableService({
+  workId,
+  active,
+  onOpenModal,
+  ...props
+}: orderSingleProps) {
   const statusColorClass = getStringStatusColorClass(active);
-
   return (
     <>
-      <ModalComponent
-        isOpen={showModal}
-        onClose={handleCloseModal}
-        modalName="Atualizar Serviço"
-        modalContent={<UpdateService workId={+workId} serviceId={props.id} />}
-      />
       <tr className="grid min-w-max grid-cols-7 items-center gap-2 border-b-[1px] border-background p-2 text-center text-xs text-foreground hover:bg-gray-900">
         <td className="text-primary">{"#" + props.id}</td>
         <td>{props.description}</td>
@@ -48,12 +34,16 @@ export function TableService({ workId, active, ...props }: orderSingleProps) {
         <td className={`rounded px-2 ${statusColorClass}`}>{props.status}</td>
         <td className="">{props.subCategory}</td>
         <td>
-          <Button variant="ghost" size="icon" onClick={toggleModal}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onOpenModal(props.id, +workId)} // Aqui você pode usar 'as number' se 'props.id' for um número
+          >
             <PenBoxIcon className="h-4 w-4 text-primary" />
           </Button>
           <DeleteItem
             itemName={props.description}
-            deleteFunction={() => deleteService(props.id, +workId)}
+            deleteFunction={() => deleteService(+workId, props.id)}
           />
         </td>
       </tr>
