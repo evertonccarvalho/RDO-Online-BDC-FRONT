@@ -1,9 +1,4 @@
-import {
-  BarChart,
-  BookCheckIcon,
-  ConstructionIcon,
-  HomeIcon,
-} from "lucide-react";
+import { BarChart, BookCheckIcon, HomeIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -12,7 +7,6 @@ interface props {
 }
 const menus = [
   { name: "Inicio", link: "/home", icon: HomeIcon },
-  { name: "Obras", link: "/obras", icon: ConstructionIcon },
   { name: "Apontamentos", link: "/apontamentos", icon: BookCheckIcon },
   { name: "Relatorios", link: "/relatorios", icon: BarChart },
 ];

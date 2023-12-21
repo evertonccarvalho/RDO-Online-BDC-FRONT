@@ -19,8 +19,8 @@ interface WorkCardProps {
   logoUrl: string;
   active: string;
   id: number;
+  handleSubmitModal: () => Promise<void>; // Certifique-se de que esta função está corretamente tipada
 }
-
 export default function WorkAndTablesCard({
   workDescription,
   company,
@@ -30,12 +30,10 @@ export default function WorkAndTablesCard({
   logoUrl,
   active,
   id,
+  handleSubmitModal,
 }: WorkCardProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
 
   const buttons = [
     { label: "Serviços2", content: <TableListServices workId={id} /> },
@@ -43,12 +41,19 @@ export default function WorkAndTablesCard({
     { label: "Subcategorias", content: <TableListSubCategory /> },
   ];
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
   const toggleCard = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const handleCloseModal = async () => {
+    setShowModal(false);
+    try {
+      await handleSubmitModal();
+    } catch (error) {}
   };
 
   const statusColorClass = getStatusColorClass(active);
@@ -110,8 +115,13 @@ export default function WorkAndTablesCard({
                     <ModalComponent
                       isOpen={showModal}
                       onClose={handleCloseModal}
-                      modalName="Atualizar Serviço"
-                      modalContent={<UpdateWorker workId={id} />}
+                      modalName="Atualizar Obra"
+                      modalContent={
+                        <UpdateWorker
+                          workId={id}
+                          onSubmitModal={handleCloseModal} // Corrigindo para a propriedade correta
+                        />
+                      }
                     />
                     <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
                       <button

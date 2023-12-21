@@ -1,8 +1,8 @@
 import { ConstructionIcon, HomeIcon, ListStartIcon } from "lucide-react";
 import { useEffect } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
-import AdminMenu from "./sideBarAdminLinks";
-import SideBarLinks from "./sideBarLinks";
+import AdminMenu from "../../app/(home)/components/sideBarAdminLinks";
+import SideBarLinks from "../../app/(home)/components/sideBarLinks";
 
 interface SidebarProps {
   sidebarOpen: boolean;

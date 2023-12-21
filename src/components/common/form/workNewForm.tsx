@@ -9,7 +9,12 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Input from "./Input";
-export default function CreateNewWork() {
+
+interface CreateNewWorkProps {
+  onCloseModal: () => Promise<void>; // Definindo a propriedade onCloseModal
+}
+
+export default function CreateNewWork({ onCloseModal }: CreateNewWorkProps) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -41,6 +46,7 @@ export default function CreateNewWork() {
           description: `${data.workDescription} foi registrada com sucesso`,
         });
         router.push("/obras");
+        onCloseModal();
       } else {
         toast({
           variant: "destructive",

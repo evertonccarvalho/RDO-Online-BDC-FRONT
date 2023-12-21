@@ -4,8 +4,8 @@ import { AuthProvider } from "@/providers/authContext";
 import { TokenService } from "@/services/tokenService";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Header from "./components/Header";
-import MainSideBar from "./components/Sidebar";
+import Header from "../../components/common/Header";
+import MainSideBar from "../../components/common/Sidebar";
 
 interface HomeLayoutProps {
   children: React.ReactNode;

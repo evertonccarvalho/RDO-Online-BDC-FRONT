@@ -1,17 +1,19 @@
 "use client";
 import Loader from "@/components/common/Loader/page";
+import ModalComponent from "@/components/common/Modal";
 import WorkAndTablesCard from "@/components/common/cards/workAndTablesCard";
+import CreateNewWork from "@/components/common/form/workNewForm";
 import { workService } from "@/services/workService";
+import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 const ObrasPage = () => {
   const [showModal, setShowModal] = useState(false);
-
   const { data: obrasData, error: obrasError } = useSWR(
     "/obras",
     workService.fetchAll,
   );
-  console.log("Obras Data:", obrasData);
+
   if (obrasError) return obrasError;
   if (!obrasData) {
     return <Loader />;
@@ -20,29 +22,34 @@ const ObrasPage = () => {
     setShowModal(!showModal);
   };
 
-  const handleCloseModal = () => {
+  const handleSubmitModal = async (): Promise<void> => {
     setShowModal(false);
+    try {
+      const fetchedObrasData = await workService.fetchAll();
+      mutate("/obras", fetchedObrasData);
+    } catch (error) {
+      console.log("Failed to fetch", error);
+    }
   };
 
   return (
     <>
       <div className="flex flex-row flex-wrap gap-4">
-        {/* <div>
+        <div>
           <ModalComponent
             isOpen={showModal}
-            onClose={handleCloseModal}
-            modalName="Criar nova obra"
-            modalContent={<CreateNewWork />}
+            onClose={handleSubmitModal}
+            modalName="Nova Obra"
+            modalContent={<CreateNewWork onCloseModal={handleSubmitModal} />}
           />
-          <div className="flex h-10 w-full  text-primary hover:bg-primary hover:text-background">
-            <button
-              className="flex h-full w-full items-center justify-center p-2"
-              onClick={toggleModal}
-            >
-              Nova Obra <PlusIcon />
-            </button>
-          </div>
-        </div> */}
+          <button
+            className="flex h-full max-w-fit items-center text-sm text-primary"
+            onClick={toggleModal}
+          >
+            <PlusIcon className="h-4 w-4" />
+            <span className="hidden md:block">Nova Obra </span>
+          </button>
+        </div>
         {obrasData.map((obra: any) => (
           <WorkAndTablesCard
             id={obra.id}
@@ -54,6 +61,7 @@ const ObrasPage = () => {
             logoUrl={obra.logoUrl}
             phoneContact={obra.phoneContact}
             active={obra.active}
+            handleSubmitModal={handleSubmitModal}
           />
         ))}
       </div>

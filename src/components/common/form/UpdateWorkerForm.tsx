@@ -13,12 +13,14 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Input from "./Input";
-
+interface UpdateWorkProps {
+  workId: number | undefined;
+  onSubmitModal: () => Promise<void>; // Defina corretamente a função para retornar Promise<void>}
+}
 export default function UpdateWorker({
   workId,
-}: {
-  workId: number | undefined;
-}) {
+  onSubmitModal,
+}: UpdateWorkProps) {
   const { toast } = useToast();
   const [work, setWork] = useState<IWork | null>(null);
   const pathname = usePathname();
@@ -88,7 +90,8 @@ export default function UpdateWorker({
           title: "Obra registrado.",
           description: successMessage,
         });
-        router.push("/obras");
+        onSubmitModal();
+        // router.push("/obras");
       } else {
         throw new Error("Houve um problema ao registrar o serviço.");
       }
