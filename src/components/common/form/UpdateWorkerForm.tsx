@@ -8,7 +8,6 @@ import userAvatar from "@/images/user.png";
 import { workSchema } from "@/lib/validations/work";
 import { IWork, workService } from "@/services/workService";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -23,8 +22,6 @@ export default function UpdateWorker({
 }: UpdateWorkProps) {
   const { toast } = useToast();
   const [work, setWork] = useState<IWork | null>(null);
-  const pathname = usePathname();
-  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function getWork(workId: number | undefined): Promise<void> {

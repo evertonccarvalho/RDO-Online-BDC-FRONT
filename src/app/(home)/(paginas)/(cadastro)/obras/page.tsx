@@ -1,23 +1,17 @@
 "use client";
-import Loader from "@/components/common/Loader/page";
 import ModalComponent from "@/components/common/Modal";
 import WorkAndTablesCard from "@/components/common/cards/workAndTablesCard";
 import CreateNewWork from "@/components/common/form/workNewForm";
+import { useObrasData } from "@/helpers/apiHelper";
 import { workService } from "@/services/workService";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
+
 const ObrasPage = () => {
   const [showModal, setShowModal] = useState(false);
-  const { data: obrasData, error: obrasError } = useSWR(
-    "/obras",
-    workService.fetchAll,
-  );
+  const { data: obrasData } = useObrasData();
 
-  if (obrasError) return obrasError;
-  if (!obrasData) {
-    return <Loader />;
-  }
   const toggleModal = () => {
     setShowModal(!showModal);
   };
@@ -50,7 +44,7 @@ const ObrasPage = () => {
             <span className="hidden md:block">Nova Obra </span>
           </button>
         </div>
-        {obrasData.map((obra: any) => (
+        {obrasData?.map((obra: any) => (
           <WorkAndTablesCard
             id={obra.id}
             key={obra.id}
