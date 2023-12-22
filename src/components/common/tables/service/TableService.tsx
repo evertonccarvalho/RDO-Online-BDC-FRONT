@@ -24,6 +24,7 @@ export function TableService({
   ...props
 }: orderSingleProps) {
   const statusColorClass = getStringStatusColorClass(active);
+
   return (
     <>
       <tr className="grid min-w-max grid-cols-7 items-center gap-2 border-b-[1px] border-background p-2 text-center text-xs text-foreground hover:bg-gray-900">

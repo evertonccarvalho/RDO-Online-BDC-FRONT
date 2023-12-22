@@ -2,11 +2,9 @@
 import ModalComponent from "@/components/common/Modal";
 import WorkAndTablesCard from "@/components/common/cards/workAndTablesCard";
 import CreateNewWork from "@/components/common/form/workNewForm";
-import { useObrasData } from "@/helpers/apiHelper";
-import { workService } from "@/services/workService";
+import { useObrasData, useSubmitModal } from "@/helpers/workQueryHelper";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-import { mutate } from "swr";
 
 const ObrasPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -16,15 +14,7 @@ const ObrasPage = () => {
     setShowModal(!showModal);
   };
 
-  const handleSubmitModal = async (): Promise<void> => {
-    setShowModal(false);
-    try {
-      const fetchedObrasData = await workService.fetchAll();
-      mutate("/obras", fetchedObrasData);
-    } catch (error) {
-      console.log("Failed to fetch", error);
-    }
-  };
+  const { handleSubmitModal } = useSubmitModal(setShowModal);
 
   return (
     <>
