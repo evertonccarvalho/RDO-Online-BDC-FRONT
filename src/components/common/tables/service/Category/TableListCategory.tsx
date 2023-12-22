@@ -1,24 +1,22 @@
+import ModalComponent from "@/components/common/Modal";
+import UpdateCategory from "@/components/common/form/categoryUpdateForm";
 import { CategorySchema, categoryService } from "@/services/categoryService";
-import { Loader } from "lucide-react";
-import { usePathname } from "next/navigation";
-import useSWR from "swr";
-import { TableCategory } from "./TableCategory";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { CategoryTableRows } from "./CategoryTableRows";
 
-export function TableListCategory() {
-  const pathname = usePathname();
-  const workId = pathname.split("/").pop();
+interface Props {
+  workId: number;
+}
 
-  if (!workId) {
-    throw new Error("WorkId not provided");
-  }
+export function TableListCategory({ workId }: Props) {
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategorySchema | null>(null);
 
-  const { data, error } = useSWR("/category", () => categoryService.fetchAll());
-  console.log(data);
-
-  if (error) return error;
-  if (!data) {
-    return <Loader />;
-  }
+  const { data, isError, isLoading } = useQuery({
+    queryKey: ["subcategories"],
+    queryFn: () => categoryService.fetchAll(),
+  });
 
   return (
     <div className="flex w-full min-w-[400px] ">
@@ -32,16 +30,31 @@ export function TableListCategory() {
           </tr>
         </thead>
         <tbody>
-          {data.map((item: CategorySchema, index: number) => (
-            <TableCategory
+          {data?.map((item: CategorySchema, index: number) => (
+            <CategoryTableRows
               key={index}
               id={item.id}
               name={item.name}
               status={item.status}
+              workId={workId}
+              onOpenModal={() => setSelectedCategory(item)}
             />
           ))}
         </tbody>
       </table>
+      {selectedCategory && (
+        <ModalComponent
+          modalName="Editar Categoria"
+          isOpen={!!selectedCategory}
+          onClose={() => setSelectedCategory(null)}
+          modalContent={
+            <UpdateCategory
+              Category={selectedCategory}
+              handleClose={() => setSelectedCategory(null)}
+            />
+          }
+        />
+      )}
     </div>
   );
 }

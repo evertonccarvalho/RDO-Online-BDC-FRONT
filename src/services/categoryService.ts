@@ -67,7 +67,7 @@ const categoryService = {
           Authorization: TokenService.get(),
         },
       });
-      return res.status;
+      return res;
     } catch (error) {
       console.error("Error updating category:", error);
       throw error;

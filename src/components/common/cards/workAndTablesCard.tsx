@@ -37,7 +37,7 @@ export default function WorkAndTablesCard({
 
   const buttons = [
     { label: "Serviços2", content: <ServiceTable workId={id} /> },
-    { label: "Categorias", content: <TableListCategory /> },
+    { label: "Categorias", content: <TableListCategory workId={id} /> },
     { label: "Subcategorias", content: <TableListSubCategory /> },
   ];
 

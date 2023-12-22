@@ -11,7 +11,7 @@ export function useServicesData(workId: number) {
 
 export function useSubCategoriesData() {
   return useQuery({
-    queryKey: ["subcategories"], // Exemplo de queryKey
+    queryKey: ["categories"], // Exemplo de queryKey
     queryFn: () => subCategoryService.fetchAll(),
   });
 }
@@ -25,7 +25,7 @@ export function useServicesForModal(
   const handleCloseModal = async () => {
     setShowModal(false);
     try {
-      await serviceService.fetchAll(workId);
+      // await serviceService.fetchAll(workId);
       queryClient.invalidateQueries({ queryKey: [`services_${workId}`] });
     } catch (error) {
       console.error("Erro ao atualizar lista de serviços:", error);

@@ -27,8 +27,10 @@ export function ServiceTable({ workId }: Props) {
   const [filterValue, setFilterValue] = useState<string>("");
   const [showModal, setShowModal] = useState(false);
   const [showModalService, setShowModalService] = useState(false);
+
   const servicesData = useServicesData(workId);
   const services = servicesData.data;
+
   const subCategoriesData = useSubCategoriesData();
   const subCategories = subCategoriesData.data;
 
