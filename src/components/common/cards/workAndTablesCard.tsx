@@ -6,7 +6,7 @@ import { useState } from "react";
 import ButtonContentSwitcher from "../ButtonContentSwitcher ";
 import ModalComponent from "../Modal";
 import UpdateWorker from "../form/UpdateWorkerForm";
-import { TableListCategory } from "../tables/service/Category/TableListCategory";
+import { CategoryTable } from "../tables/service/Category/CategoryTable";
 import { ServiceTable } from "../tables/service/ServiceTable";
 import { TableListSubCategory } from "../tables/service/subCategory/TableListSubCategory";
 
@@ -37,7 +37,7 @@ export default function WorkAndTablesCard({
 
   const buttons = [
     { label: "Serviços2", content: <ServiceTable workId={id} /> },
-    { label: "Categorias", content: <TableListCategory workId={id} /> },
+    { label: "Categorias", content: <CategoryTable workId={id} /> },
     { label: "Subcategorias", content: <TableListSubCategory /> },
   ];
 

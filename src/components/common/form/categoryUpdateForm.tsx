@@ -47,7 +47,7 @@ export default function UpdateCategory({
       const validatedData = categorySchema.parse(data);
 
       await mutation.mutateAsync(validatedData);
-      queryClient.invalidateQueries({ queryKey: ["subcategories"] });
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
       handleClose();
       toast({
         variant: "success",

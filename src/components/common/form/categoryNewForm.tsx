@@ -5,53 +5,52 @@ import { useToast } from "@/components/ui/use-toast";
 import { categorySchema } from "@/lib/validations/category";
 import { categoryService } from "@/services/categoryService";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectInput from "./selectInput";
+interface UpdateCategoryProps {
+  handleClose: () => void; // Definindo a propriedade onCloseModal
+}
+
 export default function CreateNewCategory({
-  workId,
-}: {
-  workId: number | undefined;
-}) {
+  handleClose,
+}: UpdateCategoryProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   type FormValues = z.infer<typeof categorySchema>;
   const form = useForm<FormValues>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
-      name: "",
-      status: "",
+      name: "", // Usando value.name para preencher o campo 'name'
+      status: "", // Definir valor padrão vindo da propriedade Category
     },
   });
 
-  async function onSubmit(data: z.infer<typeof categorySchema>) {
+  const mutation = useMutation({
+    mutationFn: (data: z.infer<typeof categorySchema>) => {
+      return categoryService.create(data);
+    },
+  });
+
+  // Função chamada ao submeter o formulário
+  const onSubmit = async (data: z.infer<typeof categorySchema>) => {
     setIsSubmitting(true);
 
     try {
-      categorySchema.parse(data); // Validar os valores antes de chamar a API
+      const validatedData = categorySchema.parse(data);
 
-      if (!workId) {
-        throw new Error("WorkId not provided");
-      }
-
-      const { status } = await categoryService.create(data);
-
-      const successMessage = `${data.name} foi registrado com sucesso`;
-
-      if (status === 201) {
-        toast({
-          variant: "success",
-          title: "Serviço registrado.",
-          description: successMessage,
-        });
-        router.push("/obras");
-      } else {
-        throw new Error("Houve um problema ao registrar o categoria.");
-      }
+      await mutation.mutateAsync(validatedData);
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      handleClose();
+      toast({
+        variant: "success",
+        title: "Equipe registrada.",
+        description: `${validatedData.name} foi atualizado com sucesso`,
+      });
     } catch (error) {
       console.error("Erro durante o envio do formulário:", error);
       toast({
@@ -62,22 +61,23 @@ export default function CreateNewCategory({
     } finally {
       setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <>
       <div className="flex flex-col gap-9 rounded-sm bg-card sm:grid-cols-2">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col justify-around gap-4">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2"></div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-1">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-1">
               <Input
-                placeholder="Nome da Categoria"
+                placeholder="Mome da Categoria"
                 type="text"
+                {...form.register("name")}
                 value={form.watch("name")}
-                {...form.register("name")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.name}
               />
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-3">
               <SelectInput
                 placeholder="Status"
                 value={form.watch("status")}
@@ -90,7 +90,7 @@ export default function CreateNewCategory({
               />
             </div>
             <Button disabled={isSubmitting} type="submit">
-              Criar Categoria
+              Atualizar Serviço
             </Button>
           </div>
         </form>
