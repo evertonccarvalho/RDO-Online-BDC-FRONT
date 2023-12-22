@@ -12,7 +12,7 @@ import Image from "next/image";
 import { useState } from "react";
 import ModalComponent from "../Modal";
 import UpdateWorker from "../form/UpdateWorkerForm";
-import { TableListServices } from "../tables/service/TableListServices";
+import { TableListServices } from "../tables/service/ServiceTable";
 import ServiceCard from "./ServiceMiniCard";
 import ShiftCard from "./ShiftMiniCard";
 import TeamCard from "./TeamMiniCard";

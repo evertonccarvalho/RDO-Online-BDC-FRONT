@@ -3,7 +3,7 @@
 import { IService } from "@/services/serviceService";
 import { ISubCategory } from "@/services/subCategoryService";
 
-function getSubCategoryName(
+export function getSubCategoryName(
   subcategoryId: number | undefined,
   subCategories: ISubCategory[] | undefined,
 ): string {
@@ -13,7 +13,7 @@ function getSubCategoryName(
   return subCategory ? subCategory.name : "Subcategoria não encontrada";
 }
 
-export function filterServices(
+export function ServiceTableFilter(
   services: IService[] | undefined,
   filterValue: string,
   subCategories: ISubCategory[] | undefined,

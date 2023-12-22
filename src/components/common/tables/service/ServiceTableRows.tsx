@@ -17,7 +17,7 @@ interface orderSingleProps {
   onOpenModal: (serviceId: number, workId: number) => void;
 }
 
-export function TableService({
+export function ServiceTableRows({
   workId,
   active,
   onOpenModal,

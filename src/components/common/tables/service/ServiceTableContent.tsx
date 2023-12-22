@@ -3,9 +3,9 @@
 import { IService } from "@/services/serviceService";
 import { ISubCategory } from "@/services/subCategoryService";
 import Loader from "../../Loader/page";
-import { TableService } from "./TableService";
+import { ServiceTableRows } from "./ServiceTableRows";
 
-export const renderTableContent = (
+export default function ServiceTableContent(
   services: IService[] | null,
   subCategories: ISubCategory[] | null,
   filteredServices: IService[],
@@ -13,7 +13,7 @@ export const renderTableContent = (
   workId: number,
   handleOpenModal: (serviceId: number) => void,
   getSubCategoryName: (subcategoryId: number | undefined) => string,
-) => {
+) {
   if (!services || !subCategories || filteredServices.length === 0) {
     return (
       <tr className="text-Foreground h-24 w-full rounded bg-card">
@@ -24,18 +24,22 @@ export const renderTableContent = (
     );
   }
 
-  return currentItems.map((service: IService, index: number) => (
-    <TableService
-      key={index}
-      id={service.id}
-      description={service.serviceDescription}
-      status={service.status}
-      active={service.status}
-      unit={service.unit}
-      total={service.totalAmount}
-      workId={workId}
-      onOpenModal={handleOpenModal}
-      subCategory={getSubCategoryName(service.subcategoryId)}
-    />
-  ));
-};
+  return (
+    <>
+      {currentItems.map((service: IService, index: number) => (
+        <ServiceTableRows
+          key={index}
+          id={service.id}
+          description={service.serviceDescription}
+          status={service.status}
+          active={service.status}
+          unit={service.unit}
+          total={service.totalAmount}
+          workId={workId}
+          onOpenModal={handleOpenModal}
+          subCategory={getSubCategoryName(service.subcategoryId)}
+        />
+      ))}
+    </>
+  );
+}

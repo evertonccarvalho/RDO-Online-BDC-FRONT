@@ -13,13 +13,13 @@ import Input from "../../form/Input";
 import CreateNewService from "../../form/serviceNewForm";
 import UpdateService from "../../form/serviceUpdateForm";
 import Pagination from "../pagination";
-import { renderTableContent } from "./TableUtils";
-import { filterServices } from "./serviceFIlter";
+import ServiceTableContent from "./ServiceTableContent";
+import { ServiceTableFilter } from "./ServiceTableFilter";
 
 interface Props {
   workId: number;
 }
-export function TableListServices({ workId }: Props) {
+export function ServiceTable({ workId }: Props) {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(
     null,
@@ -52,7 +52,11 @@ export function TableListServices({ workId }: Props) {
     setShowModalService,
   );
 
-  const filteredServices = filterServices(services, filterValue, subCategories);
+  const filteredServices = ServiceTableFilter(
+    services,
+    filterValue,
+    subCategories,
+  );
 
   // Defina o número de itens por página aqui
   const itemsPerPage = 10;
@@ -98,7 +102,6 @@ export function TableListServices({ workId }: Props) {
 
       <div className="relative w-full overflow-auto">
         <table className="w-full bg-card text-white ">
-          {/* Restante do seu código da tabela */}
           <thead className="min-w-max whitespace-nowrap">
             <tr className="grid grid-cols-7 gap-4 bg-gray-900 p-3 text-xs">
               <th>Id</th>
@@ -111,7 +114,7 @@ export function TableListServices({ workId }: Props) {
             </tr>
           </thead>
           <tbody>
-            {renderTableContent(
+            {ServiceTableContent(
               services,
               subCategories,
               filteredServices,

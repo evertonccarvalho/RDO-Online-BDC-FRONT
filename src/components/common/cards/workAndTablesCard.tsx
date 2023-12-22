@@ -7,7 +7,7 @@ import ButtonContentSwitcher from "../ButtonContentSwitcher ";
 import ModalComponent from "../Modal";
 import UpdateWorker from "../form/UpdateWorkerForm";
 import { TableListCategory } from "../tables/service/Category/TableListCategory";
-import { TableListServices } from "../tables/service/TableListServices";
+import { ServiceTable } from "../tables/service/ServiceTable";
 import { TableListSubCategory } from "../tables/service/subCategory/TableListSubCategory";
 
 interface WorkCardProps {
@@ -36,7 +36,7 @@ export default function WorkAndTablesCard({
   const [showModal, setShowModal] = useState(false);
 
   const buttons = [
-    { label: "Serviços2", content: <TableListServices workId={id} /> },
+    { label: "Serviços2", content: <ServiceTable workId={id} /> },
     { label: "Categorias", content: <TableListCategory /> },
     { label: "Subcategorias", content: <TableListSubCategory /> },
   ];
