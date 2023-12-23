@@ -23,7 +23,7 @@ const serviceService = {
         },
       });
 
-      return res;
+      return res.status;
     } catch (error: any) {
       if (error.response.status === 400) {
         return error.response;

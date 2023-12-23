@@ -31,15 +31,17 @@ export function SubCategoryTable({ workId }: Props) {
   const [selectedCategory, setSelectedCategory] = useState<ISubCategory | null>(
     null,
   );
+
   const [filterValue, setFilterValue] = useState<string>("");
 
   const FILTER = CategoryTableFilter(data, filterValue, categories);
 
   const [showModal, setShowModal] = useState(false);
 
-  const toggleModalService = () => {
+  const toggleModal = () => {
     setShowModal(!showModal);
   };
+
   const handleCloseModal = () => {
     // Lógica para fechar o modal
     setShowModal(false);
@@ -69,7 +71,7 @@ export function SubCategoryTable({ workId }: Props) {
           </div>
           <button
             className="flex h-full max-w-fit items-center text-sm text-primary"
-            onClick={toggleModalService}
+            onClick={toggleModal}
           >
             <PlusIcon className="h-4 w-4" />
             <span className="hidden md:block">Novo Serviço </span>

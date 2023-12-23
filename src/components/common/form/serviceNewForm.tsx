@@ -7,6 +7,7 @@ import { categoryService } from "@/services/categoryService";
 import { serviceService } from "@/services/serviceService";
 import { subCategoryService } from "@/services/subCategoryService";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,12 +16,12 @@ import SelectInput from "./selectInput";
 
 interface CreateNewServiceProps {
   workId: number;
-  onCloseModal: () => Promise<void>; // Definindo a propriedade onCloseModal
+  handleClose: () => void; // Definindo a propriedade onCloseModal
 }
 
 export default function CreateNewService({
   workId,
-  onCloseModal,
+  handleClose,
 }: CreateNewServiceProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function CreateNewService({
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     async function loadCategories() {
@@ -75,30 +77,32 @@ export default function CreateNewService({
     },
   });
 
-  async function onSubmit(data: z.infer<typeof serviceSchema>) {
+  const mutation = useMutation({
+    mutationFn: (data: z.infer<typeof serviceSchema>) => {
+      return serviceService.create(workId, data);
+    },
+    onSuccess: (data) => {
+      // Ação a ser realizada em caso de sucesso
+      console.log("Mutação bem-sucedida:", data);
+      // Aqui você pode fazer qualquer ação necessária após a mutação bem-sucedida
+    },
+  });
+
+  // Função chamada ao submeter o formulário
+  const onSubmit = async (data: z.infer<typeof serviceSchema>) => {
     setIsSubmitting(true);
 
     try {
-      serviceSchema.parse(data); // Validar os valores antes de chamar a API
+      const validatedData = serviceSchema.parse(data);
 
-      if (!workId) {
-        throw new Error("WorkId not provided");
-      }
-
-      const response = await serviceService.create(+workId, data);
-
-      const successMessage = `${data.serviceDescription} foi registrado com sucesso`;
-
-      if (response.status === 201) {
-        toast({
-          variant: "success",
-          title: "Serviço registrado.",
-          description: successMessage,
-        });
-        onCloseModal(); // Chama a função onCloseModal para atualizar os serviços após fechar o modal
-      } else {
-        throw new Error("Houve um problema ao registrar o serviço.");
-      }
+      await mutation.mutateAsync(validatedData);
+      queryClient.invalidateQueries({ queryKey: ["services"] });
+      handleClose();
+      toast({
+        variant: "success",
+        title: "Registrado.",
+        description: `${validatedData.serviceDescription} foi criado com sucesso`,
+      });
     } catch (error) {
       console.error("Erro durante o envio do formulário:", error);
       toast({
@@ -109,7 +113,7 @@ export default function CreateNewService({
     } finally {
       setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <>

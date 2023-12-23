@@ -6,27 +6,27 @@ import { serviceSchema } from "@/lib/validations/service";
 import { IService, serviceService } from "@/services/serviceService";
 import { subCategoryService } from "@/services/subCategoryService";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SelectInput from "./selectInput";
+
 interface UpdateServiceProps {
-  serviceId: number;
+  services: IService;
   workId: number;
-  onCloseModal: () => Promise<void>; // Definindo a propriedade onCloseModal
+  handleClose: () => void; // Definindo a propriedade onCloseModal
 }
 
 export default function UpdateService({
-  serviceId,
+  services,
   workId,
-  onCloseModal,
+  handleClose,
 }: UpdateServiceProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [service, setService] = useState<IService | null>(null);
-  const [subCategories, setSubCategories] = useState([]);
-  const router = useRouter();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [subCategories, setSubCategories] = useState([]);
 
   useEffect(() => {
     async function loadSubCategories() {
@@ -40,29 +40,7 @@ export default function UpdateService({
     loadSubCategories();
   }, []);
 
-  async function getService(
-    workId: number | undefined,
-    serviceId: number | undefined,
-  ): Promise<void> {
-    try {
-      if (!workId) {
-        throw new Error("WorkId not provided");
-      }
-
-      if (!serviceId) {
-        throw new Error("WorkId not provided");
-      }
-
-      const data = await serviceService.getById(serviceId, workId);
-      setService(data);
-    } catch (error) {
-      console.log("Error fetching service:", error);
-    }
-  }
-
-  useEffect(() => {
-    getService(serviceId, workId);
-  }, [serviceId, workId]);
+  const [service, setService] = useState(services);
 
   // 1. Define a schema zod.
 
@@ -78,44 +56,27 @@ export default function UpdateService({
     },
   });
 
-  useEffect(() => {
-    if (service) {
-      form.setValue("serviceDescription", service.serviceDescription);
-      form.setValue("status", service.status);
-      form.setValue("unit", service.unit);
-      form.setValue("totalAmount", service.totalAmount);
-      form.setValue("subcategoryId", service.subcategoryId || "");
-    }
-  }, [form, service]);
+  const mutation = useMutation({
+    mutationFn: (data: z.infer<typeof serviceSchema>) => {
+      return serviceService.update(workId, service?.id, data);
+    },
+  });
 
-  async function onSubmit(data: z.infer<typeof serviceSchema>) {
+  // Função chamada ao submeter o formulário
+  const onSubmit = async (data: z.infer<typeof serviceSchema>) => {
     setIsSubmitting(true);
 
     try {
-      serviceSchema.parse(data); // Validar os valores antes de chamar a API
+      const validatedData = serviceSchema.parse(data);
 
-      if (!workId) {
-        throw new Error("WorkId not provided");
-      }
-
-      if (!serviceId) {
-        throw new Error("WorkId not provided");
-      }
-
-      const res = await serviceService.update(workId, service?.id, data);
-
-      const successMessage = `${service?.serviceDescription} foi registrado com sucesso`;
-
-      if (res === 200) {
-        toast({
-          variant: "success",
-          title: "Serviço Atualizado.",
-          description: successMessage,
-        });
-        onCloseModal(); // Chama a função onCloseModal para atualizar os serviços após fechar o modal
-      } else {
-        throw new Error("Houve um problema ao registrar o serviço.");
-      }
+      await mutation.mutateAsync(validatedData);
+      queryClient.invalidateQueries({ queryKey: ["services"] });
+      handleClose();
+      toast({
+        variant: "success",
+        title: "Equipe registrada.",
+        description: `${validatedData.serviceDescription} foi atualizado com sucesso`,
+      });
     } catch (error) {
       console.error("Erro durante o envio do formulário:", error);
       toast({
@@ -126,7 +87,57 @@ export default function UpdateService({
     } finally {
       setIsSubmitting(false);
     }
-  }
+  };
+
+  // useEffect(() => {
+  //   if (service) {
+  //     form.setValue("serviceDescription", service.serviceDescription);
+  //     form.setValue("status", service.status);
+  //     form.setValue("unit", service.unit);
+  //     form.setValue("totalAmount", service.totalAmount);
+  //     form.setValue("subcategoryId", service.subcategoryId || "");
+  //   }
+  // }, [form, service]);
+
+  // async function onSubmit(data: z.infer<typeof serviceSchema>) {
+  //   setIsSubmitting(true);
+
+  //   try {
+  //     serviceSchema.parse(data); // Validar os valores antes de chamar a API
+
+  //     if (!workId) {
+  //       throw new Error("WorkId not provided");
+  //     }
+
+  //     if (!serviceId) {
+  //       throw new Error("WorkId not provided");
+  //     }
+
+  //     const res = await serviceService.update(workId, service?.id, data);
+
+  //     const successMessage = `${service?.serviceDescription} foi registrado com sucesso`;
+
+  //     if (res === 200) {
+  //       toast({
+  //         variant: "success",
+  //         title: "Serviço Atualizado.",
+  //         description: successMessage,
+  //       });
+  //       handleClose(); // Chama a função onCloseModal para atualizar os serviços após fechar o modal
+  //     } else {
+  //       throw new Error("Houve um problema ao registrar o serviço.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Erro durante o envio do formulário:", error);
+  //     toast({
+  //       variant: "destructive",
+  //       title: "Erro ao enviar formulário.",
+  //       description: "Houve um problema ao enviar o formulário.",
+  //     });
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // }
 
   return (
     <>

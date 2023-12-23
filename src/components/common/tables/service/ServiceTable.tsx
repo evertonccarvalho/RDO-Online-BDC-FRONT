@@ -1,11 +1,10 @@
-import {
-  useCreateServiceModal,
-  useServicesData,
-  useServicesForModal,
-  useSubCategoriesData,
-} from "@/helpers/servicesQueryHelper";
 import { getPaginatedItems } from "@/lib/pagination";
-import { ISubCategory } from "@/services/subCategoryService";
+import { IService, serviceService } from "@/services/serviceService";
+import {
+  ISubCategory,
+  subCategoryService,
+} from "@/services/subCategoryService";
+import { useQuery } from "@tanstack/react-query";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import ModalComponent from "../../Modal";
@@ -13,61 +12,47 @@ import Input from "../../form/Input";
 import CreateNewService from "../../form/serviceNewForm";
 import UpdateService from "../../form/serviceUpdateForm";
 import Pagination from "../pagination";
-import ServiceTableContent from "./ServiceTableContent";
 import { ServiceTableFilter } from "./ServiceTableFilter";
+import { ServiceTableRows } from "./ServiceTableRows";
 
 interface Props {
   workId: number;
 }
 export function ServiceTable({ workId }: Props) {
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(
-    null,
-  );
   const [filterValue, setFilterValue] = useState<string>("");
+  const [selectedService, setSelectedService] = useState<IService | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [showModalService, setShowModalService] = useState(false);
 
-  const servicesData = useServicesData(workId);
-  const services = servicesData.data;
+  const { data: services } = useQuery({
+    queryKey: ["services"],
+    queryFn: () => serviceService.fetchAll(workId),
+  });
 
-  const subCategoriesData = useSubCategoriesData();
-  const subCategories = subCategoriesData.data;
+  const { data: subCategories } = useQuery({
+    queryKey: ["subcategories"],
+    queryFn: () => subCategoryService.fetchAll(),
+  });
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  const handleOpenModal = (serviceId: number) => {
-    setSelectedServiceId(serviceId);
-    setShowModal(true);
+  const toggleModal = () => {
+    setShowModal(!showModal);
   };
 
-  const toggleModalService = () => {
-    setShowModalService(!showModalService);
+  const handleCloseModal = () => {
+    // Lógica para fechar o modal
+    setShowModal(false);
   };
 
-  const { handleCloseModal } = useServicesForModal(workId, setShowModal);
-
-  const { handleCloseModalService } = useCreateServiceModal(
-    workId,
-    setShowModalService,
-  );
-
-  const filteredServices = ServiceTableFilter(
-    services,
-    filterValue,
-    subCategories,
-  );
+  const FILTER = ServiceTableFilter(services, filterValue, subCategories);
 
   // Defina o número de itens por página aqui
   const itemsPerPage = 10;
   // Use a função getCurrentItems para obter os itens da página atual
-  const currentItems = getPaginatedItems(
-    filteredServices,
-    currentPage,
-    itemsPerPage,
-  );
+  const currentItems = getPaginatedItems(FILTER, currentPage, itemsPerPage);
   // Função para obter o nome da subcategoria
   const getSubCategoryName = (subcategoryId: number | undefined) => {
     const subCategory = subCategories?.find(
@@ -90,7 +75,7 @@ export function ServiceTable({ workId }: Props) {
           </div>
           <button
             className="flex h-full max-w-fit items-center text-sm text-primary"
-            onClick={toggleModalService}
+            onClick={toggleModal}
           >
             <PlusIcon className="h-4 w-4" />
             <span className="hidden md:block">Novo Serviço </span>
@@ -98,7 +83,7 @@ export function ServiceTable({ workId }: Props) {
         </div>
         <p className="px-2">
           Serviços:
-          <span className="text-primary"> {filteredServices.length}</span>
+          <span className="text-primary"> {FILTER.length}</span>
         </p>
       </div>
 
@@ -116,50 +101,52 @@ export function ServiceTable({ workId }: Props) {
             </tr>
           </thead>
           <tbody>
-            {ServiceTableContent(
-              services,
-              subCategories,
-              filteredServices,
-              currentItems,
-              workId,
-              handleOpenModal,
-              getSubCategoryName,
-            )}
+            {currentItems.map((service: IService, index: number) => (
+              <ServiceTableRows
+                key={index}
+                id={service.id}
+                description={service.serviceDescription}
+                status={service.status}
+                active={service.status}
+                unit={service.unit}
+                total={service.totalAmount}
+                workId={workId}
+                subCategory={getSubCategoryName(service.subcategoryId)}
+                onOpenModal={() => setSelectedService(service)}
+              />
+            ))}
           </tbody>
         </table>
         <Pagination
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
-          totalItems={filteredServices.length}
+          totalItems={FILTER.length}
           onPageChange={handlePageChange}
         />
       </div>
       <div>
-        <ModalComponent
-          isOpen={showModalService}
-          onClose={handleCloseModalService}
-          modalName="Novo Serviço"
-          modalContent={
-            <CreateNewService
-              workId={+workId}
-              onCloseModal={handleCloseModalService}
-            />
-          }
-        />
-        {showModal && selectedServiceId !== null && (
+        {selectedService && (
           <ModalComponent
-            isOpen={showModal}
-            onClose={handleCloseModal}
-            modalName="Atualizar Serviço"
+            modalName="Editar Serviço"
+            isOpen={true}
+            onClose={() => setSelectedService(null)}
             modalContent={
               <UpdateService
-                workId={workId}
-                serviceId={selectedServiceId}
-                onCloseModal={handleCloseModal} // Alterado para a função de fechamento do modal atual
+                workId={+workId}
+                services={selectedService}
+                handleClose={() => setSelectedService(null)}
               />
             }
           />
         )}
+        <ModalComponent
+          isOpen={showModal}
+          onClose={handleCloseModal}
+          modalName="Novo Serviço"
+          modalContent={
+            <CreateNewService workId={+workId} handleClose={handleCloseModal} />
+          }
+        />
       </div>
     </>
   );

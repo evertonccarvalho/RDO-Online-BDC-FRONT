@@ -25,9 +25,9 @@ export default function UpdateSubCategory({
 }: UpdateCategoryProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const [value, setValue] = useState(SubCategory);
   const queryClient = useQueryClient();
 
+  const [value, setValue] = useState(SubCategory);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
