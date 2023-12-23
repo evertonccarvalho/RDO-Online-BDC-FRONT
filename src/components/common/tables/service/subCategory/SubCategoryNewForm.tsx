@@ -1,53 +1,65 @@
 "use client";
 import Input from "@/components/common/form/Input";
+import SelectInput from "@/components/common/form/selectInput";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { categorySchema } from "@/lib/validations/category";
-import { ICategory, categoryService } from "@/services/categoryService";
+import { subCategorySchema } from "@/lib/validations/subCategory";
+import { categoryService } from "@/services/categoryService";
+import { subCategoryService } from "@/services/subCategoryService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import SelectInput from "./selectInput";
 interface UpdateCategoryProps {
-  Category: ICategory;
   handleClose: () => void; // Definindo a propriedade onCloseModal
 }
 
-export default function UpdateCategory({
-  Category,
+export default function CreateNewSubCategory({
   handleClose,
 }: UpdateCategoryProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const [value, setValue] = useState(Category);
   const queryClient = useQueryClient();
 
-  type FormValues = z.infer<typeof categorySchema>;
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const fetchedCategories = await categoryService.fetchAll();
+        setCategories(fetchedCategories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    }
+    loadCategories();
+  }, []);
+
+  type FormValues = z.infer<typeof subCategorySchema>;
   const form = useForm<FormValues>({
-    resolver: zodResolver(categorySchema),
+    resolver: zodResolver(subCategorySchema),
     defaultValues: {
-      name: value.name || "", // Usando value.name para preencher o campo 'name'
-      status: value.status || "", // Definir valor padrão vindo da propriedade Category
+      name: "", // Usando value.name para preencher o campo 'name'
+      status: "", // Definir valor padrão vindo da propriedade Category
+      serviceCategoryId: "",
     },
   });
 
   const mutation = useMutation({
-    mutationFn: (data: z.infer<typeof categorySchema>) => {
-      return categoryService.update(Category.id, data);
+    mutationFn: (data: z.infer<typeof subCategorySchema>) => {
+      return subCategoryService.create(data);
     },
   });
 
   // Função chamada ao submeter o formulário
-  const onSubmit = async (data: z.infer<typeof categorySchema>) => {
+  const onSubmit = async (data: z.infer<typeof subCategorySchema>) => {
     setIsSubmitting(true);
 
     try {
-      const validatedData = categorySchema.parse(data);
+      const validatedData = subCategorySchema.parse(data);
 
       await mutation.mutateAsync(validatedData);
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["subcategories"] });
       handleClose();
       toast({
         variant: "success",
@@ -71,16 +83,24 @@ export default function UpdateCategory({
       <div className="flex flex-col gap-9 rounded-sm bg-card sm:grid-cols-2">
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col justify-around gap-4">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-1">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-1">
+              <SelectInput
+                placeholder="Categoria"
+                value={categories}
+                {...form.register("serviceCategoryId")}
+                error={form.formState.errors.serviceCategoryId}
+                options={categories.map(({ id, name }) => ({
+                  value: id,
+                  label: name,
+                }))}
+              />
               <Input
-                placeholder="Mome da Categoria"
+                placeholder="Nome da Sub Categoria"
                 type="text"
-                {...form.register("name")}
                 value={form.watch("name")}
+                {...form.register("name")} // Registrando o campo com react-hook-form
                 error={form.formState.errors.name}
               />
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-3">
               <SelectInput
                 placeholder="Status"
                 value={form.watch("status")}

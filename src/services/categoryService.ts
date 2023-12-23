@@ -5,7 +5,7 @@ export type CategoryParams = {
   name: string;
   status: string;
 };
-export type CategorySchema = {
+export type ICategory = {
   id: number;
   name: string;
   status: string;

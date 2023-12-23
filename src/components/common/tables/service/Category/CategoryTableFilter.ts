@@ -1,13 +1,13 @@
-import { CategorySchema } from "@/services/categoryService";
+import { ICategory } from "@/services/categoryService";
 
 export function CategoryTableFilter(
-  category: CategorySchema[] | undefined,
+  category: ICategory[] | undefined,
   filterValue: string,
-): CategorySchema[] {
+): ICategory[] {
   const searchString = filterValue.toLowerCase();
 
   return (
-    category?.filter((category: CategorySchema) => {
+    category?.filter((category: ICategory) => {
       return (
         category.name.toLowerCase().includes(searchString) ||
         category.status.toLowerCase().includes(searchString)

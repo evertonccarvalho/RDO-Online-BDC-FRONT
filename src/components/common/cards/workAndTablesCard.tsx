@@ -8,7 +8,7 @@ import ModalComponent from "../Modal";
 import UpdateWorker from "../form/UpdateWorkerForm";
 import { CategoryTable } from "../tables/service/Category/CategoryTable";
 import { ServiceTable } from "../tables/service/ServiceTable";
-import { TableListSubCategory } from "../tables/service/subCategory/TableListSubCategory";
+import { SubCategoryTable } from "../tables/service/subCategory/SubCategoryTable";
 
 interface WorkCardProps {
   workDescription: string;
@@ -38,7 +38,7 @@ export default function WorkAndTablesCard({
   const buttons = [
     { label: "Serviços2", content: <ServiceTable workId={id} /> },
     { label: "Categorias", content: <CategoryTable workId={id} /> },
-    { label: "Subcategorias", content: <TableListSubCategory /> },
+    { label: "SubCategorias", content: <SubCategoryTable workId={id} /> },
   ];
 
   const toggleCard = () => {

@@ -9,11 +9,12 @@ interface orderSingleProps {
   name: string;
   status: string;
   work?: string | undefined;
+  subCategory?: string | undefined;
   workId: number;
   onOpenModal: (id: number) => void;
 }
 
-export function CategoryTableRows({
+export function SubCategoryTableRows({
   workId,
   onOpenModal,
   ...props
@@ -22,10 +23,12 @@ export function CategoryTableRows({
 
   return (
     <>
-      <tr className="grid min-w-max grid-cols-4 items-center gap-2 border-b-[1px] border-background p-2 text-center text-xs text-foreground hover:bg-gray-900">
+      <tr className="grid min-w-max grid-cols-5 items-center gap-2 border-b-[1px] border-background p-2 text-center text-xs text-foreground hover:bg-gray-900">
         <td className="text-primary">{"#" + props.id}</td>
         <td>{props.name}</td>
         <td className={`rounded px-2 ${statusColorClass}`}>{props.status}</td>
+        <td>{props.subCategory}</td>
+
         <td>
           <Button
             variant="ghost"

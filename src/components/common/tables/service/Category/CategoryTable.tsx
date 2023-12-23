@@ -2,7 +2,7 @@ import ModalComponent from "@/components/common/Modal";
 import Input from "@/components/common/form/Input";
 import CreateNewCategory from "@/components/common/form/categoryNewForm";
 import UpdateCategory from "@/components/common/form/categoryUpdateForm";
-import { CategorySchema, categoryService } from "@/services/categoryService";
+import { ICategory, categoryService } from "@/services/categoryService";
 import { useQuery } from "@tanstack/react-query";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
@@ -18,8 +18,9 @@ export function CategoryTable({ workId }: Props) {
     queryKey: ["categories"],
     queryFn: () => categoryService.fetchAll(),
   });
-  const [selectedCategory, setSelectedCategory] =
-    useState<CategorySchema | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+    null,
+  );
   const [filterValue, setFilterValue] = useState<string>("");
 
   const FILTER = CategoryTableFilter(data, filterValue);
@@ -71,7 +72,7 @@ export function CategoryTable({ workId }: Props) {
             </tr>
           </thead>
           <tbody>
-            {FILTER.map((item: CategorySchema, index: number) => (
+            {FILTER.map((item: ICategory, index: number) => (
               <CategoryTableRows
                 key={index}
                 id={item.id}

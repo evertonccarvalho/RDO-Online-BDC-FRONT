@@ -1,28 +1,39 @@
 import ModalComponent from "@/components/common/Modal";
 import Input from "@/components/common/form/Input";
-import CreateNewCategory from "@/components/common/form/categoryNewForm";
-import UpdateCategory from "@/components/common/form/categoryUpdateForm";
-import { CategorySchema, categoryService } from "@/services/categoryService";
+import { categoryService } from "@/services/categoryService";
+import {
+  ISubCategory,
+  subCategoryService,
+} from "@/services/subCategoryService";
 import { useQuery } from "@tanstack/react-query";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-import { CategoryTableFilter } from "./CategoryTableFilter";
-import { CategoryTableRows } from "./CategoryTableRows";
+import CreateNewSubCategory from "./SubCategoryNewForm";
+import { CategoryTableFilter } from "./SubCategoryTableFilter";
+import { SubCategoryTableRows } from "./SubCategoryTableRows";
+import UpdateSubCategory from "./SubCategoryUpdateForm";
 
 interface Props {
   workId: number;
 }
 
-export function CategoryTable({ workId }: Props) {
-  const { data, isError, isLoading } = useQuery({
+export function SubCategoryTable({ workId }: Props) {
+  const { data } = useQuery({
+    queryKey: ["subcategories"],
+    queryFn: () => subCategoryService.fetchAll(),
+  });
+
+  const { data: categories } = useQuery({
     queryKey: ["categories"],
     queryFn: () => categoryService.fetchAll(),
   });
-  const [selectedCategory, setSelectedCategory] =
-    useState<CategorySchema | null>(null);
+
+  const [selectedCategory, setSelectedCategory] = useState<ISubCategory | null>(
+    null,
+  );
   const [filterValue, setFilterValue] = useState<string>("");
 
-  const FILTER = CategoryTableFilter(data, filterValue);
+  const FILTER = CategoryTableFilter(data, filterValue, categories);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -32,6 +43,16 @@ export function CategoryTable({ workId }: Props) {
   const handleCloseModal = () => {
     // Lógica para fechar o modal
     setShowModal(false);
+  };
+
+  const getCategoryName = (categoryId: string | undefined) => {
+    if (categories) {
+      const category = categories.find(
+        (cat: { id: any }) => cat.id === categoryId,
+      );
+      return category ? category.name : "Categoria não encontrada";
+    }
+    return "Categoria não encontrada";
   };
 
   return (
@@ -63,21 +84,23 @@ export function CategoryTable({ workId }: Props) {
       <div className="relative w-full overflow-auto">
         <table className="w-full bg-card text-white ">
           <thead className="min-w-max whitespace-nowrap">
-            <tr className="grid grid-cols-4 gap-4 bg-gray-900 p-3 text-xs">
+            <tr className="grid grid-cols-5 gap-4 bg-gray-900 p-3 text-xs">
               <th className="text-center">Id</th>
               <th className="text-center">Nome</th>
               <th className="text-center">Status</th>
+              <th className="text-center">Categoria</th>
               <th className="text-center">Ações</th>
             </tr>
           </thead>
           <tbody>
-            {FILTER.map((item: CategorySchema, index: number) => (
-              <CategoryTableRows
+            {FILTER.map((item: ISubCategory, index: number) => (
+              <SubCategoryTableRows
                 key={index}
                 id={item.id}
                 name={item.name}
                 status={item.status}
                 workId={workId}
+                subCategory={getCategoryName(item.serviceCategoryId)}
                 onOpenModal={() => setSelectedCategory(item)}
               />
             ))}
@@ -85,12 +108,12 @@ export function CategoryTable({ workId }: Props) {
         </table>
         {selectedCategory && (
           <ModalComponent
-            modalName="Editar Categoria"
+            modalName="Editar Sub Categoria"
             isOpen={true}
             onClose={() => setSelectedCategory(null)}
             modalContent={
-              <UpdateCategory
-                Category={selectedCategory}
+              <UpdateSubCategory
+                SubCategory={selectedCategory}
                 handleClose={() => setSelectedCategory(null)}
               />
             }
@@ -99,8 +122,8 @@ export function CategoryTable({ workId }: Props) {
         <ModalComponent
           isOpen={showModal}
           onClose={handleCloseModal}
-          modalName="NovA Categoria"
-          modalContent={<CreateNewCategory handleClose={handleCloseModal} />}
+          modalName="Nova Sub Categoria"
+          modalContent={<CreateNewSubCategory handleClose={handleCloseModal} />}
         />
       </div>
     </>

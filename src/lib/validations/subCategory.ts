@@ -8,5 +8,7 @@ export const subCategorySchema = z.object({
       message: "Não pode ter apenas espaços!",
     }),
   status: z.string().default("Ativo"),
-  serviceCategoryId: z.string().min(1, { message: "Obrigatorio" }),
+  serviceCategoryId: z
+    .string()
+    .or(z.number().min(1, { message: "Obrigatorio" })),
 });
