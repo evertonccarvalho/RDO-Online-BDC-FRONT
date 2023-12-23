@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import SelectInput from "./selectInput";
+import SelectInput from "../../form/selectInput";
 
 interface UpdateServiceProps {
   services: IService;

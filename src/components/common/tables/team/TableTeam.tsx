@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import ModalComponent from "../../Modal";
 import DeleteItem from "../../delete/DeleteItem";
-import UpdateService from "../../form/serviceUpdateForm";
 import UpdateTeam from "../../form/teamUpdateForm";
 
 interface orderSingleProps {

@@ -4,8 +4,6 @@ import { ArrowDown, ArrowUp, PenBoxIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import ButtonContentSwitcher from "../ButtonContentSwitcher ";
-import ModalComponent from "../Modal";
-import UpdateWorker from "../form/UpdateWorkerForm";
 import { CategoryTable } from "../tables/service/Category/CategoryTable";
 import { ServiceTable } from "../tables/service/ServiceTable";
 import { SubCategoryTable } from "../tables/service/subCategory/SubCategoryTable";
@@ -19,7 +17,7 @@ interface WorkCardProps {
   logoUrl: string;
   active: string;
   id: number;
-  handleSubmitModal: () => Promise<void>; // Certifique-se de que esta função está corretamente tipada
+  onOpenModal: (id: number) => void;
 }
 export default function WorkAndTablesCard({
   workDescription,
@@ -30,10 +28,9 @@ export default function WorkAndTablesCard({
   logoUrl,
   active,
   id,
-  handleSubmitModal,
+  onOpenModal,
 }: WorkCardProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
-  const [showModal, setShowModal] = useState(false);
 
   const buttons = [
     { label: "Serviços2", content: <ServiceTable workId={id} /> },
@@ -43,17 +40,6 @@ export default function WorkAndTablesCard({
 
   const toggleCard = () => {
     setIsOpen(!isOpen);
-  };
-
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
-
-  const handleCloseModal = async () => {
-    setShowModal(false);
-    try {
-      await handleSubmitModal();
-    } catch (error) {}
   };
 
   const statusColorClass = getStatusColorClass(active);
@@ -112,21 +98,10 @@ export default function WorkAndTablesCard({
                         Endereço: <span>{address}</span>
                       </p>
                     </div>
-                    <ModalComponent
-                      isOpen={showModal}
-                      onClose={handleCloseModal}
-                      modalName="Atualizar Obra"
-                      modalContent={
-                        <UpdateWorker
-                          workId={id}
-                          onSubmitModal={handleCloseModal} // Corrigindo para a propriedade correta
-                        />
-                      }
-                    />
                     <div className="flex h-10 w-10 rounded-full text-primary hover:bg-primary hover:text-background">
                       <button
                         className="flex h-full w-full items-center justify-center"
-                        onClick={toggleModal}
+                        onClick={() => onOpenModal(id)} // Aqui você pode usar 'as number' se 'props.id' for um número
                       >
                         <PenBoxIcon />
                       </button>

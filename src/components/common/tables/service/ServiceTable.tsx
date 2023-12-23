@@ -9,11 +9,11 @@ import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import ModalComponent from "../../Modal";
 import Input from "../../form/Input";
-import CreateNewService from "../../form/serviceNewForm";
-import UpdateService from "../../form/serviceUpdateForm";
 import Pagination from "../pagination";
+import CreateNewService from "./ServiceNewForm";
 import { ServiceTableFilter } from "./ServiceTableFilter";
 import { ServiceTableRows } from "./ServiceTableRows";
+import UpdateService from "./ServiceUpdateForm";
 
 interface Props {
   workId: number;

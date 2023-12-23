@@ -1,130 +1,105 @@
 "use client";
+import Input from "@/components/common/form/Input";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { profileSchema } from "@/lib/validations/user";
+import { useAuth } from "@/providers/authContext";
 import profileService from "@/services/profileService";
-import { TokenService } from "@/services/tokenService";
-import { UserParams } from "@/services/usersServices";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import FormInputField from "@/components/common/form/FormInputField";
 import useCover from "@/images/cover.png";
 import userAvatar from "@/images/user.png";
 import VoltarButton from "../../components/VoltarButton";
 import ProfileHeader from "./profileHeader";
 
-export default function UpdateProfileForm() {
-  const pathname = usePathname();
-  const id = pathname.split("/").pop();
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [initialEmail, setInitialEmail] = useState<string | null>(null);
-  const [user, setUser] = useState<UserParams | null>(null);
+interface UpdateCategoryProps {}
 
-  async function getUser(userId: string | undefined): Promise<void> {
-    try {
-      if (userId === undefined) {
-        throw new Error("ID do usuário não fornecido.");
-      }
-      const data = await profileService.fetchCurrent();
-      setUser(data);
-    } catch (error) {
-      console.log("Error fetching user:", error);
-    }
-  }
-
-  useEffect(() => {
-    getUser(id);
-  }, [id]);
+export default function UpdateProfileForm({}: UpdateCategoryProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const { currentUser } = useAuth();
 
   type FormValues = z.infer<typeof profileSchema>;
   const form = useForm<FormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      userName: user?.userName || "",
+      userName: currentUser?.userName || "",
+      email: currentUser?.email || "",
     },
-    mode: "onChange",
   });
 
-  useEffect(() => {
-    if (user) {
-      form.setValue("userName", user.userName);
-      form.setValue("email", user.email);
-    }
-  }, [form, user]);
+  const mutation = useMutation({
+    mutationFn: (data: z.infer<typeof profileSchema>) => {
+      return profileService.updateProfile(currentUser?.id || "", data);
+    },
+  });
 
-  async function onSubmit(data: z.infer<typeof profileSchema>) {
+  const onSubmit = async (data: z.infer<typeof profileSchema>) => {
+    setIsSubmitting(true);
+
     try {
-      setLoading(true);
-      const res = await profileService.updateProfile(user?.id || "", data);
+      const validatedData = profileSchema.parse(data);
 
-      if (res === 200) {
-        toast({
-          variant: "success",
-          title: "Usuário atualizado.",
-          description: `${user?.userName} foi atualizado com sucesso`,
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Erro ao atualizar usuário.",
-          description: "Houve um problema ao atualizar o usuário.",
-        });
-      }
-
-      // Verifica se o email foi alterado
-      if (data.email !== initialEmail) {
-        TokenService.remove(); // Remove o token se o email foi alterado
-      }
-
-      router.push("/login");
+      await mutation.mutateAsync(validatedData);
+      queryClient.invalidateQueries({ queryKey: ["currentuser"] });
+      toast({
+        variant: "success",
+        title: "Equipe registrada.",
+        description: `${validatedData.userName} foi atualizado com sucesso`,
+      });
     } catch (error) {
+      console.error("Erro durante o envio do formulário:", error);
       toast({
         variant: "destructive",
-        title: "Erro ao atualizar usuário.",
-        description: "Houve um erro ao atualizar o usuário.",
+        title: "Erro ao enviar formulário.",
+        description: "Houve um problema ao enviar o formulário.",
       });
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <>
       <main className="max-h-[900px] bg-card">
         <div className="flex flex-col gap-9 rounded-sm bg-card p-5 sm:grid-cols-2">
           <ProfileHeader
-            coverImageSrc={user?.avatarUrl || useCover}
-            profileImageSrc={user?.avatarUrl || userAvatar}
-            username={user?.userName}
-            role={user?.role}
-            email={user?.email}
+            coverImageSrc={currentUser?.avatarUrl || useCover}
+            profileImageSrc={currentUser?.avatarUrl || userAvatar}
+            username={currentUser?.userName}
+            role={currentUser?.role}
+            email={currentUser?.email}
           />
           <VoltarButton href="/home" />
           <div className="flex flex-col gap-9 rounded-sm bg-card p-5 sm:grid-cols-2">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="">
-                <div className="flex flex-col justify-around gap-4">
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <FormInputField
-                      control={form.control}
-                      name="userName"
-                      label="Nome Completo"
-                      placeholder="Nome Completo"
-                      maxLength={25}
-                    />
-                  </div>
-                  <Button className="" type="submit">
-                    Submit
-                  </Button>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="">
+              <div className="flex flex-col justify-around gap-4">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <Input
+                    placeholder="Nome de Usuário"
+                    type="text"
+                    value={form.watch("userName")}
+                    {...form.register("userName")} // Registrando o campo com react-hook-form
+                    error={form.formState.errors.userName}
+                  />{" "}
+                  <Input
+                    placeholder="email"
+                    type="email"
+                    value={form.watch("email")}
+                    {...form.register("email")} // Registrando o campo com react-hook-form
+                    error={form.formState.errors.email}
+                  />
                 </div>
-              </form>
-            </Form>
+                <Button disabled={isSubmitting} type="submit">
+                  Atualizar
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       </main>

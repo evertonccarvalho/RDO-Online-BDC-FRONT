@@ -118,6 +118,7 @@ const DropdownUser = () => {
           Sair
         </button>
       </div>
+
       {/* <!-- Dropdown End --> */}
     </div>
   );

@@ -1,13 +1,13 @@
 import ModalComponent from "@/components/common/Modal";
 import Input from "@/components/common/form/Input";
-import CreateNewCategory from "@/components/common/form/categoryNewForm";
-import UpdateCategory from "@/components/common/form/categoryUpdateForm";
 import { ICategory, categoryService } from "@/services/categoryService";
 import { useQuery } from "@tanstack/react-query";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
+import CreateNewCategory from "./CategoryNewForm";
 import { CategoryTableFilter } from "./CategoryTableFilter";
 import { CategoryTableRows } from "./CategoryTableRows";
+import UpdateCategory from "./CategoryUpdateForm";
 
 interface Props {
   workId: number;

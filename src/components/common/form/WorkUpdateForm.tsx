@@ -8,40 +8,21 @@ import userAvatar from "@/images/user.png";
 import { workSchema } from "@/lib/validations/work";
 import { IWork, workService } from "@/services/workService";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Input from "./Input";
+
 interface UpdateWorkProps {
-  workId: number | undefined;
-  onSubmitModal: () => Promise<void>; // Defina corretamente a função para retornar Promise<void>}
+  works: IWork;
+  handleClose: () => void;
 }
-export default function UpdateWorker({
-  workId,
-  onSubmitModal,
-}: UpdateWorkProps) {
+export default function UpdateWork({ works, handleClose }: UpdateWorkProps) {
+  const queryClient = useQueryClient();
   const { toast } = useToast();
-  const [work, setWork] = useState<IWork | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  async function getWork(workId: number | undefined): Promise<void> {
-    try {
-      if (workId === undefined) {
-        throw new Error("ID do usuário não fornecido.");
-      }
-
-      const data = await workService.getById(workId);
-      setWork(data);
-    } catch (error) {
-      console.log("Error fetching user:", error);
-    }
-  }
-
-  useEffect(() => {
-    getWork(workId);
-  }, [workId]);
-
-  // 1. Define a schema zod.
+  const [work, setWork] = useState(works);
 
   type FormValues = z.infer<typeof workSchema>;
   const form = useForm<FormValues>({
@@ -56,42 +37,27 @@ export default function UpdateWorker({
     },
   });
 
-  useEffect(() => {
-    if (work) {
-      form.setValue("company", work.company);
-      form.setValue("workDescription", work.workDescription);
-      form.setValue("nameResponsible", work.nameResponsible);
-      form.setValue("phoneContact", work.phoneContact);
-      form.setValue("address", work.address);
-      form.setValue("active", work.active);
-    }
-  }, [form, work]);
+  const mutation = useMutation({
+    mutationFn: (data: z.infer<typeof workSchema>) => {
+      return workService.update(work?.id || "", data);
+    },
+  });
 
-  async function onSubmit(data: z.infer<typeof workSchema>) {
+  // Função chamada ao submeter o formulário
+  const onSubmit = async (data: z.infer<typeof workSchema>) => {
     setIsSubmitting(true);
 
     try {
-      workSchema.parse(data); // Validar os valores antes de chamar a API
+      const validatedData = workSchema.parse(data);
 
-      if (!workId) {
-        throw new Error("WorkId not provided");
-      }
-
-      const res = await workService.update(work?.id || "", data);
-
-      const successMessage = `${work?.workDescription} foi atualizado com sucesso`;
-
-      if (res === 200) {
-        toast({
-          variant: "success",
-          title: "Obra registrado.",
-          description: successMessage,
-        });
-        onSubmitModal();
-        // router.push("/obras");
-      } else {
-        throw new Error("Houve um problema ao registrar o serviço.");
-      }
+      await mutation.mutateAsync(validatedData);
+      queryClient.invalidateQueries({ queryKey: ["obras"] });
+      handleClose();
+      toast({
+        variant: "success",
+        title: "Equipe registrada.",
+        description: `${validatedData.workDescription} foi atualizado com sucesso`,
+      });
     } catch (error) {
       console.error("Erro durante o envio do formulário:", error);
       toast({
@@ -102,7 +68,7 @@ export default function UpdateWorker({
     } finally {
       setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <>
@@ -123,14 +89,14 @@ export default function UpdateWorker({
                   placeholder="Empresa"
                   type="text"
                   value={form.watch("company")}
-                  {...form.register("company")} // Registrando o campo com react-hook-form
+                  {...form.register("company")}
                   error={form.formState.errors.company}
                 />{" "}
                 <Input
                   placeholder="Descrição"
                   type="text"
                   value={form.watch("workDescription")}
-                  {...form.register("workDescription")} // Registrando o campo com react-hook-form
+                  {...form.register("workDescription")}
                   error={form.formState.errors.workDescription}
                 />
               </div>
@@ -139,14 +105,14 @@ export default function UpdateWorker({
                   placeholder="Responsavel"
                   type="text"
                   value={form.watch("nameResponsible")}
-                  {...form.register("nameResponsible")} // Registrando o campo com react-hook-form
+                  {...form.register("nameResponsible")}
                   error={form.formState.errors.nameResponsible}
                 />{" "}
                 <Input
                   placeholder="Endereço"
                   type="text"
                   value={form.watch("address")}
-                  {...form.register("address")} // Registrando o campo com react-hook-form
+                  {...form.register("address")}
                   error={form.formState.errors.address}
                 />{" "}
                 <Input
@@ -155,7 +121,7 @@ export default function UpdateWorker({
                   data-mask="[-](00) 0 0000-0000"
                   type="text"
                   value={form.watch("phoneContact")}
-                  {...form.register("phoneContact")} // Registrando o campo com react-hook-form
+                  {...form.register("phoneContact")}
                   error={form.formState.errors.phoneContact}
                 />
                 <div className="flex items-center gap-2 text-sm">
@@ -163,7 +129,7 @@ export default function UpdateWorker({
                   <input
                     className="h-6 w-6 cursor-pointer accent-primary"
                     checked={form.watch("active" || false)}
-                    {...form.register("active")} // Registrando o campo com react-hook-form
+                    {...form.register("active")}
                     type="checkbox"
                   />
                 </div>

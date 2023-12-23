@@ -5,18 +5,22 @@ import { useToast } from "@/components/ui/use-toast";
 import { workSchema } from "@/lib/validations/work";
 import { workService } from "@/services/workService";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Input from "./Input";
 
 interface CreateNewWorkProps {
-  onCloseModal: () => Promise<void>; // Definindo a propriedade onCloseModal
+  handleClose: () => void; // Definindo a propriedade onCloseModal
 }
 
-export default function CreateNewWork({ onCloseModal }: CreateNewWorkProps) {
+export default function CreateNewWork({ handleClose }: CreateNewWorkProps) {
   const { toast } = useToast();
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 1. Define a schema zod.
   type FormValues = z.infer<typeof workSchema>;
@@ -32,36 +36,37 @@ export default function CreateNewWork({ onCloseModal }: CreateNewWorkProps) {
     },
   });
 
-  // 2. Define a submit handler.
-  async function onSubmit(data: z.infer<typeof workSchema>) {
+  const mutation = useMutation({
+    mutationFn: (data: z.infer<typeof workSchema>) => {
+      return workService.create(data);
+    },
+  });
+
+  const onSubmit = async (data: z.infer<typeof workSchema>) => {
+    setIsSubmitting(true);
+
     try {
-      workSchema.parse(data); // Validar os valores antes de chamar a API
+      const validatedData = workSchema.parse(data);
 
-      const res = await workService.create(data);
-
-      if (res) {
-        toast({
-          variant: "success",
-          title: "Obra registrada.",
-          description: `${data.workDescription} foi registrada com sucesso`,
-        });
-        router.push("/obras");
-        onCloseModal();
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Erro ao registrar obra.",
-          description: "Ocorreu um erro ao tentar registrar OBRA!.",
-        });
-      }
+      await mutation.mutateAsync(validatedData);
+      queryClient.invalidateQueries({ queryKey: ["obras"] });
+      handleClose();
+      toast({
+        variant: "success",
+        title: "Obra registrada.",
+        description: `${validatedData.workDescription} foi atualizado com sucesso`,
+      });
     } catch (error) {
-      console.error("Erro na validação:", error);
-      // Lógica para lidar com o erro de validação, se necessário
-      // Por exemplo, exibir uma mensagem para o usuário informando que houve um erro nos dados fornecidos
+      console.error("Erro durante o envio do formulário:", error);
+      toast({
+        variant: "destructive",
+        title: "Erro ao enviar formulário.",
+        description: "Houve um problema ao enviar o formulário.",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-  }
-
-  // ✅ This will be type-safe and validated.
+  };
 
   return (
     <>
@@ -119,8 +124,8 @@ export default function CreateNewWork({ onCloseModal }: CreateNewWorkProps) {
                   />
                 </div>
               </div>
-              <Button className="" type="submit">
-                Submit
+              <Button disabled={isSubmitting} type="submit">
+                Criar Obra
               </Button>
             </div>
           </form>

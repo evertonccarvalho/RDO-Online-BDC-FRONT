@@ -3,36 +3,39 @@ import Input from "@/components/common/form/Input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { categorySchema } from "@/lib/validations/category";
-import { categoryService } from "@/services/categoryService";
+import { ICategory, categoryService } from "@/services/categoryService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import SelectInput from "./selectInput";
+import SelectInput from "../../../form/selectInput";
 interface UpdateCategoryProps {
+  Category: ICategory;
   handleClose: () => void; // Definindo a propriedade onCloseModal
 }
 
-export default function CreateNewCategory({
+export default function UpdateCategory({
+  Category,
   handleClose,
 }: UpdateCategoryProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const [value, setValue] = useState(Category);
   const queryClient = useQueryClient();
 
   type FormValues = z.infer<typeof categorySchema>;
   const form = useForm<FormValues>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
-      name: "", // Usando value.name para preencher o campo 'name'
-      status: "", // Definir valor padrão vindo da propriedade Category
+      name: value.name || "", // Usando value.name para preencher o campo 'name'
+      status: value.status || "", // Definir valor padrão vindo da propriedade Category
     },
   });
 
   const mutation = useMutation({
     mutationFn: (data: z.infer<typeof categorySchema>) => {
-      return categoryService.create(data);
+      return categoryService.update(Category.id, data);
     },
   });
 

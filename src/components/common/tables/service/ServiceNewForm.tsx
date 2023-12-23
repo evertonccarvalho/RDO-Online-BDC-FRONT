@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import SelectInput from "./selectInput";
+import SelectInput from "../../form/selectInput";
 
 interface CreateNewServiceProps {
   workId: number;
