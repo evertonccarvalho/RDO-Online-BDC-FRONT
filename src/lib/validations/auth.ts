@@ -39,3 +39,14 @@ export type RegisterSchema = {
   password: string;
   confirmPassword: string;
 };
+export const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6, { message: "mínimo 6 caracteres" }), // Mínimo 8 caracteres para a senha
+});
+
+export type LoginSchema = {
+  userName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
