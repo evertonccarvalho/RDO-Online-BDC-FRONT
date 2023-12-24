@@ -1,6 +1,6 @@
 "use client";
-import VoltarButton from "@/app/(home)/components/VoltarButton";
 import ProfileHeader from "@/app/(home)/currentuser/[id]/profileHeader";
+import VoltarButton from "@/components/common/VoltarButton";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import useCover from "@/images/cover.png";
@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Input from "./Input";
+import Input from "../Input";
 
 interface UpdateWorkProps {
   works: IWork;

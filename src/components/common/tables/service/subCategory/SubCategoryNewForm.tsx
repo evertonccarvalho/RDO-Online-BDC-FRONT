@@ -1,6 +1,6 @@
 "use client";
-import Input from "@/components/common/form/Input";
-import SelectInput from "@/components/common/form/selectInput";
+import Input from "@/components/common/Input";
+import SelectInput from "@/components/common/selectInput";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { subCategorySchema } from "@/lib/validations/subCategory";

@@ -1,5 +1,5 @@
 "use client";
-import Input from "@/components/common/form/Input";
+import Input from "@/components/common/Input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { serviceSchema } from "@/lib/validations/service";
@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import SelectInput from "../../form/selectInput";
+import SelectInput from "../../selectInput";
 
 interface CreateNewServiceProps {
   workId: number;

@@ -1,5 +1,5 @@
 "use client";
-import Input from "@/components/common/form/Input";
+import Input from "@/components/common/Input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { serviceSchema } from "@/lib/validations/service";
@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import SelectInput from "../../form/selectInput";
+import SelectInput from "../../selectInput";
 
 interface UpdateServiceProps {
   services: IService;

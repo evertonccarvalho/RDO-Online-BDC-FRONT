@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Input from "./Input";
+import Input from "../Input";
 
 interface CreateNewWorkProps {
   handleClose: () => void; // Definindo a propriedade onCloseModal

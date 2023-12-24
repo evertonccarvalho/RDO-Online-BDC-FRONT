@@ -1,5 +1,5 @@
 "use client";
-import VoltarButton from "@/app/(home)/components/VoltarButton";
+import VoltarButton from "@/components/common/VoltarButton";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import ProfileHeader from "@/app/(home)/currentuser/[id]/profileHeader";

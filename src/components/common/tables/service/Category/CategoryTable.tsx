@@ -1,5 +1,5 @@
+import Input from "@/components/common/Input";
 import ModalComponent from "@/components/common/Modal";
-import Input from "@/components/common/form/Input";
 import { ICategory, categoryService } from "@/services/categoryService";
 import { useQuery } from "@tanstack/react-query";
 import { PlusIcon } from "lucide-react";

@@ -1,6 +1,6 @@
 "use client";
 
-import Breadcrumb from "../components/Breadcrumb";
+import Breadcrumb from "../../../components/common/Breadcrumb";
 
 export default function Home() {
   return (

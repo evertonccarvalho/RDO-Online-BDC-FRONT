@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { getStringStatusColorClass } from "@/helpers/statusColorClassHelper";
 import { deleteService } from "@/lib/userUtils";
 import { PenBoxIcon } from "lucide-react";
-import DeleteItem from "../../delete/DeleteItem";
+import DeleteItem from "../../DeleteItem";
 
 interface orderSingleProps {
   id: number;

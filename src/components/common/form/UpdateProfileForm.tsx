@@ -1,5 +1,5 @@
 "use client";
-import Input from "@/components/common/form/Input";
+import Input from "@/components/common/Input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { profileSchema } from "@/lib/validations/user";
@@ -13,8 +13,8 @@ import { z } from "zod";
 
 import useCover from "@/images/cover.png";
 import userAvatar from "@/images/user.png";
-import VoltarButton from "../../components/VoltarButton";
-import ProfileHeader from "./profileHeader";
+import ProfileHeader from "../../../app/(home)/currentuser/[id]/profileHeader";
+import VoltarButton from "../VoltarButton";
 
 interface UpdateCategoryProps {}
 

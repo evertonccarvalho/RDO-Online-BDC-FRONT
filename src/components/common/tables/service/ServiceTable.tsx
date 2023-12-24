@@ -7,8 +7,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
+import Input from "../../Input";
 import ModalComponent from "../../Modal";
-import Input from "../../form/Input";
 import Pagination from "../pagination";
 import CreateNewService from "./ServiceNewForm";
 import { ServiceTableFilter } from "./ServiceTableFilter";

@@ -2,8 +2,8 @@ import { deleteTeam } from "@/lib/userUtils";
 import { PenBoxIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import DeleteItem from "../../DeleteItem";
 import ModalComponent from "../../Modal";
-import DeleteItem from "../../delete/DeleteItem";
 import UpdateTeam from "../../form/teamUpdateForm";
 
 interface orderSingleProps {

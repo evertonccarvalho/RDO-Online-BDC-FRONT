@@ -1,6 +1,6 @@
 "use client";
 
-import DeleteItem from "@/components/common/delete/DeleteItem";
+import DeleteItem from "@/components/common/DeleteItem";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { deleteUser } from "@/lib/userUtils";

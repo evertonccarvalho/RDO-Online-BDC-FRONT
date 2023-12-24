@@ -1,4 +1,4 @@
-import DeleteItem from "@/components/common/delete/DeleteItem";
+import DeleteItem from "@/components/common/DeleteItem";
 import { Button } from "@/components/ui/button";
 import { getStringStatusColorClass } from "@/helpers/statusColorClassHelper";
 import { deleteService } from "@/lib/userUtils";

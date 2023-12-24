@@ -1,7 +1,7 @@
 "use client";
-import Breadcrumb from "@/app/(home)/components/Breadcrumb";
+import Breadcrumb from "@/components/common/Breadcrumb";
 import { Separator } from "@/components/ui/separator";
-import UpdateProfileForm from "./UpdateProfileForm";
+import UpdateProfileForm from "../../../../components/common/form/UpdateProfileForm";
 
 export default function SettingsAccountPage() {
   return (
