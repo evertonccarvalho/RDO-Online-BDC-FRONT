@@ -83,7 +83,7 @@ export default function LoginPage() {
                 <Input
                   placeholder="E-mail"
                   type="email"
-                  autoComplete="off" // Adicionando o atributo autoComplete para desativar o preenchimento automático
+                  autoComplete="on" // Adicionando o atributo autoComplete para desativar o preenchimento automático
                   value={form.watch("email")}
                   {...form.register("email")}
                   error={form.formState.errors.email} // Passando o erro correspondente ao campo

@@ -33,9 +33,9 @@ export default function WorkAndTablesCard({
   const [isOpen, setIsOpen] = useState(false);
 
   const buttons = [
-    { label: "Serviços2", content: <ServiceTable workId={id} /> },
-    { label: "Categorias", content: <CategoryTable workId={id} /> },
+    { label: "Serviços", content: <ServiceTable workId={id} /> },
     { label: "SubCategorias", content: <SubCategoryTable workId={id} /> },
+    { label: "Categorias", content: <CategoryTable workId={id} /> },
   ];
 
   const toggleCard = () => {
