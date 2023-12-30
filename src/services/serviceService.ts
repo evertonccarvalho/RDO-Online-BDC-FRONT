@@ -99,7 +99,7 @@ const serviceService = {
           Authorization: TokenService.get(),
         },
       });
-      return res.status;
+      return res;
     } catch (error) {
       console.error("Error deleting work:", error);
       throw error;

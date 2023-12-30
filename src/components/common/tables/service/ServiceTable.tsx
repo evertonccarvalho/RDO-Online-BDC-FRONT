@@ -1,4 +1,4 @@
-import { getPaginatedItems } from "@/lib/pagination";
+import { getPaginatedItems } from "@/helpers/pagination";
 import { IService, serviceService } from "@/services/serviceService";
 import {
   ISubCategory,

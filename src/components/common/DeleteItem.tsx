@@ -39,7 +39,6 @@ const DeleteItem: React.FC<DeleteItemProps> = ({
           description: `${itemName} foi excluído com sucesso.`,
         });
       }
-      router.push("/obras");
     } catch (error) {
       toast({
         variant: "destructive",

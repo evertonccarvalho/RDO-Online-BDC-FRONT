@@ -3,6 +3,7 @@ import { getStringStatusColorClass } from "@/helpers/statusColorClassHelper";
 import { deleteService } from "@/lib/userUtils";
 import { PenBoxIcon } from "lucide-react";
 import DeleteItem from "../../DeleteItem";
+import ServiceDeletion from "./subCategory/deleteButton";
 
 interface orderSingleProps {
   id: number;
@@ -24,6 +25,16 @@ export function ServiceTableRows({
   ...props
 }: orderSingleProps) {
   const statusColorClass = getStringStatusColorClass(active);
+  // const queryClient = useQueryClient();
+
+  // const deleteService = useMutation({
+  //   mutationFn: async () => {
+  //     await serviceService.delete(workId, props.id);
+  //   },
+  //   async onSuccess() {
+  //     queryClient.invalidateQueries({ queryKey: ["services"] });
+  //   },
+  // });
 
   return (
     <>
@@ -42,6 +53,7 @@ export function ServiceTableRows({
           >
             <PenBoxIcon className="h-4 w-4 text-primary" />
           </Button>
+          <ServiceDeletion serviceId={props.id} workId={workId} />
           <DeleteItem
             itemName={props.description}
             deleteFunction={() => deleteService(+workId, props.id)}
