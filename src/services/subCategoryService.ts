@@ -4,9 +4,9 @@ import { TokenService } from "./tokenService";
 export type SubCategoryParams = {
   name: string;
   status: string;
-  serviceCategoryId?: string;
+  serviceCategoryId?: string | number;
 };
-export type SubCategorySchema = {
+export type ISubCategory = {
   id: number;
   name: string;
   status: string;

@@ -26,12 +26,13 @@ export async function deleteWork(workId: number): Promise<boolean> {
 }
 
 export async function deleteService(
-  workId: number,
   serviceId: number,
+  workId: number,
 ): Promise<boolean> {
   try {
     await serviceService.delete(workId, serviceId);
     console.log(`O Serviço com ID ${workId} foi deletado com sucesso.`);
+
     return true; // Retorna true após a exclusão bem-sucedida
   } catch (error) {
     console.error(`Erro ao deletar serviço com ID ${workId}:`, error);

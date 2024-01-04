@@ -2,13 +2,8 @@
 import profileService from "@/services/profileService";
 import { TokenService } from "@/services/tokenService";
 import { UserParams } from "@/services/usersServices";
-import React, {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { useQuery } from "@tanstack/react-query";
+import React, { ReactNode, createContext, useContext } from "react";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -22,20 +17,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const storedToken = TokenService.get();
   const isAuthenticated = !!storedToken;
-  const [currentUser, setCurrentUser] = useState<UserParams | null>(null);
 
-  useEffect(() => {
-    const fetchCurrent = async () => {
-      try {
-        const data = await profileService.fetchCurrent();
-        setCurrentUser(data);
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      }
-    };
-
-    fetchCurrent();
-  }, []);
+  const { data: currentUser } = useQuery({
+    queryKey: ["currentuser"],
+    queryFn: () => profileService.fetchCurrent(),
+  });
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, currentUser }}>

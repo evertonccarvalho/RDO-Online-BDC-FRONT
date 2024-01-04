@@ -10,7 +10,7 @@ export type IService = {
   unit: string;
   status: string;
   totalAmount: string;
-  subcategoryId?: string;
+  subcategoryId?: number;
   work?: IWork;
 };
 
@@ -23,7 +23,7 @@ const serviceService = {
         },
       });
 
-      return res;
+      return res.status;
     } catch (error: any) {
       if (error.response.status === 400) {
         return error.response;
@@ -99,7 +99,7 @@ const serviceService = {
           Authorization: TokenService.get(),
         },
       });
-      return res.status;
+      return res;
     } catch (error) {
       console.error("Error deleting work:", error);
       throw error;

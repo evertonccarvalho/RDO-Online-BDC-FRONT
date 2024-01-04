@@ -1,5 +1,5 @@
 "use client";
-import Breadcrumb from "@/app/(home)/components/Breadcrumb";
+import Breadcrumb from "@/components/common/Breadcrumb";
 import usersServices, { UserParams } from "@/services/usersServices";
 import { useEffect, useState } from "react";
 import { columns } from "./columns";

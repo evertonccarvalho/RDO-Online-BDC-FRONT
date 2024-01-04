@@ -1,47 +1,49 @@
 "use client";
+import ProfileHeader from "@/app/(home)/currentuser/[id]/profileHeader";
+import VoltarButton from "@/components/common/VoltarButton";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
+import useCover from "@/images/cover.png";
+import userAvatar from "@/images/user.png";
 import { workSchema } from "@/lib/validations/work";
-import { workService } from "@/services/workService";
+import { IWork, workService } from "@/services/workService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Input from "../Input";
 
-interface CreateNewWorkProps {
-  handleClose: () => void; // Definindo a propriedade onCloseModal
+interface UpdateWorkProps {
+  works: IWork;
+  handleClose: () => void;
 }
-
-export default function CreateNewWork({ handleClose }: CreateNewWorkProps) {
-  const { toast } = useToast();
-  const router = useRouter();
+export default function UpdateWork({ works, handleClose }: UpdateWorkProps) {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [work, setWork] = useState(works);
 
-  // 1. Define a schema zod.
   type FormValues = z.infer<typeof workSchema>;
   const form = useForm<FormValues>({
     resolver: zodResolver(workSchema),
     defaultValues: {
-      company: "",
-      workDescription: "",
-      nameResponsible: "",
-      address: "",
-      phoneContact: "",
-      active: false,
+      company: work?.company || "",
+      nameResponsible: work?.nameResponsible || "",
+      phoneContact: work?.phoneContact || "",
+      address: work?.address || "",
+      active: work?.active,
+      workDescription: work?.workDescription || "",
     },
   });
 
   const mutation = useMutation({
     mutationFn: (data: z.infer<typeof workSchema>) => {
-      return workService.create(data);
+      return workService.update(work?.id || "", data);
     },
   });
 
+  // Função chamada ao submeter o formulário
   const onSubmit = async (data: z.infer<typeof workSchema>) => {
     setIsSubmitting(true);
 
@@ -53,7 +55,7 @@ export default function CreateNewWork({ handleClose }: CreateNewWorkProps) {
       handleClose();
       toast({
         variant: "success",
-        title: "Obra registrada.",
+        title: "Equipe registrada.",
         description: `${validatedData.workDescription} foi atualizado com sucesso`,
       });
     } catch (error) {
@@ -70,23 +72,31 @@ export default function CreateNewWork({ handleClose }: CreateNewWorkProps) {
 
   return (
     <>
+      <VoltarButton href="/obras" />
       <div className="flex flex-col gap-9 rounded-sm bg-card p-5 sm:grid-cols-2">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="">
+        <ProfileHeader
+          coverImageSrc={useCover}
+          profileImageSrc={userAvatar}
+          username={work?.company}
+          role={work?.workDescription}
+          email={work?.nameResponsible}
+        />
+        <div className="flex flex-col gap-9 rounded-sm bg-card p-5 sm:grid-cols-2">
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col justify-around gap-4">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <Input
                   placeholder="Empresa"
                   type="text"
                   value={form.watch("company")}
-                  {...form.register("company")} // Registrando o campo com react-hook-form
+                  {...form.register("company")}
                   error={form.formState.errors.company}
                 />{" "}
                 <Input
                   placeholder="Descrição"
                   type="text"
                   value={form.watch("workDescription")}
-                  {...form.register("workDescription")} // Registrando o campo com react-hook-form
+                  {...form.register("workDescription")}
                   error={form.formState.errors.workDescription}
                 />
               </div>
@@ -95,41 +105,41 @@ export default function CreateNewWork({ handleClose }: CreateNewWorkProps) {
                   placeholder="Responsavel"
                   type="text"
                   value={form.watch("nameResponsible")}
-                  {...form.register("nameResponsible")} // Registrando o campo com react-hook-form
+                  {...form.register("nameResponsible")}
                   error={form.formState.errors.nameResponsible}
                 />{" "}
                 <Input
                   placeholder="Endereço"
                   type="text"
                   value={form.watch("address")}
-                  {...form.register("address")} // Registrando o campo com react-hook-form
+                  {...form.register("address")}
                   error={form.formState.errors.address}
                 />{" "}
                 <Input
                   placeholder="Telefone"
-                  type="text"
-                  value={form.watch("phoneContact")}
                   maxLength={14}
                   data-mask="[-](00) 0 0000-0000"
-                  {...form.register("phoneContact")} // Registrando o campo com react-hook-form
+                  type="text"
+                  value={form.watch("phoneContact")}
+                  {...form.register("phoneContact")}
                   error={form.formState.errors.phoneContact}
-                />{" "}
+                />
                 <div className="flex items-center gap-2 text-sm">
                   <label className="flex gap-2 text-sm">Ativa?</label>
                   <input
                     className="h-6 w-6 cursor-pointer accent-primary"
                     checked={form.watch("active" || false)}
-                    {...form.register("active")} // Registrando o campo com react-hook-form
+                    {...form.register("active")}
                     type="checkbox"
                   />
                 </div>
               </div>
               <Button disabled={isSubmitting} type="submit">
-                Criar Obra
+                Atualizar Obra
               </Button>
             </div>
           </form>
-        </Form>
+        </div>
       </div>
     </>
   );

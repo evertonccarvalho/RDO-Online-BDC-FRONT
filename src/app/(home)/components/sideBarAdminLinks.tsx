@@ -6,15 +6,7 @@ import {
 } from "@radix-ui/react-accordion";
 
 import { useAuth } from "@/providers/authContext";
-import {
-  HammerIcon,
-  MapPinIcon,
-  RefreshCcwIcon,
-  UserIcon,
-  UserPlus,
-  Users2Icon,
-  WorkflowIcon,
-} from "lucide-react";
+import { ConstructionIcon, UserIcon, UserPlus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
@@ -24,12 +16,8 @@ interface props {
 
 export default function SideBarAdminLinks({ sidebarOpen }: props) {
   const subMenu = [
+    { name: "Obras", link: "/obras", icon: ConstructionIcon },
     { name: "Usuário", link: "/usuario", icon: UserIcon },
-    { name: "Obra", link: "/obra", icon: WorkflowIcon },
-    { name: "Equipe", link: "/equipe", icon: Users2Icon },
-    { name: "Efetivo", link: "/efetivo", icon: RefreshCcwIcon },
-    { name: "Local", link: "/local", icon: MapPinIcon },
-    { name: "Serviço", link: "/servico", icon: HammerIcon },
   ];
   const { isAuthenticated, currentUser } = useAuth();
   const isAdmin =

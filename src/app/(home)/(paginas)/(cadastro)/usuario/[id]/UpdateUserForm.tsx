@@ -1,5 +1,5 @@
 "use client";
-import VoltarButton from "@/app/(home)/components/VoltarButton";
+import VoltarButton from "@/components/common/VoltarButton";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import ProfileHeader from "@/app/(home)/currentuser/[id]/profileHeader";
@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import RoleSelectField from "./components/RoleSelectField";
+import WorkSelectList from "./components/WorkSelectList";
 export default function UpdateUserForm() {
   const { toast } = useToast();
   const [user, setUser] = useState<UserParams | null>(null);
@@ -116,7 +117,8 @@ export default function UpdateUserForm() {
                       placeholder="email@email.com"
                     />
                   </div>
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2  lg:grid-cols-4">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-3  lg:grid-cols-3">
+                    <WorkSelectList control={form.control} name="workId" />
                     <RoleSelectField
                       control={form.control}
                       name="role"

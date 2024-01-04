@@ -1,5 +1,5 @@
 "use client";
-import Breadcrumb from "@/app/(home)/components/Breadcrumb";
+import Breadcrumb from "@/components/common/Breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import UpdateUserForm from "./UpdateUserForm";
 
