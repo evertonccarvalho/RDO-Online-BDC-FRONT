@@ -1,11 +1,11 @@
 "use client";
 import ModalComponent from "@/components/common/Modal";
 import WorkAndTablesCard from "@/components/common/cards/WorkCardTables";
-import CreateNewWork from "@/components/common/form/WorkNewForm";
 import UpdateWorker from "@/components/common/form/WorkUpdateForm";
+import CreateNewWork from "@/components/common/form/workNewForm";
 import { IWork, workService } from "@/services/workService";
 import { useQuery } from "@tanstack/react-query";
-import { PlusCircleIcon } from "lucide-react";
+import { PlusCircleIcon, PlusIcon } from "lucide-react";
 import { useState } from "react";
 
 const ObrasPage = () => {
@@ -30,11 +30,11 @@ const ObrasPage = () => {
       <div className="flex flex-row flex-wrap gap-4">
         <div>
           <button
-            className="flex h-full max-w-fit items-center text-sm text-primary"
+            className="flex h-full max-w-fit  items-center gap-2 text-sm text-primary"
             onClick={toggleModal}
           >
-            <PlusCircleIcon className="h-4 w-4" />
-            <span className="hidden md:block">Nova Obra </span>
+            <span className="hidden md:block">Nova Obra</span>
+            <PlusIcon className="h-4 w-4" />
           </button>
         </div>
         {obrasData?.map((obra: any) => (

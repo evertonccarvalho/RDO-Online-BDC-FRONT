@@ -28,12 +28,6 @@ const MainSideBar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     };
   }, [setSidebarOpen]);
 
-  const menus = [
-    { name: "Inicio", link: "/home", icon: HomeIcon },
-    { name: "Apontamentos", link: "/apontamentos", icon: ConstructionIcon },
-    { name: "Relatorios", link: "/relatorios", icon: ListStartIcon },
-  ];
-
   return (
     <>
       <aside

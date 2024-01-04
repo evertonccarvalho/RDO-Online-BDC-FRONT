@@ -1,5 +1,6 @@
 import { BarChart, BookCheckIcon, HomeIcon } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 interface props {
@@ -12,6 +13,8 @@ const menus = [
 ];
 
 export default function SideBarLinks({ sidebarOpen }: props) {
+  const pathname = usePathname();
+
   return (
     <>
       <div className="relative mr-2 gap-10  ">
@@ -19,7 +22,9 @@ export default function SideBarLinks({ sidebarOpen }: props) {
           <Link
             href={menu?.link}
             key={i}
-            className={`group flex items-center gap-3.5 rounded-md p-2 text-sm font-medium hover:text-primary`}
+            className={`${
+              menu.link === pathname && "text-primary"
+            } group flex items-center gap-3.5 rounded-md p-2 text-sm font-medium hover:text-primary`}
           >
             <div>{React.createElement(menu?.icon, { size: "20" })}</div>
 

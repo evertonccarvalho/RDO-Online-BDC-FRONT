@@ -9,12 +9,15 @@ import { useAuth } from "@/providers/authContext";
 import { ConstructionIcon, UserIcon, UserPlus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 interface props {
   sidebarOpen: boolean;
 }
 
 export default function SideBarAdminLinks({ sidebarOpen }: props) {
+  const pathname = usePathname();
+
   const subMenu = [
     { name: "Obras", link: "/obras", icon: ConstructionIcon },
     { name: "Usuário", link: "/usuario", icon: UserIcon },
@@ -54,7 +57,10 @@ export default function SideBarAdminLinks({ sidebarOpen }: props) {
                   <Link
                     href={subMenu?.link}
                     key={i}
-                    className={`group flex items-center gap-3.5 rounded-md p-2 text-sm font-medium hover:text-primary`}
+                    className={` 
+                    ${subMenu.link === pathname && "text-primary"}
+                    
+                    group flex items-center gap-3.5 rounded-md p-2 text-sm font-medium hover:text-primary`}
                   >
                     <div>
                       {React.createElement(subMenu?.icon, {
